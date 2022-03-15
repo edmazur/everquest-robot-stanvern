@@ -48,7 +48,7 @@ public class FteListener implements GameLogListener {
         if (SEND_DISCORD_MESSAGE_AS_DM) {
           discord.sendMessage(DiscordUser.EDMAZUR, message);
         } else {
-          discord.sendMessage(DiscordChannel.RAIDER_CHAT_AND_ALERTS, message);
+          discord.sendMessage(DiscordChannel.RAIDER_CHAT, message);
         }
       }
     }

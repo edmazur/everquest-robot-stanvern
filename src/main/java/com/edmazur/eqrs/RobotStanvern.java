@@ -18,6 +18,7 @@ import com.edmazur.eqrs.game.RaidTargets;
 import com.edmazur.eqrs.game.listener.FteListener;
 import com.edmazur.eqrs.game.listener.GameLogListener;
 import com.edmazur.eqrs.game.listener.HeartbeatListener;
+import com.edmazur.eqrs.game.listener.MotdListener;
 import com.edmazur.eqrs.game.listener.RaidTargetSpawnListener;
 
 public class RobotStanvern {
@@ -70,6 +71,10 @@ public class RobotStanvern {
     RaidTargetSpawnListener raidTargetSpawnListener =
         new RaidTargetSpawnListener(discord);
     gameLogListeners.add(raidTargetSpawnListener);
+
+    // Add MotD listener.
+    MotdListener motdListener = new MotdListener(discord);
+    gameLogListeners.add(motdListener);
 
     // Print configs for each listener.
     for (GameLogListener gameLogListener : gameLogListeners) {

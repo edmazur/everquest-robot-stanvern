@@ -69,7 +69,7 @@ public class RaidTargetSpawnListener implements GameLogListener {
                 getGameScreenshot());
           } else {
             discord.sendMessage(
-                DiscordChannel.RAIDER_CHAT_AND_ALERTS,
+                DiscordChannel.RAIDER_CHAT,
                 String.format(REGULAR_MESSAGE, target),
                 getGameScreenshot());
           }
