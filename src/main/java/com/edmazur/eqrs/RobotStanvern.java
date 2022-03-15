@@ -27,6 +27,12 @@ public class RobotStanvern {
   public static void main(String[] args) {
 
     Config config = new Config();
+
+    // Check if debug mode is set.
+    if (args.length == 1 && args[0].equals("--debug")) {
+      config.enableDebug();
+    }
+
     if (config.getBoolean(Property.DEBUG)) {
       LOGGER.log("Debug mode enabled, Discord output will only be sent as DM "
           + "and database writes will be skipped (SQL will be logged)");

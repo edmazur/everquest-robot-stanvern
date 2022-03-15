@@ -1,7 +1,5 @@
 discord.private_key=
 
-debug=false
-
 mysql.database=
 mysql.host=
 mysql.password=
