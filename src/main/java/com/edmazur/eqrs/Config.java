@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+// TODO: Is there a way to force property X to always be read as type Y?
 public class Config {
 
   private static final String CONFIG_FILE_NAME = "app.config";
@@ -11,6 +12,12 @@ public class Config {
   public enum Property {
 
     DISCORD_PRIVATE_KEY("discord.private_key"),
+
+    // When enabled:
+    // - Discord input will only be accepted from me via DM.
+    // - Discord output will only go to me as a DM (i.e. no channel output).
+    // - Database writes will be skipped and SQL will instead just be logged.
+    DEBUG("debug"),
 
     MYSQL_DATABASE("mysql.database"),
     MYSQL_HOST("mysql.host"),
@@ -42,6 +49,10 @@ public class Config {
       e.printStackTrace();
       System.exit(-1);
     }
+  }
+
+  public boolean getBoolean(Property property) {
+    return Boolean.parseBoolean(properties.getProperty(property.getName()));
   }
 
   public String getString(Property property) {

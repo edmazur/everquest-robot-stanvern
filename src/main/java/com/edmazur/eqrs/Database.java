@@ -9,9 +9,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.game.RaidTarget;
 
 public class Database {
+
+  private static final Logger LOGGER = new Logger();
 
   private static final String MYSQL_CONNECTION_FORMAT_STRING =
       "jdbc:mysql://%s:%d/%s";
@@ -27,16 +30,10 @@ public class Database {
   private static final DateTimeFormatter DATE_TIME_FORMATTER =
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-  private final String host;
-  private final String database;
-  private final String username;
-  private final String password;
+  private final Config config;
 
   public Database(Config config) {
-    this.host = config.getString(Config.Property.MYSQL_HOST);
-    this.database = config.getString(Config.Property.MYSQL_DATABASE);
-    this.username = config.getString(Config.Property.MYSQL_USERNAME);
-    this.password = config.getString(Config.Property.MYSQL_PASSWORD);
+    this.config = config;
   }
 
   public List<RaidTarget> getAllTargets() {
@@ -74,6 +71,11 @@ public class Database {
   }
 
   private void update(String query) {
+    if (config.getBoolean(Property.DEBUG)) {
+      LOGGER.log("Debug mode enabled, skipping query: " + query);
+      return;
+    }
+
     try {
       getConnection().createStatement().executeUpdate(query);
     } catch (SQLException e) {
@@ -90,6 +92,12 @@ public class Database {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
+
+    String host = config.getString(Config.Property.MYSQL_HOST);
+    String database = config.getString(Config.Property.MYSQL_DATABASE);
+    String username = config.getString(Config.Property.MYSQL_USERNAME);
+    String password = config.getString(Config.Property.MYSQL_PASSWORD);
+
     String connectionString = String.format(
         MYSQL_CONNECTION_FORMAT_STRING, host, MYSQL_PORT, database);
     try {

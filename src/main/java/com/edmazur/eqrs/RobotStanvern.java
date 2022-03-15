@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordUser;
 import com.edmazur.eqrs.discord.listener.AnnouncementListener;
@@ -26,6 +27,11 @@ public class RobotStanvern {
   public static void main(String[] args) {
 
     Config config = new Config();
+    if (config.getBoolean(Property.DEBUG)) {
+      LOGGER.log("Debug mode enabled, Discord output will only be sent as DM "
+          + "and database writes will be skipped (SQL will be logged)");
+    }
+
     Discord discord = new Discord(config);
 
     // Uncomment to send one-off images/messages.
@@ -38,7 +44,7 @@ public class RobotStanvern {
     RaidTargets raidTargets = new RaidTargets(database);
     // TODO: Set this up more like how game log messages are received centrally
     // and passed out to listeners?
-    new TodListener(discord, database, raidTargets);
+    new TodListener(config, discord, database, raidTargets);
     new AnnouncementListener(discord);
 
     List<GameLogListener> gameLogListeners = new ArrayList<>();

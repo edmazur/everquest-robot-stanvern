@@ -13,7 +13,6 @@ import com.edmazur.eqrs.game.GameLogEvent;
 
 public class RaidTargetSpawnListener implements GameLogListener {
 
-  private static final Boolean DEBUG = false;
   private static final Boolean BATPHONE = false;
 
   private static final String REGULAR_MESSAGE =
@@ -50,8 +49,8 @@ public class RaidTargetSpawnListener implements GameLogListener {
   @Override
   public String getConfig() {
     return String.format(
-        "DEBUG=%s, BATPHONE=%s",
-        DEBUG, BATPHONE);
+        "BATPHONE=%s",
+        BATPHONE);
   }
 
   @Override
@@ -63,22 +62,15 @@ public class RaidTargetSpawnListener implements GameLogListener {
       // end-of-line weirdness (trailing whitespace, /r, etc.).
       if (gameLogEvent.getText().startsWith(trigger)) {
         if (rateLimiter.getPermission()) {
-          String message = String.format(
-              BATPHONE ? BATPHONE_MESSAGE : REGULAR_MESSAGE, target);
-          if (DEBUG) {
-            discord.sendMessage(
-                DiscordUser.EDMAZUR,
-                message,
-                getGameScreenshot());
-          } else if (BATPHONE) {
+          if (BATPHONE) {
             discord.sendMessage(
                 DiscordChannel.RAID_BATPHONE,
-                message,
+                String.format(BATPHONE_MESSAGE, target),
                 getGameScreenshot());
           } else {
             discord.sendMessage(
                 DiscordChannel.RAIDER_CHAT_AND_ALERTS,
-                message,
+                String.format(REGULAR_MESSAGE, target),
                 getGameScreenshot());
           }
           break;

@@ -14,8 +14,9 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
+import com.edmazur.eqrs.Config;
+import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.Database;
-import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.discord.DiscordUser;
@@ -23,10 +24,6 @@ import com.edmazur.eqrs.game.RaidTarget;
 import com.edmazur.eqrs.game.RaidTargets;
 
 public class TodListener implements MessageCreateListener {
-
-  private static final Logger LOGGER = new Logger();
-
-  private static final boolean DEBUG = false;
 
   private static final String HELP_TOD_USAGE =
       "- !tod usage: `!tod <target>, <timestamp>` Example: `!tod naggy, 5/14 17:55:36`";
@@ -56,16 +53,17 @@ public class TodListener implements MessageCreateListener {
   private static final File SUCCESS_IMAGE =
       new File("/home/mazur/eclipse-workspace/RobotStanvern/img/str.png");
 
+  private final Config config;
   private final Discord discord;
   private final Database database;
   private final RaidTargets raidTargets;
 
-  public TodListener(Discord discord, Database database, RaidTargets raidTargets) {
+  public TodListener(Config config, Discord discord, Database database, RaidTargets raidTargets) {
+    this.config = config;
     this.discord = discord;
     this.discord.addListener(this);
     this.database = database;
     this.raidTargets = raidTargets;
-    LOGGER.log("%s running (DEBUG=%s)", this.getClass().getName(), DEBUG);
   }
 
   @Override
@@ -75,7 +73,7 @@ public class TodListener implements MessageCreateListener {
       return;
     }
 
-    boolean shouldConsiderMessage = DEBUG
+    boolean shouldConsiderMessage = config.getBoolean(Property.DEBUG)
         ? event.isPrivateMessage() && DiscordUser.EDMAZUR.isEventUser(event)
         : CHANNEL.isEventChannel(event);
     if (shouldConsiderMessage) {

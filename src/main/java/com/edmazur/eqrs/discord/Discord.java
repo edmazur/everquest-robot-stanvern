@@ -12,12 +12,15 @@ import org.javacord.api.entity.message.Messageable;
 import org.javacord.api.listener.message.MessageCreateListener;
 
 import com.edmazur.eqrs.Config;
+import com.edmazur.eqrs.Config.Property;
 
 public class Discord {
 
+  private final Config config;
   private final DiscordApi discordApi;
 
   public Discord(Config config) {
+    this.config = config;
     discordApi = new DiscordApiBuilder()
         .setToken(config.getString(Config.Property.DISCORD_PRIVATE_KEY))
         .login()
@@ -28,11 +31,11 @@ public class Discord {
   }
 
   public void sendMessage(DiscordChannel discordChannel, String message) {
-    getMessageable(discordChannel).sendMessage(message);
+    getMessageable(discordChannel).sendMessage(getMessage(message));
   }
 
   public void sendMessage(DiscordUser discordUser, String message) {
-    getMessageable(discordUser).sendMessage(message);
+    getMessageable(discordUser).sendMessage(getMessage(message));
   }
 
   public void sendMessage(DiscordChannel discordChannel, File image) {
@@ -44,14 +47,18 @@ public class Discord {
   }
 
   public void sendMessage(DiscordChannel discordChannel, String message, File image) {
-    getMessageable(discordChannel).sendMessage(message, image);
+    getMessageable(discordChannel).sendMessage(getMessage(message), image);
   }
 
   public void sendMessage(DiscordUser discordUser, String message, File image) {
-    getMessageable(discordUser).sendMessage(message, image);
+    getMessageable(discordUser).sendMessage(getMessage(message), image);
   }
 
   private Messageable getMessageable(DiscordChannel discordChannel) {
+    if (config.getBoolean(Property.DEBUG)) {
+      return getMessageable(DiscordUser.EDMAZUR);
+    }
+
     Optional<Channel> maybeChannel =
         discordApi.getChannelById(discordChannel.getId());
     if (maybeChannel.isEmpty()) {
@@ -63,6 +70,13 @@ public class Discord {
 
   private Messageable getMessageable(DiscordUser discordUser) {
     return discordApi.getUserById(discordUser.getId()).join();
+  }
+
+  // TODO: Maybe work this into the image-only sendMessage() variants.
+  private String getMessage(String message) {
+    return config.getBoolean(Property.DEBUG)
+        ? "(debug mode enabled)\n" + message
+        : message;
   }
 
   public void addListener(MessageCreateListener listener) {
