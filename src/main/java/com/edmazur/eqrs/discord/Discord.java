@@ -8,12 +8,11 @@ import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.activity.ActivityType;
 import org.javacord.api.entity.channel.Channel;
 import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.user.User;
+import org.javacord.api.entity.message.Messageable;
 import org.javacord.api.listener.message.MessageCreateListener;
 
 import com.edmazur.eqrs.Config;
 
-// TODO: There's probably a lot of opportunity to eliminate similar-code duplication here.
 public class Discord {
 
   private final DiscordApi discordApi;
@@ -29,48 +28,41 @@ public class Discord {
   }
 
   public void sendMessage(DiscordChannel discordChannel, String message) {
-    Optional<Channel> maybeChannel =
-        discordApi.getChannelById(discordChannel.getId());
-    if (maybeChannel.isEmpty()) {
-      System.err.println("Could not find channel: " + discordChannel);
-    }
-    TextChannel channel = maybeChannel.get().asTextChannel().get();
-    channel.sendMessage(message);
+    getMessageable(discordChannel).sendMessage(message);
   }
 
   public void sendMessage(DiscordUser discordUser, String message) {
-    User user = discordApi.getUserById(discordUser.getId()).join();
-    user.sendMessage(message);
+    getMessageable(discordUser).sendMessage(message);
   }
 
   public void sendMessage(DiscordChannel discordChannel, File image) {
-    Optional<Channel> maybeChannel =
-        discordApi.getChannelById(discordChannel.getId());
-    if (maybeChannel.isEmpty()) {
-      System.err.println("Could not find channel: " + discordChannel);
-    }
-    TextChannel channel = maybeChannel.get().asTextChannel().get();
-    channel.sendMessage(image);
+    getMessageable(discordChannel).sendMessage(image);
   }
 
   public void sendMessage(DiscordUser discordUser, File image) {
-    User user = discordApi.getUserById(discordUser.getId()).join();
-    user.sendMessage(image);
+    getMessageable(discordUser).sendMessage(image);
   }
 
   public void sendMessage(DiscordChannel discordChannel, String message, File image) {
+    getMessageable(discordChannel).sendMessage(message, image);
+  }
+
+  public void sendMessage(DiscordUser discordUser, String message, File image) {
+    getMessageable(discordUser).sendMessage(message, image);
+  }
+
+  private Messageable getMessageable(DiscordChannel discordChannel) {
     Optional<Channel> maybeChannel =
         discordApi.getChannelById(discordChannel.getId());
     if (maybeChannel.isEmpty()) {
       System.err.println("Could not find channel: " + discordChannel);
     }
     TextChannel channel = maybeChannel.get().asTextChannel().get();
-    channel.sendMessage(message, image);
+    return channel;
   }
 
-  public void sendMessage(DiscordUser discordUser, String message, File image) {
-    User user = discordApi.getUserById(discordUser.getId()).join();
-    user.sendMessage(message, image);
+  private Messageable getMessageable(DiscordUser discordUser) {
+    return discordApi.getUserById(discordUser.getId()).join();
   }
 
   public void addListener(MessageCreateListener listener) {
