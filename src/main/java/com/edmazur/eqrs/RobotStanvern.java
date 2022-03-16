@@ -11,12 +11,14 @@ import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordUser;
 import com.edmazur.eqrs.discord.listener.AnnouncementListener;
-import com.edmazur.eqrs.discord.listener.TodListener;
+import com.edmazur.eqrs.discord.listener.DiscordTodListener;
 import com.edmazur.eqrs.game.GameLog;
 import com.edmazur.eqrs.game.GameLogEvent;
 import com.edmazur.eqrs.game.RaidTargets;
 import com.edmazur.eqrs.game.listener.FteListener;
 import com.edmazur.eqrs.game.listener.GameLogListener;
+import com.edmazur.eqrs.game.listener.GameTodDetector;
+import com.edmazur.eqrs.game.listener.GameTodListener;
 import com.edmazur.eqrs.game.listener.HeartbeatListener;
 import com.edmazur.eqrs.game.listener.MotdListener;
 import com.edmazur.eqrs.game.listener.RaidTargetSpawnListener;
@@ -51,7 +53,7 @@ public class RobotStanvern {
     RaidTargets raidTargets = new RaidTargets(database);
     // TODO: Set this up more like how game log messages are received centrally
     // and passed out to listeners?
-    new TodListener(config, discord, database, raidTargets);
+    new DiscordTodListener(config, discord, database, raidTargets);
     new AnnouncementListener(discord);
 
     List<GameLogListener> gameLogListeners = new ArrayList<>();
@@ -75,6 +77,12 @@ public class RobotStanvern {
     // Add MotD listener.
     MotdListener motdListener = new MotdListener(discord);
     gameLogListeners.add(motdListener);
+
+    // Add ToD listener.
+    GameTodDetector gameTodDetector = new GameTodDetector();
+    GameTodListener gameTodListener =
+        new GameTodListener(discord, gameTodDetector);
+    gameLogListeners.add(gameTodListener);
 
     // Print configs for each listener.
     for (GameLogListener gameLogListener : gameLogListeners) {

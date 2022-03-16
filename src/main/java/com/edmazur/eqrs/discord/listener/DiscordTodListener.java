@@ -23,7 +23,7 @@ import com.edmazur.eqrs.discord.DiscordUser;
 import com.edmazur.eqrs.game.RaidTarget;
 import com.edmazur.eqrs.game.RaidTargets;
 
-public class TodListener implements MessageCreateListener {
+public class DiscordTodListener implements MessageCreateListener {
 
   private static final String HELP_TOD_USAGE =
       "- !tod usage: `!tod <target>, <timestamp>` Example: `!tod naggy, 5/14 17:55:36`";
@@ -58,7 +58,7 @@ public class TodListener implements MessageCreateListener {
   private final Database database;
   private final RaidTargets raidTargets;
 
-  public TodListener(Config config, Discord discord, Database database, RaidTargets raidTargets) {
+  public DiscordTodListener(Config config, Discord discord, Database database, RaidTargets raidTargets) {
     this.config = config;
     this.discord = discord;
     this.discord.addListener(this);

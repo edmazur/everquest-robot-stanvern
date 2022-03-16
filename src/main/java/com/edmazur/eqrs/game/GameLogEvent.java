@@ -8,7 +8,7 @@ public class GameLogEvent {
   private final LocalDateTime time;
   private final String text;
 
-  protected GameLogEvent(String fullLogLine, LocalDateTime time, String text) {
+  public GameLogEvent(String fullLogLine, LocalDateTime time, String text) {
     this.fullLogline = fullLogLine;
     this.time = time;
     this.text = text;
