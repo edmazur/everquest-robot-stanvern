@@ -68,7 +68,7 @@ public class MotdListener implements GameLogListener {
     };
 
     Optional<String> maybeMotd =
-        discord.getLastMessageMatchingPredicated(MOTD_CHANNEL, predicate);
+        discord.getLastMessageMatchingPredicate(MOTD_CHANNEL, predicate);
     if (maybeMotd.isEmpty()) {
       return maybeMotd;
     } else {

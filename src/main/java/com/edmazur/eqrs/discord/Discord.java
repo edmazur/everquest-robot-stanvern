@@ -56,7 +56,7 @@ public class Discord {
     getMessageable(discordUser).sendMessage(getMessage(message), image);
   }
 
-  public Optional<String> getLastMessageMatchingPredicated(
+  public Optional<String> getLastMessageMatchingPredicate(
       DiscordChannel discordChannel,
       Predicate<Message> predicate) {
     Optional<Message> maybeMessage = getTextChannel(discordChannel)
