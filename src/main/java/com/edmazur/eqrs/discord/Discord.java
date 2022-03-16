@@ -2,12 +2,14 @@ package com.edmazur.eqrs.discord;
 
 import java.io.File;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.activity.ActivityType;
 import org.javacord.api.entity.channel.Channel;
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.Messageable;
 import org.javacord.api.listener.message.MessageCreateListener;
 
@@ -54,11 +56,20 @@ public class Discord {
     getMessageable(discordUser).sendMessage(getMessage(message), image);
   }
 
-  private Messageable getMessageable(DiscordChannel discordChannel) {
-    if (config.getBoolean(Property.DEBUG)) {
-      return getMessageable(DiscordUser.EDMAZUR);
+  public Optional<String> getLastMessageMatchingPredicated(
+      DiscordChannel discordChannel,
+      Predicate<Message> predicate) {
+    Optional<Message> maybeMessage = getTextChannel(discordChannel)
+        .getMessagesUntil(predicate).join()
+        .getOldestMessage();
+    if (maybeMessage.isEmpty()) {
+      return Optional.empty();
     }
+    Message message = maybeMessage.get();
+    return Optional.of(message.getContent());
+  }
 
+  private TextChannel getTextChannel(DiscordChannel discordChannel) {
     Optional<Channel> maybeChannel =
         discordApi.getChannelById(discordChannel.getId());
     if (maybeChannel.isEmpty()) {
@@ -66,6 +77,14 @@ public class Discord {
     }
     TextChannel channel = maybeChannel.get().asTextChannel().get();
     return channel;
+  }
+
+  private Messageable getMessageable(DiscordChannel discordChannel) {
+    if (config.getBoolean(Property.DEBUG)) {
+      return getMessageable(DiscordUser.EDMAZUR);
+    }
+
+    return getTextChannel(discordChannel);
   }
 
   private Messageable getMessageable(DiscordUser discordUser) {
