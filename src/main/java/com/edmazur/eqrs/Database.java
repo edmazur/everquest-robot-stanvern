@@ -86,13 +86,6 @@ public class Database {
   }
 
   private Connection getConnection() {
-    try {
-      Class.forName("com.mysql.jdbc.Driver");
-    } catch (ClassNotFoundException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-
     String host = config.getString(Config.Property.MYSQL_HOST);
     String database = config.getString(Config.Property.MYSQL_DATABASE);
     String username = config.getString(Config.Property.MYSQL_USERNAME);
