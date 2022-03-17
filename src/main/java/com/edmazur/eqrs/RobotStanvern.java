@@ -54,7 +54,7 @@ public class RobotStanvern {
     // TODO: Set this up more like how game log messages are received centrally
     // and passed out to listeners?
     new DiscordTodListener(config, discord, database, raidTargets);
-    new AnnouncementListener(discord);
+    new AnnouncementListener(config, discord);
 
     List<GameLogListener> gameLogListeners = new ArrayList<>();
 

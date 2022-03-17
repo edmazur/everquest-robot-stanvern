@@ -11,6 +11,8 @@ import org.javacord.api.event.message.MessageEditEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 import org.javacord.api.listener.message.MessageEditListener;
 
+import com.edmazur.eqrs.Config;
+import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
@@ -43,9 +45,11 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
     }
   }
 
+  private final Config config;
   private final Discord discord;
 
-  public AnnouncementListener(Discord discord) {
+  public AnnouncementListener(Config config, Discord discord) {
+    this.config = config;
     this.discord = discord;
     this.discord.addListener(this);
     LOGGER.log("%s running", this.getClass().getName());
@@ -77,10 +81,15 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
       String content,
       MessageType messageType) {
     boolean isChannelToReadFrom = false;
-    for (DiscordChannel channelToReadFrom : CHANNELS_TO_READ_FROM) {
-      if (channelToReadFrom.isEventChannel(channel)) {
-        isChannelToReadFrom = true;
-        break;
+    if (config.getBoolean(Property.DEBUG)) {
+      isChannelToReadFrom =
+          DiscordChannel.ROBOT_STANVERN_TESTING.isEventChannel(channel);
+    } else {
+      for (DiscordChannel channelToReadFrom : CHANNELS_TO_READ_FROM) {
+        if (channelToReadFrom.isEventChannel(channel)) {
+          isChannelToReadFrom = true;
+          break;
+        }
       }
     }
 
