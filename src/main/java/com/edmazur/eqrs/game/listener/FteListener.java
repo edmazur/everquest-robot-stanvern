@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.edmazur.eqrs.Sound;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.discord.DiscordUser;
@@ -18,9 +19,11 @@ public class FteListener implements GameLogListener {
   private static final Pattern FTE_PATTERN = Pattern.compile(".+ engages \\w+!");
 
   private final Discord discord;
+  private final Sound sound;
 
-  public FteListener(Discord discord) {
+  public FteListener(Discord discord, Sound sound) {
     this.discord = discord;
+    this.sound = sound;
   }
 
   @Override
@@ -35,12 +38,7 @@ public class FteListener implements GameLogListener {
     Matcher matcher = FTE_PATTERN.matcher(gameLogEvent.getText());
     if (matcher.matches()) {
       if (PLAY_SOUND) {
-        try {
-          Runtime.getRuntime().exec(new String[] {"mplayer", "/home/mazur/eclipse-workspace/RobotStanvern/audio/time-to-slay-the-dragon.mp3"});
-        } catch (IOException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        }
+        sound.play();
       }
 
       if (SEND_DISCORD_MESSAGE) {

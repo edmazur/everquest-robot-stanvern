@@ -4,6 +4,7 @@ Multi-purpose Discord bot for EverQuest
 # Capabilities
 - Discord: Listens for reported ToDs and saves them to a database.
 - Discord: Listens for messages in announcement/batphone channels and records them in a separate audit channel.
+- Discord: Listens for messages in batphone channels and plays a sound on the local machine.
 - Game: Listens for FTE messages and sends a Discord message to a channel/user and/or plays a sound on the local machine.
 - Game: Listens for raid target spawns and sends a Discord message/screenshot to a channel/user and/or plays a sound on the local machine.
 - Game: Detects inactivity and sends a Discord message to a user.

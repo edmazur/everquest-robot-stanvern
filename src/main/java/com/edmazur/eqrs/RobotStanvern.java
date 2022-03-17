@@ -11,6 +11,7 @@ import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordUser;
 import com.edmazur.eqrs.discord.listener.AnnouncementListener;
+import com.edmazur.eqrs.discord.listener.BatphoneListener;
 import com.edmazur.eqrs.discord.listener.DiscordTodListener;
 import com.edmazur.eqrs.game.GameLog;
 import com.edmazur.eqrs.game.GameLogEvent;
@@ -51,15 +52,17 @@ public class RobotStanvern {
 
     Database database = new Database(config);
     RaidTargets raidTargets = new RaidTargets(database);
+    Sound sound = new Sound();
     // TODO: Set this up more like how game log messages are received centrally
     // and passed out to listeners?
     new DiscordTodListener(config, discord, database, raidTargets);
     new AnnouncementListener(config, discord);
+    new BatphoneListener(config, discord, sound);
 
     List<GameLogListener> gameLogListeners = new ArrayList<>();
 
     // Add FTE listener.
-    gameLogListeners.add(new FteListener(discord));
+    gameLogListeners.add(new FteListener(discord, sound));
 
     // Add heartbeat listener.
     HeartbeatListener heartbeatListener = new HeartbeatListener(discord);
