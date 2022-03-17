@@ -24,6 +24,9 @@ public class Config {
     MYSQL_PASSWORD("mysql.password"),
     MYSQL_USERNAME("mysql.username"),
 
+    // TODO: Use this everywhere instead of ever relying on machine timezone.
+    TIMEZONE("timezone"),
+
     ;
 
     private final String name;

@@ -1,5 +1,9 @@
 package com.edmazur.eqrs.discord.listener;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +63,7 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
   public void onMessageCreate(MessageCreateEvent event) {
     onMessage(
         event.getChannel(),
+        event.getMessage().getCreationTimestamp(),
         event.getMessageAuthor().getDisplayName(),
         event.getMessageContent(),
         MessageType.CREATE);
@@ -68,6 +73,9 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
   public void onMessageEdit(MessageEditEvent event) {
     onMessage(
         event.getChannel(),
+        // TODO: Probably need to make this more robust - I think this depends
+        // on the original message which may or may not be in the cache.
+        event.getMessage().get().getLastEditTimestamp().get(),
         event.getMessageAuthor().isPresent()
             ? event.getMessageAuthor().get().getDisplayName()
             : "",
@@ -77,6 +85,7 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
 
   private void onMessage(
       TextChannel channel,
+      Instant instant,
       String author,
       String content,
       MessageType messageType) {
@@ -101,10 +110,12 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
       // TODO: Make the #channel linked.
       // TODO: Maybe make the user linked.
       // TODO: Use an "embed" with nice colors/images for different channels.
-      String auditMessage = String.format("**%s** message from **%s** in **#%s**:\n%s",
+      String auditMessage = String.format("**%s** message from **%s** in **#%s** at **%s**:\n%s",
           messageType.getDescription(),
           author,
           maybeServerChannel.get().getName(),
+          instant.atZone(ZoneId.of(config.getString(Property.TIMEZONE)))
+              .format(DateTimeFormatter.RFC_1123_DATE_TIME),
           content);
       discord.sendMessage(CHANNEL_TO_WRITE_TO, auditMessage);
     }

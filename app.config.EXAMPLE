@@ -4,3 +4,5 @@ mysql.database=
 mysql.host=
 mysql.password=
 mysql.username=
+
+timezone=
