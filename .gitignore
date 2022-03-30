@@ -1,6 +1,12 @@
 # Config
 /app.config
 
+# Eclipse
+/.classpath
+/.project
+/.settings/
+/bin/
+
 # Gradle
 /.gradle/
 /build/
