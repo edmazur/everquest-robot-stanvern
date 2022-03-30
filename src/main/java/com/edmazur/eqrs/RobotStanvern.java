@@ -63,7 +63,7 @@ public class RobotStanvern {
     List<GameLogListener> gameLogListeners = new ArrayList<>();
 
     // Add FTE listener.
-    gameLogListeners.add(new FteListener(discord, sound));
+    gameLogListeners.add(new FteListener(discord));
 
     // Add heartbeat listener.
     HeartbeatListener heartbeatListener = new HeartbeatListener(discord);

@@ -28,7 +28,7 @@ $ ./gradlew run
 - Discord: Listens for reported ToDs and saves them to a database.
 - Discord: Listens for messages in announcement/batphone channels and records them in a separate audit channel.
 - Discord: Listens for messages in batphone channels, then plays a sound on the local machine and sends an alert through PagerDuty.
-- Game: Listens for FTE messages and sends a Discord message to a channel/user and/or plays a sound on the local machine.
+- Game: Listens for FTE messages and sends a Discord message to a channel/user.
 - Game: Listens for raid target spawns and sends a Discord message/screenshot to a channel/user and/or plays a sound on the local machine.
 - Game: Detects inactivity and sends a Discord message to a user.
 - Game: Listens for MotD messages and sends to Discord.
