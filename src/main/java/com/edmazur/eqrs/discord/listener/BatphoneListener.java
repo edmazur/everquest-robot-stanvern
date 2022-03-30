@@ -9,6 +9,7 @@ import org.javacord.api.listener.message.MessageCreateListener;
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.Logger;
+import com.edmazur.eqrs.Pager;
 import com.edmazur.eqrs.Sound;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
@@ -26,12 +27,15 @@ public class BatphoneListener implements MessageCreateListener {
 
   private final Config config;
   private final Discord discord;
+  private final Pager pager;
   private final Sound sound;
 
-  public BatphoneListener(Config config, Discord discord, Sound sound) {
+  public BatphoneListener(
+      Config config, Discord discord, Pager pager, Sound sound) {
     this.config = config;
     this.discord = discord;
     this.discord.addListener(this);
+    this.pager = pager;
     this.sound = sound;
     LOGGER.log("%s running", this.getClass().getName());
   }
@@ -55,6 +59,7 @@ public class BatphoneListener implements MessageCreateListener {
     }
 
     sound.play();
+    pager.page(event.getMessageContent());
   }
 
 }
