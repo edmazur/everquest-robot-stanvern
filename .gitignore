@@ -1,6 +1,6 @@
-# Gradle
-.gradle/
-build/
-
 # Config
-app.config
+/app.config
+
+# Gradle
+/.gradle/
+/build/
