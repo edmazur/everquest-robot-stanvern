@@ -1,6 +1,29 @@
 # everquest-robot-stanvern
 Multi-purpose Discord bot for EverQuest
 
+# Usage
+
+Setup:
+
+```
+$ git clone https://github.com/edmazur/everquest-robot-stanvern
+$ cd everquest-robot-stanvern
+$ cp app.config.EXAMPLE app.config
+$ # (configure app.config)
+```
+
+Debug mode (Discord output only sent as DM, database writes skipped):
+
+```
+$ ./gradlew runDebug
+```
+
+Regular mode:
+
+```
+$ ./gradlew run
+```
+
 # Capabilities
 - Discord: Listens for reported ToDs and saves them to a database.
 - Discord: Listens for messages in announcement/batphone channels and records them in a separate audit channel.
@@ -12,8 +35,6 @@ Multi-purpose Discord bot for EverQuest
 - Game: Listens for ToD reports in guild chat and sends to Discord.
 
 # TODO
-- Make it feasible for other people to run this (build system? uber jar?).
-- Document setup/running instructions.
 - Eliminate references to my local file system.
 - Eliminate Runtime.exec() usage.
 - Eliminate System.err/System.out logging.

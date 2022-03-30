@@ -1,0 +1,20 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation 'commons-io:commons-io:2.11.0'
+  implementation 'org.javacord:javacord:3.4.0'
+  implementation 'mysql:mysql-connector-java:8.0.25'
+}
+
+mainClassName = 'com.edmazur.eqrs.RobotStanvern'
+
+task runDebug(type: JavaExec) {
+  args = ['--debug']
+  classpath = sourceSets.main.runtimeClasspath
+  main = mainClassName
+}
