@@ -13,9 +13,3 @@ dependencies {
 }
 
 mainClassName = 'com.edmazur.eqrs.RobotStanvern'
-
-task runDebug(type: JavaExec) {
-  args = ['--debug']
-  classpath = sourceSets.main.runtimeClasspath
-  main = mainClassName
-}

@@ -12,17 +12,15 @@ $ cp app.config.EXAMPLE app.config
 $ # (configure app.config)
 ```
 
-Debug mode (Discord output only sent as DM, database writes skipped):
+Run:
 
 ```
-$ ./gradlew runDebug
+$ git pull
+$ ./gradlew installDist
+$ ./build/install/everquest-robot-stanvern/bin/everquest-robot-stanvern
 ```
 
-Regular mode:
-
-```
-$ ./gradlew run
-```
+Debug mode: Append `--debug` on final Run command (Discord output only sent as DM, database writes skipped).
 
 # Capabilities
 - Discord: Listens for reported ToDs and saves them to a database.
