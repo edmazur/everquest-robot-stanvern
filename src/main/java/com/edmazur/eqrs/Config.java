@@ -56,10 +56,10 @@ public class Config {
     }
   }
 
-  // Only the debug property supports being set externally like this in order to
-  // facilitate setting it via the command line.
-  // TODO: Look into how to eliminate this by supporting different config files
-  // for development/production environments.
+  // Only the debug property supports being set externally like this in order to facilitate setting
+  // it via the command line.
+  // TODO: Look into how to eliminate this by supporting different config files for
+  // development/production environments.
   public void enableDebug() {
     properties.setProperty(Property.DEBUG.getName(), "true");
   }

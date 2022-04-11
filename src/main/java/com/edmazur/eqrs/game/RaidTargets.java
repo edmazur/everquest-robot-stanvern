@@ -1,9 +1,8 @@
 package com.edmazur.eqrs.game;
 
+import com.edmazur.eqrs.Database;
 import java.util.List;
 import java.util.Optional;
-
-import com.edmazur.eqrs.Database;
 
 public class RaidTargets {
 

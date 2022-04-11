@@ -1,13 +1,11 @@
 package com.edmazur.eqrs.game.listener;
 
-import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.discord.DiscordUser;
 import com.edmazur.eqrs.game.GameLogEvent;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FteListener implements GameLogListener {
 
@@ -23,9 +21,7 @@ public class FteListener implements GameLogListener {
 
   @Override
   public String getConfig() {
-    return String.format(
-        "SEND_DISCORD_MESSAGE_AS_DM=%s",
-        SEND_DISCORD_MESSAGE_AS_DM);
+    return String.format("SEND_DISCORD_MESSAGE_AS_DM=%s", SEND_DISCORD_MESSAGE_AS_DM);
   }
 
   @Override

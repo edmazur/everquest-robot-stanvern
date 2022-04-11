@@ -1,25 +1,22 @@
 package com.edmazur.eqrs.discord.listener;
 
+import com.edmazur.eqrs.Config;
+import com.edmazur.eqrs.Config.Property;
+import com.edmazur.eqrs.Logger;
+import com.edmazur.eqrs.discord.Discord;
+import com.edmazur.eqrs.discord.DiscordChannel;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import org.javacord.api.entity.channel.ServerChannel;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.event.message.MessageEditEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 import org.javacord.api.listener.message.MessageEditListener;
-
-import com.edmazur.eqrs.Config;
-import com.edmazur.eqrs.Config.Property;
-import com.edmazur.eqrs.Logger;
-import com.edmazur.eqrs.discord.Discord;
-import com.edmazur.eqrs.discord.DiscordChannel;
 
 public class AnnouncementListener implements MessageCreateListener, MessageEditListener {
 
@@ -73,12 +70,10 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
   public void onMessageEdit(MessageEditEvent event) {
     onMessage(
         event.getChannel(),
-        // TODO: Probably need to make this more robust - I think this depends
-        // on the original message which may or may not be in the cache.
+        // TODO: Probably need to make this more robust - I think this depends on the original
+        // message which may or may not be in the cache.
         event.getMessage().get().getLastEditTimestamp().get(),
-        event.getMessageAuthor().isPresent()
-            ? event.getMessageAuthor().get().getDisplayName()
-            : "",
+        event.getMessageAuthor().isPresent() ? event.getMessageAuthor().get().getDisplayName() : "",
         event.getNewContent(),
         MessageType.EDIT);
   }
@@ -91,8 +86,7 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
       MessageType messageType) {
     boolean isChannelToReadFrom = false;
     if (config.getBoolean(Property.DEBUG)) {
-      isChannelToReadFrom =
-          DiscordChannel.ROBOT_STANVERN_TESTING.isEventChannel(channel);
+      isChannelToReadFrom = DiscordChannel.ROBOT_STANVERN_TESTING.isEventChannel(channel);
     } else {
       for (DiscordChannel channelToReadFrom : CHANNELS_TO_READ_FROM) {
         if (channelToReadFrom.isEventChannel(channel)) {

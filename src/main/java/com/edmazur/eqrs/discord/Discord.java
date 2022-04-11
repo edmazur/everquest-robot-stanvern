@@ -1,9 +1,10 @@
 package com.edmazur.eqrs.discord;
 
+import com.edmazur.eqrs.Config;
+import com.edmazur.eqrs.Config.Property;
 import java.io.File;
 import java.util.Optional;
 import java.util.function.Predicate;
-
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.activity.ActivityType;
@@ -12,9 +13,6 @@ import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.Messageable;
 import org.javacord.api.listener.message.MessageCreateListener;
-
-import com.edmazur.eqrs.Config;
-import com.edmazur.eqrs.Config.Property;
 
 public class Discord {
 
@@ -70,8 +68,7 @@ public class Discord {
   }
 
   private TextChannel getTextChannel(DiscordChannel discordChannel) {
-    Optional<Channel> maybeChannel =
-        discordApi.getChannelById(discordChannel.getId());
+    Optional<Channel> maybeChannel = discordApi.getChannelById(discordChannel.getId());
     if (maybeChannel.isEmpty()) {
       System.err.println("Could not find channel: " + discordChannel);
     }
@@ -93,9 +90,7 @@ public class Discord {
 
   // TODO: Maybe work this into the image-only sendMessage() variants.
   private String getMessage(String message) {
-    return config.getBoolean(Property.DEBUG)
-        ? "(debug mode enabled)\n" + message
-        : message;
+    return config.getBoolean(Property.DEBUG) ? "(debug mode enabled)\n" + message : message;
   }
 
   public void addListener(MessageCreateListener listener) {

@@ -1,15 +1,13 @@
 package com.edmazur.eqrs.game.listener;
 
+import com.edmazur.eqrs.RateLimiter;
+import com.edmazur.eqrs.discord.Discord;
+import com.edmazur.eqrs.discord.DiscordChannel;
+import com.edmazur.eqrs.game.GameLogEvent;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Map;
-
-import com.edmazur.eqrs.RateLimiter;
-import com.edmazur.eqrs.discord.Discord;
-import com.edmazur.eqrs.discord.DiscordChannel;
-import com.edmazur.eqrs.discord.DiscordUser;
-import com.edmazur.eqrs.game.GameLogEvent;
 
 public class RaidTargetSpawnListener implements GameLogListener {
 
@@ -17,20 +15,17 @@ public class RaidTargetSpawnListener implements GameLogListener {
 
   private static final String REGULAR_MESSAGE =
       "@everyone %s POP! Stanvern's stream should be up if you want to confirm. "
-      + "Stay tuned for a decision from an officer on whether we will contest "
-      + "it. Be ready in case we do!\n"
+      + "Stay tuned for a decision from an officer on whether we will contest it. Be ready in case "
+      + "we do!\n"
       + "\n"
-      + "(Disclaimer: This is an automated message, brought to you by "
-      + "S.E.B.S. (Stanvern Emergency Broadcast System). I'm just a dumb robot "
-      + "and I'm really sorry if I made a mistake!)";
+      + "(Disclaimer: This is an automated message, brought to you by S.E.B.S. (Stanvern Emergency "
+      + "Broadcast System). I'm just a dumb robot and I'm really sorry if I made a mistake!)";
 
   private static final String BATPHONE_MESSAGE =
-      "@everyone %s POP! Go go go! Stanvern's stream should be up if you want "
-      + "to confirm.\n"
+      "@everyone %s POP! Go go go! Stanvern's stream should be up if you want to confirm.\n"
       + "\n"
-      + "(Disclaimer: This is an automated message, brought to you by "
-      + "S.E.B.S. (Stanvern Emergency Broadcast System). I'm just a dumb robot "
-      + "and I'm really sorry if I made a mistake!)";
+      + "(Disclaimer: This is an automated message, brought to you by S.E.B.S. (Stanvern Emergency "
+      + "Broadcast System). I'm just a dumb robot and I'm really sorry if I made a mistake!)";
 
   private static Map<String, String> TRIGGERS_AND_TARGETS = Map.ofEntries(
       Map.entry("Master Yael begins to cast a spell.", "YAEL"));
@@ -48,9 +43,7 @@ public class RaidTargetSpawnListener implements GameLogListener {
 
   @Override
   public String getConfig() {
-    return String.format(
-        "BATPHONE=%s",
-        BATPHONE);
+    return String.format("BATPHONE=%s", BATPHONE);
   }
 
   @Override
@@ -58,8 +51,8 @@ public class RaidTargetSpawnListener implements GameLogListener {
     for (Map.Entry<String, String> mapEntry : TRIGGERS_AND_TARGETS.entrySet()) {
       String trigger = mapEntry.getKey();
       String target = mapEntry.getValue();
-      // Use startsWith() instead of equals() to account for potential
-      // end-of-line weirdness (trailing whitespace, /r, etc.).
+      // Use startsWith() instead of equals() to account for potential end-of-line weirdness
+      // (trailing whitespace, /r, etc.).
       if (gameLogEvent.getText().startsWith(trigger)) {
         if (rateLimiter.getPermission()) {
           if (BATPHONE) {
@@ -84,7 +77,8 @@ public class RaidTargetSpawnListener implements GameLogListener {
     File file = null;
     try {
       file = File.createTempFile(this.getClass().getName() + "-", ".png");
-      Runtime.getRuntime().exec(new String[] {"import", "-window", "EverQuest", file.getAbsolutePath()});
+      Runtime.getRuntime().exec(
+          new String[] {"import", "-window", "EverQuest", file.getAbsolutePath()});
       // Give some time for the screenshot to complete.
       // TODO: Check every 100ms or something for the file being ready.
       Thread.sleep(1000 * 5);

@@ -1,5 +1,13 @@
 package com.edmazur.eqrs.discord.listener;
 
+import com.edmazur.eqrs.Config;
+import com.edmazur.eqrs.Config.Property;
+import com.edmazur.eqrs.Database;
+import com.edmazur.eqrs.discord.Discord;
+import com.edmazur.eqrs.discord.DiscordChannel;
+import com.edmazur.eqrs.discord.DiscordUser;
+import com.edmazur.eqrs.game.RaidTarget;
+import com.edmazur.eqrs.game.RaidTargets;
 import java.awt.Color;
 import java.io.File;
 import java.time.Duration;
@@ -9,19 +17,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
-
-import com.edmazur.eqrs.Config;
-import com.edmazur.eqrs.Config.Property;
-import com.edmazur.eqrs.Database;
-import com.edmazur.eqrs.discord.Discord;
-import com.edmazur.eqrs.discord.DiscordChannel;
-import com.edmazur.eqrs.discord.DiscordUser;
-import com.edmazur.eqrs.game.RaidTarget;
-import com.edmazur.eqrs.game.RaidTargets;
 
 public class DiscordTodListener implements MessageCreateListener {
 
@@ -30,14 +28,18 @@ public class DiscordTodListener implements MessageCreateListener {
   private static final String HELP_QUAKE_USAGE =
       "- !quake usage: `!quake <timestamp>` Example: `!quake 5/14 17:55:36`";
   private static final String HELP_TARGET =
-      "- `<target>` is case-insensitive and supports common abbrevations, e.g. `Lord Nagafen`, `lord nagafen`, and `naggy` are all valid.";
+      "- `<target>` is case-insensitive and supports common abbrevations, "
+      + "e.g. `Lord Nagafen`, `lord nagafen`, and `naggy` are all valid.";
   private static final String HELP_TIMESTAMP =
-      "- `<timestamp>` format is `{month}/{day} {hour}:{minute}:{seconds}`. Times are 24h format (e.g. 7pm = 19:00:00) and are always interpreted as Eastern time.";
+      "- `<timestamp>` format is `{month}/{day} {hour}:{minute}:{seconds}`. "
+      + "Times are 24h format (e.g. 7pm = 19:00:00) and are always interpreted as Eastern time.";
   private static final String HELP_GUILD =
-      "- `<guild>` is case-insensitive and supports common abbrevations, e.g. `Force of Will` and `fow` are both valid.";
+      "- `<guild>` is case-insensitive and supports common abbrevations, "
+      + "e.g. `Force of Will` and `fow` are both valid.";
 
   private static final Pattern HELP_PATTERN = Pattern.compile("!help.*");
-  private static final Pattern TIMESTAMP_PATTERN = Pattern.compile("(\\d+{1,2})/(\\d+{1,2}) (\\d{1,2}):(\\d{2}):(\\d{2})");
+  private static final Pattern TIMESTAMP_PATTERN =
+      Pattern.compile("(\\d+{1,2})/(\\d+{1,2}) (\\d{1,2}):(\\d{2}):(\\d{2})");
 
   private static final Pattern TOD_PATTERN = Pattern.compile("!tod.*");
   private static final Pattern TOD_PARSE_PATTERN = Pattern.compile("!tod (.+), (.+)");
@@ -58,7 +60,11 @@ public class DiscordTodListener implements MessageCreateListener {
   private final Database database;
   private final RaidTargets raidTargets;
 
-  public DiscordTodListener(Config config, Discord discord, Database database, RaidTargets raidTargets) {
+  public DiscordTodListener(
+      Config config,
+      Discord discord,
+      Database database,
+      RaidTargets raidTargets) {
     this.config = config;
     this.discord = discord;
     this.discord.addListener(this);
@@ -98,7 +104,8 @@ public class DiscordTodListener implements MessageCreateListener {
         }
         if (commaCount != 1) {
           event.addReactionsToMessage("❌");
-          event.getMessage().reply("Sorry, unrecognized !tod command, there should be exactly 1 comma"
+          event.getMessage().reply(
+              "Sorry, unrecognized !tod command, there should be exactly 1 comma"
               + "\n" + HELP_TOD_USAGE
               + "\n" + HELP_TARGET
               + "\n" + HELP_TIMESTAMP);
@@ -140,7 +147,8 @@ public class DiscordTodListener implements MessageCreateListener {
         LocalDateTime timestamp = maybeTimestamp.get();
         if (timestamp.compareTo(LocalDateTime.now()) > 0) {
           event.addReactionsToMessage("❌");
-          event.getMessage().reply("Sorry, ToD cannot be in the future: `" + timestampToParse + "`");
+          event.getMessage().reply(
+              "Sorry, ToD cannot be in the future: `" + timestampToParse + "`");
           return;
         }
         String timeSince = "~" + getTimeSince(timestamp) + " ago";
@@ -152,7 +160,8 @@ public class DiscordTodListener implements MessageCreateListener {
             .setThumbnail(SUCCESS_IMAGE)
             .addField("http://edmazur.com/eq updated",
                   "`     Target:` " + raidTarget.getName() + "\n"
-                + "`   (ET) ToD:` " + DATE_TIME_FORMATTER.format(timestamp) + " [" + timeSince + "]\n"
+                + "`   (ET) ToD:` " + DATE_TIME_FORMATTER.format(timestamp)
+                + " [" + timeSince + "]\n"
                 + "`(local) ToD:` " + "<t:" + getUnixTimestamp(timestamp) + ":F>");
 
         database.updateTimeOfDeath(raidTarget, timestamp);
@@ -185,7 +194,8 @@ public class DiscordTodListener implements MessageCreateListener {
         LocalDateTime timestamp = maybeTimestamp.get();
         if (timestamp.compareTo(LocalDateTime.now()) > 0) {
           event.addReactionsToMessage("❌");
-          event.getMessage().reply("Sorry, quake time cannot be in the future: `" + timestampToParse + "`");
+          event.getMessage().reply(
+              "Sorry, quake time cannot be in the future: `" + timestampToParse + "`");
           return;
         }
         String timeSince = "~" + getTimeSince(timestamp) + " ago";
@@ -196,7 +206,8 @@ public class DiscordTodListener implements MessageCreateListener {
             .setColor(Color.GREEN)
             .setThumbnail(SUCCESS_IMAGE)
             .addField("http://edmazur.com/eq updated",
-                  "`   (ET) Quake time:` " + DATE_TIME_FORMATTER.format(timestamp) + " [" + timeSince + "]\n"
+                "`   (ET) Quake time:` " + DATE_TIME_FORMATTER.format(timestamp)
+                + " [" + timeSince + "]\n"
                 + "`(local) Quake time:` " + "<t:" + getUnixTimestamp(timestamp) + ":F>");
 
         database.updateQuakeTime(timestamp);

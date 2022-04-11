@@ -1,28 +1,24 @@
 package com.edmazur.eqrs.game.listener;
 
-import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.javacord.api.entity.message.Message;
-
 import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.game.GameLogEvent;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.javacord.api.entity.message.Message;
 
 public class MotdListener implements GameLogListener {
 
   private static final Logger LOGGER = new Logger();
 
-  private static final Pattern GAME_MOTD_PATTERN =
-      Pattern.compile("GUILD MOTD: .+ - .+");
+  private static final Pattern GAME_MOTD_PATTERN = Pattern.compile("GUILD MOTD: .+ - .+");
   private static final Pattern DISCORD_MOTD_PATTERN =
       Pattern.compile("`" + GAME_MOTD_PATTERN.pattern() + "`");
 
-  private static final DiscordChannel MOTD_CHANNEL =
-      DiscordChannel.RAIDER_GMOTD;
+  private static final DiscordChannel MOTD_CHANNEL = DiscordChannel.RAIDER_GMOTD;
 
   private final Discord discord;
 
@@ -49,8 +45,8 @@ public class MotdListener implements GameLogListener {
         }
       }
 
-      // TODO: Maybe avoid sending multiple MotDs in quick succession (e.g. from
-      // fixing typos) by waiting a bit and only sending latest MotD.
+      // TODO: Maybe avoid sending multiple MotDs in quick succession (e.g. from fixing typos) by
+      // waiting a bit and only sending latest MotD.
       discord.sendMessage(MOTD_CHANNEL, "`" + gameLogEvent.getText() + "`");
     }
   }
@@ -62,13 +58,12 @@ public class MotdListener implements GameLogListener {
     Predicate<Message> predicate = new Predicate<Message>() {
       @Override
       public boolean test(Message message) {
-        return message.getAuthor().isYourself() &&
-            DISCORD_MOTD_PATTERN.matcher(message.getContent()).matches();
+        return message.getAuthor().isYourself()
+            && DISCORD_MOTD_PATTERN.matcher(message.getContent()).matches();
       }
     };
 
-    Optional<String> maybeMotd =
-        discord.getLastMessageMatchingPredicate(MOTD_CHANNEL, predicate);
+    Optional<String> maybeMotd = discord.getLastMessageMatchingPredicate(MOTD_CHANNEL, predicate);
     if (maybeMotd.isEmpty()) {
       return maybeMotd;
     } else {

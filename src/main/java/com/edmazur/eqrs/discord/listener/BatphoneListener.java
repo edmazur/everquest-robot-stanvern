@@ -1,11 +1,5 @@
 package com.edmazur.eqrs.discord.listener;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.javacord.api.event.message.MessageCreateEvent;
-import org.javacord.api.listener.message.MessageCreateListener;
-
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.Logger;
@@ -13,6 +7,10 @@ import com.edmazur.eqrs.Pager;
 import com.edmazur.eqrs.Sound;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
+import java.util.Arrays;
+import java.util.List;
+import org.javacord.api.event.message.MessageCreateEvent;
+import org.javacord.api.listener.message.MessageCreateListener;
 
 // TODO: Use text-to-speech to say the batphone text on local machine.
 // TODO: Use text-to-speech to say the batphone text in wake-up Discord channel.
@@ -30,8 +28,7 @@ public class BatphoneListener implements MessageCreateListener {
   private final Pager pager;
   private final Sound sound;
 
-  public BatphoneListener(
-      Config config, Discord discord, Pager pager, Sound sound) {
+  public BatphoneListener(Config config, Discord discord, Pager pager, Sound sound) {
     this.config = config;
     this.discord = discord;
     this.discord.addListener(this);
@@ -44,8 +41,7 @@ public class BatphoneListener implements MessageCreateListener {
   public void onMessageCreate(MessageCreateEvent event) {
     boolean isChannelToReadFrom = false;
     if (config.getBoolean(Property.DEBUG)) {
-      isChannelToReadFrom =
-          DiscordChannel.ROBOT_STANVERN_TESTING.isEventChannel(event);
+      isChannelToReadFrom = DiscordChannel.ROBOT_STANVERN_TESTING.isEventChannel(event);
     } else {
       for (DiscordChannel channelToReadFrom : CHANNELS_TO_READ_FROM) {
         if (channelToReadFrom.isEventChannel(event)) {

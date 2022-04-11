@@ -1,15 +1,7 @@
 package com.edmazur.eqrs;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.discord.Discord;
-import com.edmazur.eqrs.discord.DiscordUser;
 import com.edmazur.eqrs.discord.listener.AnnouncementListener;
 import com.edmazur.eqrs.discord.listener.BatphoneListener;
 import com.edmazur.eqrs.discord.listener.DiscordTodListener;
@@ -23,6 +15,11 @@ import com.edmazur.eqrs.game.listener.GameTodListener;
 import com.edmazur.eqrs.game.listener.HeartbeatListener;
 import com.edmazur.eqrs.game.listener.MotdListener;
 import com.edmazur.eqrs.game.listener.RaidTargetSpawnListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class RobotStanvern {
 
@@ -38,24 +35,27 @@ public class RobotStanvern {
     }
 
     if (config.getBoolean(Property.DEBUG)) {
-      LOGGER.log("Debug mode enabled, Discord output will only be sent as DM "
-          + "and database writes will be skipped (SQL will be logged)");
+      LOGGER.log("Debug mode enabled, Discord output will only be sent as DM and database writes "
+          + "will be skipped (SQL will be logged)");
     }
 
     Discord discord = new Discord(config);
 
     // Uncomment to send one-off images/messages.
-//    File image = new File("/home/mazur/eclipse-workspace/RobotStanvern/img/angry-robot.gif");
-//    if (image.exists()) {
-//      discord.sendMessage(DiscordChannel.TOD, image);
-//    }
+    // TODO: Add a better way to send one-off images/messages that doesn't require code changes.
+    /*
+    File image = new File("/home/mazur/eclipse-workspace/RobotStanvern/img/angry-robot.gif");
+    if (image.exists()) {
+      discord.sendMessage(DiscordChannel.TOD, image);
+    }
+    */
 
     Database database = new Database(config);
     RaidTargets raidTargets = new RaidTargets(database);
     Pager pager = new Pager(config);
     Sound sound = new Sound();
-    // TODO: Set this up more like how game log messages are received centrally
-    // and passed out to listeners?
+    // TODO: Set this up more like how game log messages are received centrally and passed out to
+    // listeners?
     new DiscordTodListener(config, discord, database, raidTargets);
     new AnnouncementListener(config, discord);
     new BatphoneListener(config, discord, pager, sound);
@@ -67,15 +67,12 @@ public class RobotStanvern {
 
     // Add heartbeat listener.
     HeartbeatListener heartbeatListener = new HeartbeatListener(discord);
-    ScheduledExecutorService scheduledExecutorService =
-        Executors.newScheduledThreadPool(10);
-    scheduledExecutorService.scheduleAtFixedRate(
-        heartbeatListener, 1, 1, TimeUnit.SECONDS);
+    ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
+    scheduledExecutorService.scheduleAtFixedRate(heartbeatListener, 1, 1, TimeUnit.SECONDS);
     gameLogListeners.add(heartbeatListener);
 
     // Add raid target spawn listener.
-    RaidTargetSpawnListener raidTargetSpawnListener =
-        new RaidTargetSpawnListener(discord);
+    RaidTargetSpawnListener raidTargetSpawnListener = new RaidTargetSpawnListener(discord);
     gameLogListeners.add(raidTargetSpawnListener);
 
     // Add MotD listener.
@@ -84,8 +81,7 @@ public class RobotStanvern {
 
     // Add ToD listener.
     GameTodDetector gameTodDetector = new GameTodDetector();
-    GameTodListener gameTodListener =
-        new GameTodListener(discord, gameTodDetector);
+    GameTodListener gameTodListener = new GameTodListener(discord, gameTodDetector);
     gameLogListeners.add(gameTodListener);
 
     // Print configs for each listener.
@@ -96,7 +92,6 @@ public class RobotStanvern {
 
     // Parse the log.
     // TODO: Automatically switch between logs as you change characters.
-//    String character = "Stanvern";
     String character = "Holecreep";
     GameLog gameLog = new GameLog(character);
     LOGGER.log("Reading log from: " + character);

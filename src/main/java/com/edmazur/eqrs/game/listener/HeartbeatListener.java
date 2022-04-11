@@ -1,11 +1,10 @@
 package com.edmazur.eqrs.game.listener;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordUser;
 import com.edmazur.eqrs.game.GameLogEvent;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class HeartbeatListener implements GameLogListener, Runnable {
 
@@ -38,14 +37,12 @@ public class HeartbeatListener implements GameLogListener, Runnable {
 
   @Override
   public void run() {
-    LocalDateTime mustHaveSeenActivityAfter =
-        LocalDateTime.now().minus(ACTIVITY_THRESHOLD);
+    LocalDateTime mustHaveSeenActivityAfter = LocalDateTime.now().minus(ACTIVITY_THRESHOLD);
     LocalDateTime mustHaveSentNotificationBefore =
         LocalDateTime.now().minus(NOTIFICATION_THRESHOLD);
-    if (lastSeenActivity.isBefore(mustHaveSeenActivityAfter) &&
-        lastSentNotification.isBefore(mustHaveSentNotificationBefore)) {
-      Duration durationSinceLastActivity =
-          Duration.between(lastSeenActivity, LocalDateTime.now());
+    if (lastSeenActivity.isBefore(mustHaveSeenActivityAfter)
+        && lastSentNotification.isBefore(mustHaveSentNotificationBefore)) {
+      Duration durationSinceLastActivity = Duration.between(lastSeenActivity, LocalDateTime.now());
       String message = String.format("No EQ log activity seen in %d minutes",
           durationSinceLastActivity.toMinutes());
       discord.sendMessage(DiscordUser.EDMAZUR, message);

@@ -16,8 +16,7 @@ public class RateLimiter {
   // Tries to get permission to do whatever action is being rate limited. If
   // this returns false, then the caller is rate-limited and should not proceed.
   public boolean getPermission() {
-    if (rateLimitExpiration == null ||
-        LocalDateTime.now().compareTo(rateLimitExpiration) >= 0) {
+    if (rateLimitExpiration == null || LocalDateTime.now().compareTo(rateLimitExpiration) >= 0) {
       rateLimitExpiration = LocalDateTime.now().plus(duration);
       return true;
     } else {

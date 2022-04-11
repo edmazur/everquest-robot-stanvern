@@ -1,9 +1,8 @@
 package com.edmazur.eqrs.game.listener;
 
+import com.edmazur.eqrs.game.GameLogEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.edmazur.eqrs.game.GameLogEvent;
 
 public class GameTodDetector {
 
@@ -16,8 +15,7 @@ public class GameTodDetector {
       return false;
     }
     String guildChatText = matcher.group(1).toLowerCase();
-    return guildChatText.contains("tod") &&
-        !guildChatText.contains("today");
+    return guildChatText.contains("tod") && !guildChatText.contains("today");
   }
 
 }

@@ -12,16 +12,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.io.input.Tailer;
 import org.apache.commons.io.input.TailerListenerAdapter;
 
-public class GameLog extends TailerListenerAdapter implements Iterable<GameLogEvent>, Iterator<GameLogEvent> {
+public class GameLog extends TailerListenerAdapter
+    implements Iterable<GameLogEvent>, Iterator<GameLogEvent> {
 
   private static final String LOG_DIRECTORY_PREFIX = "/opt/everquest/EverQuest Project 1999/Logs/";
   private static final Duration RECENCY_THRESHOLD = Duration.ofMinutes(1);
   private static final Pattern LINE_PATTERN = Pattern.compile("^\\[(.+?)\\] (.+)$");
-  private static final DateTimeFormatter TIMESTAMP_FORMAT = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss yyyy");
+  private static final DateTimeFormatter TIMESTAMP_FORMAT =
+      DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss yyyy");
 
   private final BlockingQueue<GameLogEvent> queue = new LinkedBlockingQueue<GameLogEvent>();
 
@@ -36,8 +37,8 @@ public class GameLog extends TailerListenerAdapter implements Iterable<GameLogEv
 
   @Override
   public void handle(String line) {
-    // Ignore empty lines. These appear sporadically through the log, I think
-    // maybe when doing /who commands...for GMs?
+    // Ignore empty lines. These appear sporadically through the log, I think maybe when doing /who
+    // commands...for GMs?
     if (line.equals("")) {
       return;
     }
@@ -54,8 +55,8 @@ public class GameLog extends TailerListenerAdapter implements Iterable<GameLogEv
         return;
       }
 
-      // Sometimes the log tailing library loops back to the beginning for some
-      // reason, so check the timestamp to make sure it's recent.
+      // Sometimes the log tailing library loops back to the beginning for some reason, so check the
+      // timestamp to make sure it's recent.
       if (Duration.between(time, LocalDateTime.now()).compareTo(RECENCY_THRESHOLD) > 0) {
         return;
       }

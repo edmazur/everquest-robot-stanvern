@@ -17,17 +17,14 @@ public class Pager {
   }
 
   public void page(String message) {
-    PagerDutyEventsClient pagerDutyEventsClient =
-        PagerDutyEventsClient.create();
+    PagerDutyEventsClient pagerDutyEventsClient = PagerDutyEventsClient.create();
     Payload payload = Payload.Builder.newBuilder()
         .setSummary(message)
         .setSource("RobotStanvern")
         .setSeverity(Severity.CRITICAL)
         .build();
     TriggerIncident incident = TriggerIncident.TriggerIncidentBuilder
-        .newBuilder(
-            config.getString(Config.Property.PAGERDUTY_INTEGRATION_KEY),
-            payload)
+        .newBuilder(config.getString(Config.Property.PAGERDUTY_INTEGRATION_KEY), payload)
         .build();
     try {
       pagerDutyEventsClient.trigger(incident);
