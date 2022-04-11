@@ -15,7 +15,7 @@ public class TickDetector {
       return false;
     }
     String guildChatText = matcher.group(1);
-    return guildChatText.contains("RAID TICK") || guildChatText.contains("RAIDTICK");
+    return guildChatText.contains("TICK");
   }
 
 }
