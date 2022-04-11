@@ -15,6 +15,8 @@ import com.edmazur.eqrs.game.listener.GameTodListener;
 import com.edmazur.eqrs.game.listener.HeartbeatListener;
 import com.edmazur.eqrs.game.listener.MotdListener;
 import com.edmazur.eqrs.game.listener.RaidTargetSpawnListener;
+import com.edmazur.eqrs.game.listener.TickDetector;
+import com.edmazur.eqrs.game.listener.TickListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -83,6 +85,11 @@ public class RobotStanvern {
     GameTodDetector gameTodDetector = new GameTodDetector();
     GameTodListener gameTodListener = new GameTodListener(discord, gameTodDetector);
     gameLogListeners.add(gameTodListener);
+
+    // Add tick listener.
+    TickDetector tickDetector = new TickDetector();
+    TickListener tickListener = new TickListener(discord, tickDetector);
+    gameLogListeners.add(tickListener);
 
     // Print configs for each listener.
     for (GameLogListener gameLogListener : gameLogListeners) {
