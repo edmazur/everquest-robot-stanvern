@@ -12,6 +12,8 @@ import com.edmazur.eqrs.game.listener.FteListener;
 import com.edmazur.eqrs.game.listener.GameLogListener;
 import com.edmazur.eqrs.game.listener.GameTodDetector;
 import com.edmazur.eqrs.game.listener.GameTodListener;
+import com.edmazur.eqrs.game.listener.GratsDetector;
+import com.edmazur.eqrs.game.listener.GratsListener;
 import com.edmazur.eqrs.game.listener.HeartbeatListener;
 import com.edmazur.eqrs.game.listener.MotdListener;
 import com.edmazur.eqrs.game.listener.RaidTargetSpawnListener;
@@ -90,6 +92,11 @@ public class RobotStanvern {
     TickDetector tickDetector = new TickDetector();
     TickListener tickListener = new TickListener(discord, tickDetector);
     gameLogListeners.add(tickListener);
+
+    // Add grats listener.
+    GratsDetector gratsDetector = new GratsDetector();
+    GratsListener gratsListener = new GratsListener(discord, gratsDetector);
+    gameLogListeners.add(gratsListener);
 
     // Print configs for each listener.
     for (GameLogListener gameLogListener : gameLogListeners) {

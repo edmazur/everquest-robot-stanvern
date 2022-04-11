@@ -4,16 +4,16 @@ import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.game.GameLogEvent;
 
-public class TickListener implements GameLogListener {
+public class GratsListener implements GameLogListener {
 
   private static final DiscordChannel OUTPUT_CHANNEL = DiscordChannel.RAID_TICKS_AND_GRATSS;
 
   private final Discord discord;
-  private final TickDetector tickDetector;
+  private final GratsDetector gratsDetector;
 
-  public TickListener(Discord discord, TickDetector tickDetector) {
+  public GratsListener(Discord discord, GratsDetector gratsDetector) {
     this.discord = discord;
-    this.tickDetector = tickDetector;
+    this.gratsDetector = gratsDetector;
   }
 
   @Override
@@ -23,10 +23,10 @@ public class TickListener implements GameLogListener {
 
   @Override
   public void onGameLogEvent(GameLogEvent gameLogEvent) {
-    if (tickDetector.containsTick(gameLogEvent)) {
+    if (gratsDetector.containsGrats(gameLogEvent)) {
       discord.sendMessage(
           OUTPUT_CHANNEL,
-          "Possible tick sighting, ET: `" + gameLogEvent.getFullLogLine() + "`");
+          "Possible gratss sighting, ET: `" + gameLogEvent.getFullLogLine() + "`");
     }
   }
 
