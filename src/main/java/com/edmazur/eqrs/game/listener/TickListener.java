@@ -26,7 +26,7 @@ public class TickListener implements GameLogListener {
     if (tickDetector.containsTick(gameLogEvent)) {
       discord.sendMessage(
           OUTPUT_CHANNEL,
-          "Possible tick sighting, ET: `" + gameLogEvent.getFullLogLine() + "`");
+          "🎟️ Possible tick sighting, ET: `" + gameLogEvent.getFullLogLine() + "`");
     }
   }
 

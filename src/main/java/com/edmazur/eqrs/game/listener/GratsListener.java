@@ -26,7 +26,7 @@ public class GratsListener implements GameLogListener {
     if (gratsDetector.containsGrats(gameLogEvent)) {
       discord.sendMessage(
           OUTPUT_CHANNEL,
-          "Possible gratss sighting, ET: `" + gameLogEvent.getFullLogLine() + "`");
+          "💰 Possible gratss sighting, ET: `" + gameLogEvent.getFullLogLine() + "`");
     }
   }
 

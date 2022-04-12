@@ -26,7 +26,7 @@ public class GameTodListener implements GameLogListener {
     if (gameTodDetector.containsTod(gameLogEvent)) {
       discord.sendMessage(
           OUTPUT_CHANNEL,
-          "Possible ToD sighting, ET: `" + gameLogEvent.getFullLogLine() + "`");
+          "⏲ Possible ToD sighting, ET: `" + gameLogEvent.getFullLogLine() + "`");
     }
   }
 
