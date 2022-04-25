@@ -40,4 +40,3 @@ Debug mode: Append `--debug` on final Run command (Discord output only sent as D
 - Eliminate System.err/System.out logging.
 - Use https://github.com/edmazur/everquest-log-parser instead of local copy of old game log parser.
 - Add unit tests.
-- Add a linter or something for trailing whitespace, EOF consistency, max line length, etc.
