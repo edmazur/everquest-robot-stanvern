@@ -1,5 +1,8 @@
 discord.private_key=
 
+everquest.install_directory=
+everquest.server=
+
 mysql.database=
 mysql.host=
 mysql.password=

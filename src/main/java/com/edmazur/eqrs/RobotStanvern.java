@@ -1,15 +1,14 @@
 package com.edmazur.eqrs;
 
+import com.edmazur.eqlp.EqLog;
+import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.listener.AnnouncementListener;
 import com.edmazur.eqrs.discord.listener.BatphoneListener;
 import com.edmazur.eqrs.discord.listener.DiscordTodListener;
-import com.edmazur.eqrs.game.GameLog;
-import com.edmazur.eqrs.game.GameLogEvent;
 import com.edmazur.eqrs.game.RaidTargets;
 import com.edmazur.eqrs.game.listener.FteListener;
-import com.edmazur.eqrs.game.listener.GameLogListener;
 import com.edmazur.eqrs.game.listener.GameTodDetector;
 import com.edmazur.eqrs.game.listener.GameTodListener;
 import com.edmazur.eqrs.game.listener.GratsDetector;
@@ -19,6 +18,9 @@ import com.edmazur.eqrs.game.listener.MotdListener;
 import com.edmazur.eqrs.game.listener.RaidTargetSpawnListener;
 import com.edmazur.eqrs.game.listener.TickDetector;
 import com.edmazur.eqrs.game.listener.TickListener;
+import java.nio.file.Paths;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -64,56 +66,55 @@ public class RobotStanvern {
     new AnnouncementListener(config, discord);
     new BatphoneListener(config, discord, pager, sound);
 
-    List<GameLogListener> gameLogListeners = new ArrayList<>();
+    List<EqLogListener> eqLogListeners = new ArrayList<>();
 
     // Add FTE listener.
-    gameLogListeners.add(new FteListener(discord));
+    eqLogListeners.add(new FteListener(discord));
 
     // Add heartbeat listener.
     HeartbeatListener heartbeatListener = new HeartbeatListener(discord);
     ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
     scheduledExecutorService.scheduleAtFixedRate(heartbeatListener, 1, 1, TimeUnit.SECONDS);
-    gameLogListeners.add(heartbeatListener);
+    eqLogListeners.add(heartbeatListener);
 
     // Add raid target spawn listener.
     RaidTargetSpawnListener raidTargetSpawnListener = new RaidTargetSpawnListener(discord);
-    gameLogListeners.add(raidTargetSpawnListener);
+    eqLogListeners.add(raidTargetSpawnListener);
 
     // Add MotD listener.
     MotdListener motdListener = new MotdListener(discord);
-    gameLogListeners.add(motdListener);
+    eqLogListeners.add(motdListener);
 
     // Add ToD listener.
     GameTodDetector gameTodDetector = new GameTodDetector();
     GameTodListener gameTodListener = new GameTodListener(discord, gameTodDetector);
-    gameLogListeners.add(gameTodListener);
+    eqLogListeners.add(gameTodListener);
 
     // Add tick listener.
     TickDetector tickDetector = new TickDetector();
     TickListener tickListener = new TickListener(discord, tickDetector);
-    gameLogListeners.add(tickListener);
+    eqLogListeners.add(tickListener);
 
     // Add grats listener.
     GratsDetector gratsDetector = new GratsDetector();
     GratsListener gratsListener = new GratsListener(discord, gratsDetector);
-    gameLogListeners.add(gratsListener);
-
-    // Print configs for each listener.
-    for (GameLogListener gameLogListener : gameLogListeners) {
-      LOGGER.log("%s running (%s)",
-          gameLogListener.getClass().getName(), gameLogListener.getConfig());
-    }
+    eqLogListeners.add(gratsListener);
 
     // Parse the log.
     // TODO: Automatically switch between logs as you change characters.
     String character = "Holecreep";
-    GameLog gameLog = new GameLog(character);
+    EqLog eqLog = new EqLog(
+        Paths.get(config.getString(Property.EVERQUEST_INSTALL_DIRECTORY)),
+        ZoneId.of(config.getString(Property.TIMEZONE)),
+        config.getString(Property.EVERQUEST_SERVER),
+        character,
+        Instant.now(),
+        Instant.MAX);
     LOGGER.log("Reading log from: " + character);
-    for (GameLogEvent gameLogEvent : gameLog) {
-      for (GameLogListener gameLogListener : gameLogListeners) {
-        gameLogListener.onGameLogEvent(gameLogEvent);
-      }
+    for (EqLogListener eqLogListener : eqLogListeners) {
+      eqLog.addListener(eqLogListener);
     }
+    eqLog.run();
   }
 
 }

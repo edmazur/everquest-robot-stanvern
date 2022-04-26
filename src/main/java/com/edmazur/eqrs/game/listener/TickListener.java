@@ -1,10 +1,11 @@
 package com.edmazur.eqrs.game.listener;
 
+import com.edmazur.eqlp.EqLogEvent;
+import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
-import com.edmazur.eqrs.game.GameLogEvent;
 
-public class TickListener implements GameLogListener {
+public class TickListener implements EqLogListener {
 
   private static final DiscordChannel OUTPUT_CHANNEL = DiscordChannel.RAID_TICKS_AND_GRATSS;
 
@@ -17,16 +18,11 @@ public class TickListener implements GameLogListener {
   }
 
   @Override
-  public String getConfig() {
-    return "";
-  }
-
-  @Override
-  public void onGameLogEvent(GameLogEvent gameLogEvent) {
-    if (tickDetector.containsTick(gameLogEvent)) {
+  public void onEvent(EqLogEvent eqLogEvent) {
+    if (tickDetector.containsTick(eqLogEvent)) {
       discord.sendMessage(
           OUTPUT_CHANNEL,
-          "🎟️ Possible tick sighting, ET: `" + gameLogEvent.getFullLogLine() + "`");
+          "🎟️ Possible tick sighting, ET: `" + eqLogEvent.getFullLine() + "`");
     }
   }
 

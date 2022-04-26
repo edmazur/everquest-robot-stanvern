@@ -1,15 +1,16 @@
 package com.edmazur.eqrs.game.listener;
 
+import com.edmazur.eqlp.EqLogEvent;
+import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.RateLimiter;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
-import com.edmazur.eqrs.game.GameLogEvent;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Map;
 
-public class RaidTargetSpawnListener implements GameLogListener {
+public class RaidTargetSpawnListener implements EqLogListener {
 
   private static final Boolean BATPHONE = false;
 
@@ -42,18 +43,13 @@ public class RaidTargetSpawnListener implements GameLogListener {
   }
 
   @Override
-  public String getConfig() {
-    return String.format("BATPHONE=%s", BATPHONE);
-  }
-
-  @Override
-  public void onGameLogEvent(GameLogEvent gameLogEvent) {
+  public void onEvent(EqLogEvent eqLogEvent) {
     for (Map.Entry<String, String> mapEntry : TRIGGERS_AND_TARGETS.entrySet()) {
       String trigger = mapEntry.getKey();
       String target = mapEntry.getValue();
       // Use startsWith() instead of equals() to account for potential end-of-line weirdness
       // (trailing whitespace, /r, etc.).
-      if (gameLogEvent.getText().startsWith(trigger)) {
+      if (eqLogEvent.getPayload().startsWith(trigger)) {
         if (rateLimiter.getPermission()) {
           if (BATPHONE) {
             discord.sendMessage(

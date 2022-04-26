@@ -1,13 +1,14 @@
 package com.edmazur.eqrs.game.listener;
 
+import com.edmazur.eqlp.EqLogEvent;
+import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.discord.DiscordUser;
-import com.edmazur.eqrs.game.GameLogEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FteListener implements GameLogListener {
+public class FteListener implements EqLogListener {
 
   private static final boolean SEND_DISCORD_MESSAGE_AS_DM = true;
 
@@ -20,15 +21,10 @@ public class FteListener implements GameLogListener {
   }
 
   @Override
-  public String getConfig() {
-    return String.format("SEND_DISCORD_MESSAGE_AS_DM=%s", SEND_DISCORD_MESSAGE_AS_DM);
-  }
-
-  @Override
-  public void onGameLogEvent(GameLogEvent gameLogEvent) {
-    Matcher matcher = FTE_PATTERN.matcher(gameLogEvent.getText());
+  public void onEvent(EqLogEvent eqLogEvent) {
+    Matcher matcher = FTE_PATTERN.matcher(eqLogEvent.getPayload());
     if (matcher.matches()) {
-      String message = "FTE notice! ET: `" + gameLogEvent.getFullLogLine() + "`";
+      String message = "FTE notice! ET: `" + eqLogEvent.getFullLine() + "`";
       if (SEND_DISCORD_MESSAGE_AS_DM) {
         discord.sendMessage(DiscordUser.EDMAZUR, message);
       } else {

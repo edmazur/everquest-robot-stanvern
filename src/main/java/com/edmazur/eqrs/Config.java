@@ -19,6 +19,9 @@ public class Config {
     // - Database writes will be skipped and SQL will instead just be logged.
     DEBUG("debug"),
 
+    EVERQUEST_INSTALL_DIRECTORY("everquest.install_directory"),
+    EVERQUEST_SERVER("everquest.server"),
+
     MYSQL_DATABASE("mysql.database"),
     MYSQL_HOST("mysql.host"),
     MYSQL_PASSWORD("mysql.password"),

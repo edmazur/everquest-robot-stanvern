@@ -1,0 +1,5 @@
+sourceControl {
+  gitRepository("https://github.com/edmazur/everquest-log-parser.git") {
+    producesModule("com.edmazur.eqlp:everquest-log-parser")
+  }
+}

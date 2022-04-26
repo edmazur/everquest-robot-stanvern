@@ -38,5 +38,4 @@ Debug mode: Append `--debug` on final Run command (Discord output only sent as D
 - Eliminate references to my local file system.
 - Eliminate Runtime.exec() usage.
 - Eliminate System.err/System.out logging.
-- Use https://github.com/edmazur/everquest-log-parser instead of local copy of old game log parser.
 - Add unit tests.

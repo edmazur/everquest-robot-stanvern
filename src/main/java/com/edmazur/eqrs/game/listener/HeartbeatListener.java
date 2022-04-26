@@ -1,12 +1,13 @@
 package com.edmazur.eqrs.game.listener;
 
+import com.edmazur.eqlp.EqLogEvent;
+import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordUser;
-import com.edmazur.eqrs.game.GameLogEvent;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-public class HeartbeatListener implements GameLogListener, Runnable {
+public class HeartbeatListener implements EqLogListener, Runnable {
 
   // Notify if activity hasn't been seen in this amount of time.
   private static final Duration ACTIVITY_THRESHOLD = Duration.ofMinutes(5);
@@ -24,15 +25,8 @@ public class HeartbeatListener implements GameLogListener, Runnable {
   }
 
   @Override
-  public String getConfig() {
-    return String.format(
-        "ACTIVITY_THRESHOLD=%s, NOTIFICATION_THRESHOLD=%s",
-        ACTIVITY_THRESHOLD, NOTIFICATION_THRESHOLD);
-  }
-
-  @Override
-  public void onGameLogEvent(GameLogEvent gameLogEvent) {
-    lastSeenActivity = gameLogEvent.getTime();
+  public void onEvent(EqLogEvent eqLogEvent) {
+    lastSeenActivity = eqLogEvent.getTimestamp();
   }
 
   @Override

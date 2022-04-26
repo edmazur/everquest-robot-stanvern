@@ -1,16 +1,17 @@
 package com.edmazur.eqrs.game.listener;
 
+import com.edmazur.eqlp.EqLogEvent;
+import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
-import com.edmazur.eqrs.game.GameLogEvent;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.javacord.api.entity.message.Message;
 
-public class MotdListener implements GameLogListener {
+public class MotdListener implements EqLogListener {
 
   private static final Logger LOGGER = new Logger();
 
@@ -27,27 +28,22 @@ public class MotdListener implements GameLogListener {
   }
 
   @Override
-  public String getConfig() {
-    return "";
-  }
-
-  @Override
-  public void onGameLogEvent(GameLogEvent gameLogEvent) {
-    Matcher matcher = GAME_MOTD_PATTERN.matcher(gameLogEvent.getText());
+  public void onEvent(EqLogEvent eqLogEvent) {
+    Matcher matcher = GAME_MOTD_PATTERN.matcher(eqLogEvent.getPayload());
     if (matcher.matches()) {
       // Avoid repeating the same MotD when you manually /get or login.
       Optional<String> maybeCurrentMotd = getCurrentMotd();
       if (maybeCurrentMotd.isEmpty()) {
         LOGGER.log("Could not read current MotD from Discord. This should not happen.");
       } else {
-        if (maybeCurrentMotd.get().equals(gameLogEvent.getText())) {
+        if (maybeCurrentMotd.get().equals(eqLogEvent.getPayload())) {
           return;
         }
       }
 
       // TODO: Maybe avoid sending multiple MotDs in quick succession (e.g. from fixing typos) by
       // waiting a bit and only sending latest MotD.
-      discord.sendMessage(MOTD_CHANNEL, "`" + gameLogEvent.getText() + "`");
+      discord.sendMessage(MOTD_CHANNEL, "`" + eqLogEvent.getPayload() + "`");
     }
   }
 
