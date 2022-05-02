@@ -59,12 +59,12 @@ public class RobotStanvern {
     Database database = new Database(config);
     RaidTargets raidTargets = new RaidTargets(database);
     Pager pager = new Pager(config);
-    Sound sound = new Sound();
+    SoundPlayer soundPlayer = new SoundPlayer();
     // TODO: Set this up more like how game log messages are received centrally and passed out to
     // listeners?
     new DiscordTodListener(config, discord, database, raidTargets);
     new AnnouncementListener(config, discord);
-    new BatphoneListener(config, discord, pager, sound);
+    new BatphoneListener(config, discord, pager, soundPlayer);
 
     List<EqLogListener> eqLogListeners = new ArrayList<>();
 
