@@ -8,6 +8,8 @@ import com.edmazur.eqrs.discord.listener.AnnouncementListener;
 import com.edmazur.eqrs.discord.listener.BatphoneListener;
 import com.edmazur.eqrs.discord.listener.DiscordTodListener;
 import com.edmazur.eqrs.game.RaidTargets;
+import com.edmazur.eqrs.game.listener.DiceDetector;
+import com.edmazur.eqrs.game.listener.DiceListener;
 import com.edmazur.eqrs.game.listener.FteListener;
 import com.edmazur.eqrs.game.listener.GameTodDetector;
 import com.edmazur.eqrs.game.listener.GameTodListener;
@@ -99,6 +101,11 @@ public class RobotStanvern {
     GratsDetector gratsDetector = new GratsDetector();
     GratsListener gratsListener = new GratsListener(discord, gratsDetector);
     eqLogListeners.add(gratsListener);
+
+    // Add dice listener.
+    DiceDetector diceDetector = new DiceDetector();
+    DiceListener diceListener = new DiceListener(diceDetector, soundPlayer);
+    eqLogListeners.add(diceListener);
 
     // Parse the log.
     // TODO: Automatically switch between logs as you change characters.

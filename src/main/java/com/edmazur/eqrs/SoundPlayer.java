@@ -6,6 +6,8 @@ public class SoundPlayer {
 
   public enum Sound {
 
+    DICE("/home/mazur/git/everquest-robot-stanvern/src/main/resources/dice.mp3"),
+
     ITS_TIME_TO_SLAY_THE_DRAGON(
         "/home/mazur/eclipse-workspace/RobotStanvern/audio/time-to-slay-the-dragon.mp3"),
 

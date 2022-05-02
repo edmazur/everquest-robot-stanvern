@@ -33,6 +33,7 @@ Debug mode: Append `--debug` on final Run command (Discord output only sent as D
 - Game: Listens for ToD reports in guild chat and sends to Discord.
 - Game: Listens for ticks in guild chat and sends to Discord.
 - Game: Listens for grats in guild chat and sends to Discord.
+- Game: Listens for dice rolls, then plays a sound on the local machine.
 
 # TODO
 - Eliminate references to my local file system.
