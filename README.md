@@ -20,7 +20,11 @@ $ ./gradlew installDist
 $ ./build/install/everquest-robot-stanvern/bin/everquest-robot-stanvern
 ```
 
-Debug mode: Append `--debug` on final Run command (Discord output only sent as DM, database writes skipped).
+Development (Discord output only sent as DM, database writes skipped):
+
+```
+$ ./gradlew run --args='--debug'
+```
 
 # Capabilities
 - Discord: Listens for reported ToDs and saves them to a database.
