@@ -6,7 +6,10 @@ import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.listener.AnnouncementListener;
 import com.edmazur.eqrs.discord.listener.BatphoneListener;
+import com.edmazur.eqrs.discord.listener.CharInfoScreenshotListener;
 import com.edmazur.eqrs.discord.listener.DiscordTodListener;
+import com.edmazur.eqrs.game.CharInfoScraper;
+import com.edmazur.eqrs.game.ExpPercentToNextLevelScraper;
 import com.edmazur.eqrs.game.RaidTargets;
 import com.edmazur.eqrs.game.listener.DiceDetector;
 import com.edmazur.eqrs.game.listener.DiceListener;
@@ -34,7 +37,6 @@ public class RobotStanvern {
   private static final Logger LOGGER = new Logger();
 
   public static void main(String[] args) {
-
     Config config = new Config();
 
     // Check if debug mode is set.
@@ -67,6 +69,10 @@ public class RobotStanvern {
     new DiscordTodListener(config, discord, database, raidTargets);
     new AnnouncementListener(config, discord);
     new BatphoneListener(config, discord, pager, soundPlayer);
+    Ocr ocr = new Ocr();
+    ExpPercentToNextLevelScraper expPercentToNextLevelScraper = new ExpPercentToNextLevelScraper();
+    CharInfoScraper charInfoScraper = new CharInfoScraper(ocr, expPercentToNextLevelScraper);
+    new CharInfoScreenshotListener(config, discord, charInfoScraper).init();
 
     List<EqLogListener> eqLogListeners = new ArrayList<>();
 

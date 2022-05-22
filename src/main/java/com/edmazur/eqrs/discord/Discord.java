@@ -3,7 +3,13 @@ package com.edmazur.eqrs.discord;
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.Config.Property;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
@@ -65,6 +71,48 @@ public class Discord {
     }
     Message message = maybeMessage.get();
     return Optional.of(message.getContent());
+  }
+
+  /**
+   * Gets messages from a channel matching the given predicate that haven't been replied to by the
+   * bot, sorted by oldest first. Intended purpose is for checking on startup for messages that were
+   * missed while bot was offline.
+   *
+   * @param discordChannel The Discord channel to search in.
+   * @param predicate The predicate to check with.
+   * @return The list of unreplied messages.
+   */
+  public List<Message> getUnrepliedMessagesMatchingPredicate(
+      DiscordChannel discordChannel,
+      Predicate<Message> predicate) {
+    List<Message> unrepliedMessages = new ArrayList<>();
+    Set<Long> messagesWithReplies = new HashSet<>();
+    Predicate<Message> replyPredicate =
+        DiscordPredicate.isFromYourself().and(DiscordPredicate.isReply());
+    Iterator<Message> iterator = getTextChannel(discordChannel).getMessagesAsStream().iterator();
+    while (iterator.hasNext()) {
+      Message message = iterator.next();
+
+      // Record messages that have been replied to by you.
+      if (replyPredicate.test(message)) {
+        messagesWithReplies.add(message.getReferencedMessage().get().getId());
+        continue;
+      }
+
+      // If this is a message that has been replied to by you, then the search is done.
+      if (messagesWithReplies.contains(message.getId())) {
+        break;
+      }
+
+      // If you get to this point, then the message is unreplied to. If it also matches the
+      // predicate, then add it to the list to be returned.
+      if (predicate.test(message)) {
+        unrepliedMessages.add(message);
+      }
+    }
+    // Reverse the list to be returned so that oldest messages are first.
+    Collections.reverse(unrepliedMessages);
+    return unrepliedMessages;
   }
 
   private TextChannel getTextChannel(DiscordChannel discordChannel) {

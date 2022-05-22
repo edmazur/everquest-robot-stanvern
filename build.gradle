@@ -7,12 +7,17 @@ repositories {
   mavenCentral()
 }
 
+test {
+  useJUnitPlatform()
+}
+
 dependencies {
   implementation 'com.edmazur.eqlp:everquest-log-parser'
   implementation 'com.github.dikhan:pagerduty-client:3.1.2'
   implementation 'commons-io:commons-io:2.11.0'
   implementation 'mysql:mysql-connector-java:8.0.25'
   implementation 'org.javacord:javacord:3.4.0'
+  testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
 }
 
 mainClassName = 'com.edmazur.eqrs.RobotStanvern'

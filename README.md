@@ -26,6 +26,7 @@ Debug mode: Append `--debug` on final Run command (Discord output only sent as D
 - Discord: Listens for reported ToDs and saves them to a database.
 - Discord: Listens for messages in announcement/batphone channels and records them in a separate audit channel.
 - Discord: Listens for messages in batphone channels, then plays a sound on the local machine and sends an alert through PagerDuty.
+- Discord: Listens for screenshots of the char info part of the UI, then replies with a scrape summary of the name/class/level/exp.
 - Game: Listens for FTE messages and sends a Discord message to a channel/user.
 - Game: Listens for raid target spawns and sends a Discord message/screenshot to a channel/user and/or plays a sound on the local machine.
 - Game: Detects inactivity and sends a Discord message to a user.
