@@ -2,6 +2,7 @@ package com.edmazur.eqrs.discord;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageAttachment;
 
@@ -36,6 +37,15 @@ public class DiscordPredicate {
       @Override
       public boolean test(Message message) {
         return message.getReferencedMessage().isPresent();
+      }
+    };
+  }
+
+  public static Predicate<Message> textMatchesPattern(Pattern pattern) {
+    return new Predicate<Message>() {
+      @Override
+      public boolean test(Message message) {
+        return pattern.matcher(message.getContent()).matches();
       }
     };
   }

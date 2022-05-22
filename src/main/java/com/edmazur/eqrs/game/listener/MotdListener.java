@@ -5,11 +5,10 @@ import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
+import com.edmazur.eqrs.discord.DiscordPredicate;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.javacord.api.entity.message.Message;
 
 public class MotdListener implements EqLogListener {
 
@@ -51,15 +50,10 @@ public class MotdListener implements EqLogListener {
    * Gets the current MotD as reported in the Discord channel.
    */
   public Optional<String> getCurrentMotd() {
-    Predicate<Message> predicate = new Predicate<Message>() {
-      @Override
-      public boolean test(Message message) {
-        return message.getAuthor().isYourself()
-            && DISCORD_MOTD_PATTERN.matcher(message.getContent()).matches();
-      }
-    };
-
-    Optional<String> maybeMotd = discord.getLastMessageMatchingPredicate(MOTD_CHANNEL, predicate);
+    Optional<String> maybeMotd = discord.getLastMessageMatchingPredicate(
+        MOTD_CHANNEL,
+        DiscordPredicate.isFromYourself().and(
+            DiscordPredicate.textMatchesPattern(DISCORD_MOTD_PATTERN)));
     if (maybeMotd.isEmpty()) {
       return maybeMotd;
     } else {
