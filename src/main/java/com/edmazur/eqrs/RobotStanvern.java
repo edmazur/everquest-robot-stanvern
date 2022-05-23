@@ -121,7 +121,7 @@ public class RobotStanvern {
     String character = "Holecreep";
     EqLog eqLog = new EqLog(
         Paths.get(config.getString(Property.EVERQUEST_INSTALL_DIRECTORY)),
-        ZoneId.of(config.getString(Property.TIMEZONE)),
+        ZoneId.of(config.getString(Property.TIMEZONE_GAME)),
         config.getString(Property.EVERQUEST_SERVER),
         character,
         Instant.now(),

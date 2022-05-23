@@ -29,8 +29,11 @@ public class Config {
 
     PAGERDUTY_INTEGRATION_KEY("pagerduty.integration_key"),
 
-    // TODO: Use this everywhere instead of ever relying on machine timezone.
-    TIMEZONE("timezone"),
+    // TODO: Use these everywhere instead of ever relying on machine timezone.
+    // The timezone that game logs are in.
+    TIMEZONE_GAME("timezone.game"),
+    // The timezone that the guild uses for scheduling.
+    TIMEZONE_GUILD("timezone.guild")
 
     ;
 

@@ -108,7 +108,7 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
           messageType.getDescription(),
           author,
           maybeServerChannel.get().getName(),
-          instant.atZone(ZoneId.of(config.getString(Property.TIMEZONE)))
+          instant.atZone(ZoneId.of(config.getString(Property.TIMEZONE_GUILD)))
               .format(DateTimeFormatter.RFC_1123_DATE_TIME),
           content);
       discord.sendMessage(CHANNEL_TO_WRITE_TO, auditMessage);
