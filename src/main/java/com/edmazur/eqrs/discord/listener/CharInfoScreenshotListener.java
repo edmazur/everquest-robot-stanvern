@@ -75,16 +75,23 @@ public class CharInfoScreenshotListener implements MessageCreateListener {
       }
 
       CharInfo charInfo = charInfoScraper.scrape(image);
-      EmbedBuilder embed = new EmbedBuilder()
-          .setColor(Color.GREEN)
-          .setThumbnail(SUCCESS_IMAGE)
-          .addField("Char info parsed:",
-                "` Name:` " + (charInfo.hasName() ? charInfo.getName() : "?") + "\n"
-              + "`Class:` " + (charInfo.hasEqClass() ? charInfo.getEqClass() : "?") + "\n"
-              + "`Level:` " + (charInfo.hasLevel() ? charInfo.getLevel() : "?") + "\n"
-              + "`  Exp:` " + (charInfo.hasExpPercentToNextLevel()
-                  ? charInfo.getExpPercentToNextLevel() : "?") + "%\n");
-      message.reply(embed);
+      boolean hasAnyFieldScraped =
+          charInfo.hasName()
+          || charInfo.hasEqClass()
+          || charInfo.hasLevel()
+          || charInfo.hasExpPercentToNextLevel();
+      if (hasAnyFieldScraped) {
+        EmbedBuilder embed = new EmbedBuilder()
+            .setColor(Color.GREEN)
+            .setThumbnail(SUCCESS_IMAGE)
+            .addField("Char info parsed:",
+                  "` Name:` " + (charInfo.hasName() ? charInfo.getName() : "?") + "\n"
+                + "`Class:` " + (charInfo.hasEqClass() ? charInfo.getEqClass() : "?") + "\n"
+                + "`Level:` " + (charInfo.hasLevel() ? charInfo.getLevel() : "?") + "\n"
+                + "`  Exp:` " + (charInfo.hasExpPercentToNextLevel()
+                    ? charInfo.getExpPercentToNextLevel() + "%" : "?") + "\n");
+        message.reply(embed);
+      }
     }).start();
   }
 
