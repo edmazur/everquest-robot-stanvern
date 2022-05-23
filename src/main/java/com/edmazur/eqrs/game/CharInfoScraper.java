@@ -9,10 +9,15 @@ import java.util.Optional;
 public class CharInfoScraper {
 
   private Ocr ocr;
+  private CharInfoOcrScrapeComparator charInfoOcrScrapeComparator;
   private ExpPercentToNextLevelScraper expPercentToNextLevelScraper;
 
-  public CharInfoScraper(Ocr ocr, ExpPercentToNextLevelScraper expPercentToNextLevelScraper) {
+  public CharInfoScraper(
+      Ocr ocr,
+      CharInfoOcrScrapeComparator charInfoOcrScrapeComparator,
+      ExpPercentToNextLevelScraper expPercentToNextLevelScraper) {
     this.ocr = ocr;
+    this.charInfoOcrScrapeComparator = charInfoOcrScrapeComparator;
     this.expPercentToNextLevelScraper = expPercentToNextLevelScraper;
   }
 
@@ -20,7 +25,7 @@ public class CharInfoScraper {
     CharInfo charInfo = new CharInfo();
 
     // Scrape class/level/name.
-    List<String> lines = ocr.scrape(image);
+    List<String> lines = ocr.scrape(image, charInfoOcrScrapeComparator);
     for (int i = 0; i < lines.size(); i++) {
       String line = cleanseOcrLine(lines.get(i));
       String[] parts = line.split("\\s");
@@ -34,10 +39,13 @@ public class CharInfoScraper {
           // Get level from the left on the current line.
           charInfo.setLevel(Integer.parseInt(parts[0]));
 
-          // Get name from the line above.
-          int nameLinesIndex = i - 1;
-          if (nameLinesIndex >= 0) {
-            charInfo.setName(cleanseOcrLine(lines.get(nameLinesIndex)));
+          // Get name from the first non-blank line above (it's usually the line right above, but
+          // occasionally not).
+          for (int j = 0; j < i; j++) {
+            if (!lines.get(j).isBlank()) {
+              charInfo.setName(cleanseOcrLine(lines.get(j)));
+              break;
+            }
           }
         }
       }
@@ -52,13 +60,15 @@ public class CharInfoScraper {
     return charInfo;
   }
 
-  // Strips out everything except alphanumeric/whitespace characters and "/". Everything else is
-  // assumed to be an OCR scrape error. Examples seen:
+  // Strips out everything except alphanumeric characters, whitespace characters (though
+  // leading/trailing are removed), and "/". Everything else is assumed to be an OCR scrape error.
+  // Examples seen:
   // - "Magician’" -> "Magician"
   // - "Agnostic," -> "Agnostic"
   // - "NEXT LEVEL," -> "NEXT LEVEL"
+  // - "Raluca " -> "Raluca"
   private String cleanseOcrLine(String line) {
-    return line.replaceAll("[^A-Za-z0-9\\s/]", "");
+    return line.replaceAll("[^A-Za-z0-9\\s/]", "").trim();
   }
 
 }

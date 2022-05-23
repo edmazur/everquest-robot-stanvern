@@ -21,6 +21,9 @@ class ExpPercentToNextLevelScraperTest {
     expPercentToNextLevelScraper = new ExpPercentToNextLevelScraper();
   }
 
+  // TODO: Add the cropped screenshots here too. Currently they are all tested indirectly in
+  // CharInfoScraperTest, but that should eventually be mocked out, at which point they'll need to
+  // be tested here.
   @ParameterizedTest
   @CsvSource({
     "uncropped-stanvern-51-0.png,0",
@@ -28,9 +31,6 @@ class ExpPercentToNextLevelScraperTest {
     "uncropped-stanvern-52-20-b.png,20",
     "uncropped-stanvern-52-21.png,21",
     "uncropped-stanvern-52-64.png,64",
-    "cropped-klearic-60-96.png,96",
-    "cropped-wilma-1-42.png,42",
-    "cropped-wilma-2-0.png,0",
   })
   void expectedExpMatchesActual(String imageName, String expectedExp) {
     Optional<Integer> actualExp =

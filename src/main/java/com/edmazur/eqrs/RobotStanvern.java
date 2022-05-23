@@ -8,6 +8,7 @@ import com.edmazur.eqrs.discord.listener.AnnouncementListener;
 import com.edmazur.eqrs.discord.listener.BatphoneListener;
 import com.edmazur.eqrs.discord.listener.CharInfoScreenshotListener;
 import com.edmazur.eqrs.discord.listener.DiscordTodListener;
+import com.edmazur.eqrs.game.CharInfoOcrScrapeComparator;
 import com.edmazur.eqrs.game.CharInfoScraper;
 import com.edmazur.eqrs.game.ExpPercentToNextLevelScraper;
 import com.edmazur.eqrs.game.RaidTargets;
@@ -70,8 +71,10 @@ public class RobotStanvern {
     new AnnouncementListener(config, discord);
     new BatphoneListener(config, discord, pager, soundPlayer);
     Ocr ocr = new Ocr();
+    CharInfoOcrScrapeComparator charInfoOcrScrapeComparator = new CharInfoOcrScrapeComparator();
     ExpPercentToNextLevelScraper expPercentToNextLevelScraper = new ExpPercentToNextLevelScraper();
-    CharInfoScraper charInfoScraper = new CharInfoScraper(ocr, expPercentToNextLevelScraper);
+    CharInfoScraper charInfoScraper =
+        new CharInfoScraper(ocr, charInfoOcrScrapeComparator, expPercentToNextLevelScraper);
     new CharInfoScreenshotListener(config, discord, charInfoScraper).init();
 
     List<EqLogListener> eqLogListeners = new ArrayList<>();

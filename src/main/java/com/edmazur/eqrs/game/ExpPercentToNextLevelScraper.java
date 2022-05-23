@@ -26,7 +26,7 @@ public class ExpPercentToNextLevelScraper {
   //    you need to mouseover quadrant 2 of a pixel to get its position). Set DEBUG_ROW to this.
   // 4. Save test output for row from step 3 to pom.txt.
   // 5. Replace "1354" with the second value of the first line of pom.txt:
-  //    $ cat pom.txt | cut -d ',' -f 2 | xargs -I{} echo {} - 1354 | bc
+  //    $ cat pom.txt | grep ',' | cut -d ',' -f 2 | xargs -I{} echo {} - 1354 | bc
   // 6. Compare output to NEXT_LEVEL_STRING_OFFSETS.
   private static final boolean DEBUG = false;
   private static final int DEBUG_ROW = 88;
@@ -58,7 +58,9 @@ public class ExpPercentToNextLevelScraper {
       new HashSet<>(Arrays.asList(
           0, 6, 9, 29, 39, 46, 64, 73)),
       new HashSet<>(Arrays.asList(
-          0, 9, 10, 11, 12, 13, 21, 23, 24, 25, 26, 27, 28))
+          0, 9, 10, 11, 12, 13, 21, 23, 24, 25, 26, 27, 28)),
+      new HashSet<>(Arrays.asList(
+          0, 9, 10, 11, 12, 13, 14, 16, 21, 23, 24, 25, 26, 27, 28))
   );
 
   private static final List<Integer> WHITEISH_STRATEGIES =
