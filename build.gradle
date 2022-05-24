@@ -27,6 +27,11 @@ dependencies {
 
 mainClassName = 'com.edmazur.eqrs.RobotStanvern'
 
+task runGameTodDetectorBenchmark(type: JavaExec) {
+   main = 'com.edmazur.eqrs.game.listener.GameTodDetectorBenchmark'
+   classpath = sourceSets.main.runtimeClasspath
+}
+
 // TODO: Instead of copy/pasting/modifying google_checks.xml into this project,
 // see if there's a way to dynamically pull it in (with local config on top of
 // it if possible).
