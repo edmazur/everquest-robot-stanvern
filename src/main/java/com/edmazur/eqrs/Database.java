@@ -4,12 +4,9 @@ import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.game.RaidTarget;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Database {
 
@@ -18,7 +15,6 @@ public class Database {
   private static final String MYSQL_CONNECTION_FORMAT_STRING = "jdbc:mysql://%s:%d/%s";
   private static final int MYSQL_PORT = 3306;
 
-  private static final String SELECT_TARGETS_SQL = "SELECT target, aliases FROM targets;";
   private static final String UPDATE_TOD_SQL = "UPDATE tods SET tod = '%s' WHERE target = '%s';";
   private static final String UPDATE_QUAKE_SQL = "UPDATE quakes SET lastquake = '%s'";
 
@@ -29,24 +25,6 @@ public class Database {
 
   public Database(Config config) {
     this.config = config;
-  }
-
-  public List<RaidTarget> getAllTargets() {
-    try {
-      List<RaidTarget> raidTargets = new ArrayList<>();
-      ResultSet resultSet = getConnection().createStatement().executeQuery(SELECT_TARGETS_SQL);
-      while (resultSet.next()) {
-        String name = resultSet.getString("target");
-        String[] aliases = resultSet.getString("aliases").split(",");
-        raidTargets.add(new RaidTarget(name, aliases));
-      }
-      return raidTargets;
-    } catch (SQLException e) {
-      // TODO: Handle this more gracefully.
-      e.printStackTrace();
-      System.exit(-1);
-      return null;
-    }
   }
 
   public void updateTimeOfDeath(RaidTarget raidTarget, LocalDateTime tod) {

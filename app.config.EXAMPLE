@@ -1,6 +1,7 @@
 discord.private_key=
 
 everquest.install_directory=
+everquest.raid_targets_endpoint=
 everquest.server=
 
 mysql.database=

@@ -1,21 +1,29 @@
 package com.edmazur.eqrs.game;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class RaidTarget {
 
   private final String name;
   private final Set<String> aliases;
+  private final List<Window> windows;
 
-  public RaidTarget(String name, String... aliases) {
+  public RaidTarget(
+      String name,
+      Set<String> aliases,
+      List<Window> windows) {
     this.name = name;
-    this.aliases = new HashSet<String>(Arrays.asList(aliases));
+    this.aliases = aliases;
+    this.windows = windows;
   }
 
   public String getName() {
     return name;
+  }
+
+  public List<Window> getWindows() {
+    return windows;
   }
 
   public boolean matchesName(String nameToCheck) {
@@ -32,7 +40,7 @@ public class RaidTarget {
 
   @Override
   public String toString() {
-    return name + " (" + aliases + ")";
+    return String.format("%s (aliases=%s, windows=%s)", name, aliases, windows);
   }
 
 }

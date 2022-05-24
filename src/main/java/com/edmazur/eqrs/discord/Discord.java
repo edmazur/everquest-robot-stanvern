@@ -115,6 +115,14 @@ public class Discord {
     return unrepliedMessages;
   }
 
+  public void deleteMessagesMatchingPredicate(
+      DiscordChannel discordChannel,
+      Predicate<Message> predicate) {
+    getTextChannel(discordChannel).getMessagesAsStream()
+        .filter(predicate)
+        .forEach(message -> message.delete());
+  }
+
   private TextChannel getTextChannel(DiscordChannel discordChannel) {
     Optional<Channel> maybeChannel = discordApi.getChannelById(discordChannel.getId());
     if (maybeChannel.isEmpty()) {

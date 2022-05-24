@@ -4,13 +4,16 @@ import com.edmazur.eqlp.EqLog;
 import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.discord.Discord;
+import com.edmazur.eqrs.discord.DiscordTableFormatter;
 import com.edmazur.eqrs.discord.listener.AnnouncementListener;
 import com.edmazur.eqrs.discord.listener.BatphoneListener;
 import com.edmazur.eqrs.discord.listener.CharInfoScreenshotListener;
 import com.edmazur.eqrs.discord.listener.DiscordTodListener;
+import com.edmazur.eqrs.discord.speaker.TodWindowSpeaker;
 import com.edmazur.eqrs.game.CharInfoOcrScrapeComparator;
 import com.edmazur.eqrs.game.CharInfoScraper;
 import com.edmazur.eqrs.game.ExpPercentToNextLevelScraper;
+import com.edmazur.eqrs.game.RaidTargetTableMaker;
 import com.edmazur.eqrs.game.RaidTargets;
 import com.edmazur.eqrs.game.listener.DiceDetector;
 import com.edmazur.eqrs.game.listener.DiceListener;
@@ -62,7 +65,8 @@ public class RobotStanvern {
     */
 
     Database database = new Database(config);
-    RaidTargets raidTargets = new RaidTargets(database);
+    Json json = new Json();
+    RaidTargets raidTargets = new RaidTargets(config, json);
     Pager pager = new Pager(config);
     SoundPlayer soundPlayer = new SoundPlayer();
     // TODO: Set this up more like how game log messages are received centrally and passed out to
@@ -115,6 +119,13 @@ public class RobotStanvern {
     DiceDetector diceDetector = new DiceDetector();
     DiceListener diceListener = new DiceListener(diceDetector, soundPlayer);
     eqLogListeners.add(diceListener);
+
+    // Add ToD window speaker.
+    RaidTargetTableMaker raidTargetTableMaker = new RaidTargetTableMaker(config, raidTargets);
+    DiscordTableFormatter discordTableFormatter = new DiscordTableFormatter();
+    TodWindowSpeaker todWindowSpeaker =
+        new TodWindowSpeaker(discord, raidTargetTableMaker, discordTableFormatter);
+    scheduledExecutorService.scheduleAtFixedRate(todWindowSpeaker, 0, 1, TimeUnit.MINUTES);
 
     // Parse the log.
     // TODO: Automatically switch between logs as you change characters.

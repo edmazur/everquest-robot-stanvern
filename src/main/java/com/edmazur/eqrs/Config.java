@@ -20,6 +20,7 @@ public class Config {
     DEBUG("debug"),
 
     EVERQUEST_INSTALL_DIRECTORY("everquest.install_directory"),
+    EVERQUEST_RAID_TARGETS_ENDPOINT("everquest.raid_targets_endpoint"),
     EVERQUEST_SERVER("everquest.server"),
 
     MYSQL_DATABASE("mysql.database"),
