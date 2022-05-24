@@ -124,7 +124,7 @@ public class RobotStanvern {
     RaidTargetTableMaker raidTargetTableMaker = new RaidTargetTableMaker(config, raidTargets);
     DiscordTableFormatter discordTableFormatter = new DiscordTableFormatter();
     TodWindowSpeaker todWindowSpeaker =
-        new TodWindowSpeaker(discord, raidTargetTableMaker, discordTableFormatter);
+        new TodWindowSpeaker(config, discord, raidTargetTableMaker, discordTableFormatter);
     scheduledExecutorService.scheduleAtFixedRate(todWindowSpeaker, 0, 1, TimeUnit.MINUTES);
 
     // Parse the log.
