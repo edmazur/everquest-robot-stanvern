@@ -9,6 +9,11 @@ repositories {
 
 test {
   useJUnitPlatform()
+
+  // Disable slow tests.
+  // TODO: Re-organize project setup so that full tests can be run on-demand in a non-blocking way.
+  exclude 'com/edmazur/eqrs/game/CharInfoScraperTest.class'
+  exclude 'com/edmazur/eqrs/game/ExpPercentToNextLevelScraperTest.class'
 }
 
 dependencies {
