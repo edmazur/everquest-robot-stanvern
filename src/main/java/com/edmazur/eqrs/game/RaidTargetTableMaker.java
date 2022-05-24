@@ -59,8 +59,8 @@ public class RaidTargetTableMaker {
           subTable.setHeaderRow(new HeaderRow()
               .addColumn("Name", Justification.LEFT)
               .addColumn("Time Left", Justification.RIGHT)
-              .addColumn("Window Opened (ET)", Justification.LEFT)
-              .addColumn("Window Opened (local)", Justification.LEFT));
+              .addColumn("Window Closes (ET)", Justification.LEFT)
+              .addColumn("Window Closes (local)", Justification.LEFT));
           break;
         case SOON:
           subTable.setHeading(
