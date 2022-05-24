@@ -26,10 +26,14 @@ public class TodWindowSpeaker implements Runnable {
 
   @Override
   public void run() {
-    Table table = raidTargetTableMaker.make();
-    discord.deleteMessagesMatchingPredicate(CHANNEL, DiscordPredicate.isFromYourself());
-    for (String text : discordTableFormatter.format(table)) {
-      discord.sendMessage(CHANNEL, text);
+    try {
+      Table table = raidTargetTableMaker.make();
+      discord.deleteMessagesMatchingPredicate(CHANNEL, DiscordPredicate.isFromYourself());
+      for (String text : discordTableFormatter.format(table)) {
+        discord.sendMessage(CHANNEL, text);
+      }
+    } catch (Throwable t) {
+      t.printStackTrace();
     }
   }
 

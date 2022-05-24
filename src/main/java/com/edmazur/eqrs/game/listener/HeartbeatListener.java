@@ -31,16 +31,21 @@ public class HeartbeatListener implements EqLogListener, Runnable {
 
   @Override
   public void run() {
-    LocalDateTime mustHaveSeenActivityAfter = LocalDateTime.now().minus(ACTIVITY_THRESHOLD);
-    LocalDateTime mustHaveSentNotificationBefore =
-        LocalDateTime.now().minus(NOTIFICATION_THRESHOLD);
-    if (lastSeenActivity.isBefore(mustHaveSeenActivityAfter)
-        && lastSentNotification.isBefore(mustHaveSentNotificationBefore)) {
-      Duration durationSinceLastActivity = Duration.between(lastSeenActivity, LocalDateTime.now());
-      String message = String.format("No EQ log activity seen in %d minutes",
-          durationSinceLastActivity.toMinutes());
-      discord.sendMessage(DiscordUser.EDMAZUR, message);
-      lastSentNotification = LocalDateTime.now();
+    try {
+      LocalDateTime mustHaveSeenActivityAfter = LocalDateTime.now().minus(ACTIVITY_THRESHOLD);
+      LocalDateTime mustHaveSentNotificationBefore =
+          LocalDateTime.now().minus(NOTIFICATION_THRESHOLD);
+      if (lastSeenActivity.isBefore(mustHaveSeenActivityAfter)
+          && lastSentNotification.isBefore(mustHaveSentNotificationBefore)) {
+        Duration durationSinceLastActivity =
+            Duration.between(lastSeenActivity, LocalDateTime.now());
+        String message = String.format("No EQ log activity seen in %d minutes",
+            durationSinceLastActivity.toMinutes());
+        discord.sendMessage(DiscordUser.EDMAZUR, message);
+        lastSentNotification = LocalDateTime.now();
+      }
+    } catch (Throwable t) {
+      t.printStackTrace();
     }
   }
 
