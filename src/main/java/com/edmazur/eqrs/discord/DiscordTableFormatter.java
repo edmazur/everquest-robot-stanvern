@@ -38,7 +38,7 @@ public class DiscordTableFormatter {
             dataRow.getColumns(),
             table.getJustifications(),
             maxColumnWidths,
-            Optional.of(dataRow.getCodeFontIndex())) + "\n");
+            dataRow.getCodeFontEndIndex()) + "\n");
       }
       formattedTable.add(sb.toString());
     }

@@ -21,6 +21,11 @@ import java.util.TreeSet;
 
 public class RaidTargetTableMaker {
 
+  // Including Discord timestamps makes the table width too wide to render well on mobile devices,
+  // so they're disabled by default. The code is left here in case it's ever needed, e.g. if a
+  // separate non-mobile channel is created.
+  private static final boolean SHOW_DISCORD_TIMESTAMPS = false;
+
   private static final String HUMAN_READABLE_TIMESTAMP_PATTERN = "EEE HH:mm:ss";
 
   private final RaidTargets raidTargets;
@@ -44,7 +49,9 @@ public class RaidTargetTableMaker {
     for (Map.Entry<Window.Status, SortedSet<RaidTarget>> mapEntry :
         raidTargetsByWindowStatus.entrySet()) {
       Window.Status windowStatus = mapEntry.getKey();
-      SortedSet<RaidTarget> raidTargets = mapEntry.getValue();
+      // This is final to avoid a VariableDeclarationUsageDistance checkstyle warning.
+      // TODO: Disable that check?
+      final SortedSet<RaidTarget> raidTargets = mapEntry.getValue();
 
       if (windowStatus == Window.Status.PAST) {
         continue;
@@ -52,38 +59,46 @@ public class RaidTargetTableMaker {
 
       // Create each subtable.
       SubTable subTable = new SubTable();
+      HeaderRow headerRow = new HeaderRow();
       // TODO: Factor out the duplication here.
       switch (windowStatus) {
         case NOW:
           subTable.setHeading("Targets in window **NOW**:");
-          subTable.setHeaderRow(new HeaderRow()
+          headerRow
               .addColumn("Name", Justification.LEFT)
               .addColumn("Time Left", Justification.RIGHT)
-              .addColumn("Window Closes (ET)", Justification.LEFT)
-              .addColumn("Window Closes (local)", Justification.LEFT));
+              .addColumn("Window Closes (ET)", Justification.LEFT);
+          if (SHOW_DISCORD_TIMESTAMPS) {
+            headerRow.addColumn("Window Closes (local)", Justification.LEFT);
+          }
           break;
         case SOON:
           subTable.setHeading(
               "Targets in window **SOON** (under " + Window.Status.SOON_DESCRIPTION + "):");
-          subTable.setHeaderRow(new HeaderRow()
+          headerRow
               .addColumn("Name", Justification.LEFT)
-              .addColumn("Time Left", Justification.RIGHT)
-              .addColumn("Window Opens (ET)", Justification.LEFT)
-              .addColumn("Window Opens (local)", Justification.LEFT));
+              .addColumn("Time Until", Justification.RIGHT)
+              .addColumn("Window Opens (ET)", Justification.LEFT);
+          if (SHOW_DISCORD_TIMESTAMPS) {
+            headerRow.addColumn("Window Opens (local)", Justification.LEFT);
+          }
           break;
         case LATER:
           subTable.setHeading(
               "Targets in window **LATER** (over " + Window.Status.SOON_DESCRIPTION + "):");
-          subTable.setHeaderRow(new HeaderRow()
+          headerRow
               .addColumn("Name", Justification.LEFT)
-              .addColumn("Time Left", Justification.RIGHT)
-              .addColumn("Window Opens (ET)", Justification.LEFT)
-              .addColumn("Window Opens (local)", Justification.LEFT));
+              .addColumn("Time Until", Justification.RIGHT)
+              .addColumn("Window Opens (ET)", Justification.LEFT);
+          if (SHOW_DISCORD_TIMESTAMPS) {
+            headerRow.addColumn("Window Opens (local)", Justification.LEFT);
+          }
           break;
         default:
           // Do nothing.
           break;
       }
+      subTable.setHeaderRow(headerRow);
 
       // Populate each subtable.
       for (RaidTarget raidTarget : raidTargets) {
@@ -107,8 +122,10 @@ public class RaidTargetTableMaker {
         dataRow.addColumn(raidTarget.getName());
         dataRow.addColumn(formatHumanReadableDuration(timeLeft));
         dataRow.addColumn(formatHumanReadableTimestamp(relevantWindowTimestamp));
-        dataRow.setCodeFontEndIndex(2);
-        dataRow.addColumn(formatDiscordTimestamp(relevantWindowTimestamp));
+        if (SHOW_DISCORD_TIMESTAMPS) {
+          dataRow.setCodeFontEndIndex(2);
+          dataRow.addColumn(formatDiscordTimestamp(relevantWindowTimestamp));
+        }
         subTable.addDataRow(dataRow);
       }
 

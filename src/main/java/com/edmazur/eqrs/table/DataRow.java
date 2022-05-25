@@ -2,6 +2,7 @@ package com.edmazur.eqrs.table;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class DataRow {
 
@@ -9,7 +10,7 @@ public class DataRow {
   // This field technically leaks Discord implementation details, whereas these table classes are
   // meant to be agnostic to output format, but I haven't thought of a way of avoiding this that
   // doesn't introduce a bunch of unnecessary complexity.
-  private int codeFontEndIndex;
+  private Optional<Integer> maybeCodeFontEndIndex = Optional.empty();
 
   public DataRow addColumn(String column) {
     this.columns.add(column);
@@ -21,12 +22,12 @@ public class DataRow {
   }
 
   public DataRow setCodeFontEndIndex(int codeFontEndIndex) {
-    this.codeFontEndIndex = codeFontEndIndex;
+    this.maybeCodeFontEndIndex = Optional.of(codeFontEndIndex);
     return this;
   }
 
-  public int getCodeFontIndex() {
-    return codeFontEndIndex;
+  public Optional<Integer> getCodeFontEndIndex() {
+    return maybeCodeFontEndIndex;
   }
 
   int getColumnWidth(int i) {
