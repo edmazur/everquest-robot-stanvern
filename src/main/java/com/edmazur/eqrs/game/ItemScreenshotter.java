@@ -38,7 +38,6 @@ public class ItemScreenshotter {
         + "wrapperDiv.appendChild(itemTopDiv);"
         + "wrapperDiv.appendChild(itemMiddleDiv);"
         + "wrapperDiv.appendChild(itemBottomDiv);");
-    // TODO: change string
     WebElement itemElement = driver.findElement(By.id(unique));
     File screenshot = ((TakesScreenshot) itemElement).getScreenshotAs(OutputType.FILE);
     driver.quit();
