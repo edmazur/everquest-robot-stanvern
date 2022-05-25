@@ -9,10 +9,13 @@ import com.edmazur.eqrs.discord.listener.AnnouncementListener;
 import com.edmazur.eqrs.discord.listener.BatphoneListener;
 import com.edmazur.eqrs.discord.listener.CharInfoScreenshotListener;
 import com.edmazur.eqrs.discord.listener.DiscordTodListener;
+import com.edmazur.eqrs.discord.listener.ItemListener;
 import com.edmazur.eqrs.discord.speaker.TodWindowSpeaker;
 import com.edmazur.eqrs.game.CharInfoOcrScrapeComparator;
 import com.edmazur.eqrs.game.CharInfoScraper;
 import com.edmazur.eqrs.game.ExpPercentToNextLevelScraper;
+import com.edmazur.eqrs.game.ItemDatabase;
+import com.edmazur.eqrs.game.ItemScreenshotter;
 import com.edmazur.eqrs.game.RaidTargetTableMaker;
 import com.edmazur.eqrs.game.RaidTargets;
 import com.edmazur.eqrs.game.listener.DiceDetector;
@@ -80,6 +83,10 @@ public class RobotStanvern {
     CharInfoScraper charInfoScraper =
         new CharInfoScraper(ocr, charInfoOcrScrapeComparator, expPercentToNextLevelScraper);
     new CharInfoScreenshotListener(config, discord, charInfoScraper).init();
+    ItemDatabase itemDatabase = new ItemDatabase();
+    itemDatabase.initialize();
+    ItemScreenshotter itemScreenshotter = new ItemScreenshotter();
+    new ItemListener(discord, itemDatabase, itemScreenshotter);
 
     List<EqLogListener> eqLogListeners = new ArrayList<>();
 
