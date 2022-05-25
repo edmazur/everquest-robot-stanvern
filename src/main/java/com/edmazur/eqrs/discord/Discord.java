@@ -19,6 +19,7 @@ import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.Messageable;
 import org.javacord.api.listener.message.MessageCreateListener;
+import org.javacord.api.util.logging.ExceptionLogger;
 
 public class Discord {
 
@@ -37,27 +38,39 @@ public class Discord {
   }
 
   public void sendMessage(DiscordChannel discordChannel, String message) {
-    getMessageable(discordChannel).sendMessage(getMessage(message));
+    getMessageable(discordChannel)
+        .sendMessage(getMessage(message))
+        .exceptionally(ExceptionLogger.get());
   }
 
   public void sendMessage(DiscordUser discordUser, String message) {
-    getMessageable(discordUser).sendMessage(getMessage(message));
+    getMessageable(discordUser)
+        .sendMessage(getMessage(message))
+        .exceptionally(ExceptionLogger.get());
   }
 
   public void sendMessage(DiscordChannel discordChannel, File image) {
-    getMessageable(discordChannel).sendMessage(image);
+    getMessageable(discordChannel)
+        .sendMessage(image)
+        .exceptionally(ExceptionLogger.get());
   }
 
   public void sendMessage(DiscordUser discordUser, File image) {
-    getMessageable(discordUser).sendMessage(image);
+    getMessageable(discordUser)
+        .sendMessage(image)
+        .exceptionally(ExceptionLogger.get());
   }
 
   public void sendMessage(DiscordChannel discordChannel, String message, File image) {
-    getMessageable(discordChannel).sendMessage(getMessage(message), image);
+    getMessageable(discordChannel)
+        .sendMessage(getMessage(message), image)
+        .exceptionally(ExceptionLogger.get());
   }
 
   public void sendMessage(DiscordUser discordUser, String message, File image) {
-    getMessageable(discordUser).sendMessage(getMessage(message), image);
+    getMessageable(discordUser)
+        .sendMessage(getMessage(message), image)
+        .exceptionally(ExceptionLogger.get());
   }
 
   public Optional<String> getLastMessageMatchingPredicate(
