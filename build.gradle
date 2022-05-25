@@ -32,6 +32,11 @@ task runGameTodDetectorBenchmark(type: JavaExec) {
    classpath = sourceSets.main.runtimeClasspath
 }
 
+task runP99WikiItemReader(type: JavaExec) {
+   main = 'com.edmazur.eqrs.game.P99WikiItemReader'
+   classpath = sourceSets.main.runtimeClasspath
+}
+
 // TODO: Instead of copy/pasting/modifying google_checks.xml into this project,
 // see if there's a way to dynamically pull it in (with local config on top of
 // it if possible).
