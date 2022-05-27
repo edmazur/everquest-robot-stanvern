@@ -7,18 +7,14 @@ import com.edmazur.eqrs.discord.DiscordServer;
 import com.edmazur.eqrs.game.Item;
 import com.edmazur.eqrs.game.ItemDatabase;
 import com.edmazur.eqrs.game.ItemScreenshotter;
-import java.io.File;
-import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
 public class ItemListener implements MessageCreateListener {
 
-  private static final Pattern ITEM_PATTERN = Pattern.compile("!item.*");
-  private static final Pattern ITEM_PARSE_PATTERN = Pattern.compile("!item (.+)");
+  private static final String TRIGGER = "!item";
 
   private final Config config;
   private final Discord discord;
@@ -52,30 +48,30 @@ public class ItemListener implements MessageCreateListener {
       return;
     }
 
-    Matcher itemMatcher = ITEM_PATTERN.matcher(event.getMessageContent());
-    if (itemMatcher.matches()) {
-      Matcher itemParseMatcher = ITEM_PARSE_PATTERN.matcher(event.getMessageContent());
-      if (!itemParseMatcher.matches()) {
-        event.getMessage().reply("Sorry, couldn't parse !item command.");
-        return;
-      }
-
-      String itemToSearchFor = itemParseMatcher.group(1);
-      Optional<Item> maybeItem = itemDatabase.getByName(itemToSearchFor);
-      if (maybeItem.isEmpty()) {
-        event.getMessage().reply("Sorry, couldn't find item. Note that only case-sensitive exact "
-            + "match is currently supported.");
-        return;
-      }
-
-      event.getChannel().type();
-      Item item = maybeItem.get();
-      File screenshot = itemScreenshotter.get(item);
-      new MessageBuilder()
-          .append(item.getName() + " (" + item.getUrl() + ")")
-          .addAttachment(screenshot)
-          .replyTo(event.getMessage())
-          .send(event.getChannel());
+    // Ignore messages without trigger.
+    if (!event.getMessageContent().contains(TRIGGER)) {
+      return;
     }
+
+    event.getChannel().type();
+    List<Item> items = itemDatabase.parse(event.getMessageContent());
+    if (items.isEmpty()) {
+      event.getMessage().reply("Sorry, saw !item request, but couldn't match any item names. "
+          + "Search is case-insensitive, but partials matches are NOT supported.");
+      return;
+    }
+
+    MessageBuilder messageBuilder = new MessageBuilder().replyTo(event.getMessage());
+    for (int i = 0; i < items.size(); i++) {
+      Item item = items.get(i);
+      messageBuilder.append((i > 0 ? "\n" : "") + item.getName() + " (" + item.getUrl() + ")");
+    }
+    // Add the attachments in reverse order so that they appear in the same order as the names.
+    // Probably a Javacord bug.
+    for (int i = items.size() - 1; i >= 0; i--) {
+      Item item = items.get(i);
+      messageBuilder.addAttachment(itemScreenshotter.get(item));
+    }
+    messageBuilder.send(event.getChannel());
   }
 }

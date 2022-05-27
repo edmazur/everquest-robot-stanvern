@@ -21,6 +21,7 @@ dependencies {
   implementation 'com.github.dikhan:pagerduty-client:3.1.2'
   implementation 'commons-io:commons-io:2.11.0'
   implementation 'mysql:mysql-connector-java:8.0.25'
+  implementation 'org.ahocorasick:ahocorasick:0.6.3'
   implementation 'org.javacord:javacord:3.4.0'
   implementation 'org.seleniumhq.selenium:selenium-java:4.0.0'
   testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
