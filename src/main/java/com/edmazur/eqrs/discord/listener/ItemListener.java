@@ -1,6 +1,9 @@
 package com.edmazur.eqrs.discord.listener;
 
+import com.edmazur.eqrs.Config;
+import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.discord.Discord;
+import com.edmazur.eqrs.discord.DiscordServer;
 import com.edmazur.eqrs.game.Item;
 import com.edmazur.eqrs.game.ItemDatabase;
 import com.edmazur.eqrs.game.ItemScreenshotter;
@@ -17,14 +20,17 @@ public class ItemListener implements MessageCreateListener {
   private static final Pattern ITEM_PATTERN = Pattern.compile("!item.*");
   private static final Pattern ITEM_PARSE_PATTERN = Pattern.compile("!item (.+)");
 
+  private final Config config;
   private final Discord discord;
   private final ItemDatabase itemDatabase;
   private final ItemScreenshotter itemScreenshotter;
 
   public ItemListener(
+      Config config,
       Discord discord,
       ItemDatabase itemDatabase,
       ItemScreenshotter itemScreenshotter) {
+    this.config = config;
     this.discord = discord;
     this.discord.addListener(this);
     this.itemDatabase = itemDatabase;
@@ -33,12 +39,18 @@ public class ItemListener implements MessageCreateListener {
 
   @Override
   public void onMessageCreate(MessageCreateEvent event) {
+    if (config.getBoolean(Property.DEBUG) && !DiscordServer.TEST.isEventServer(event)) {
+      // In debug mode, ignore non-test server messages.
+      return;
+    } else if (!config.getBoolean(Property.DEBUG) && DiscordServer.TEST.isEventServer(event)) {
+      // In non-debug mode, ignore test server messages.
+      return;
+    }
+
     // Ignore yourself.
     if (event.getMessageAuthor().isYourself()) {
       return;
     }
-
-    // TODO: Prevent replies on non-test server when in debug mode.
 
     Matcher itemMatcher = ITEM_PATTERN.matcher(event.getMessageContent());
     if (itemMatcher.matches()) {

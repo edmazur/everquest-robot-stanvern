@@ -95,7 +95,7 @@ public class RobotStanvern {
     ItemDatabase itemDatabase = new ItemDatabase();
     itemDatabase.initialize();
     ItemScreenshotter itemScreenshotter = new ItemScreenshotter();
-    new ItemListener(discord, itemDatabase, itemScreenshotter);
+    new ItemListener(config, discord, itemDatabase, itemScreenshotter);
 
     List<EqLogListener> eqLogListeners = new ArrayList<>();
 
