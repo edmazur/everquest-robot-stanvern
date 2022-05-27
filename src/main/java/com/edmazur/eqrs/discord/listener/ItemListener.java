@@ -57,7 +57,7 @@ public class ItemListener implements MessageCreateListener {
     List<Item> items = itemDatabase.parse(event.getMessageContent());
     if (items.isEmpty()) {
       event.getMessage().reply("Sorry, saw !item request, but couldn't match any item names. "
-          + "Search is case-insensitive, but partials matches are NOT supported.");
+          + "Search is case-insensitive, but partial matches are NOT supported.");
       return;
     }
 
