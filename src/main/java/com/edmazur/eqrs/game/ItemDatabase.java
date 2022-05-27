@@ -20,7 +20,9 @@ public class ItemDatabase {
 
   public void initialize() {
     PayloadTrieBuilder<Item> itemsByNameBuilder = PayloadTrie.builder();
-    itemsByNameBuilder.ignoreCase();
+    itemsByNameBuilder
+        .ignoreCase()
+        .ignoreOverlaps();
     BufferedReader bufferedReader;
     try {
       bufferedReader = new BufferedReader(new FileReader(ITEM_FILE));

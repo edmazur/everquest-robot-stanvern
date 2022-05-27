@@ -66,4 +66,11 @@ class ItemDatabaseTest {
     assertEquals("Earthcaller", items.get(1).getName());
   }
 
+  @Test
+  void getItemWithSubstringItems() {
+    List<Item> items = itemDatabase.parse("Black Sapphire Electrum Earring");
+    assertEquals(1, items.size());
+    assertEquals("Black Sapphire Electrum Earring", items.get(0).getName());
+  }
+
 }
