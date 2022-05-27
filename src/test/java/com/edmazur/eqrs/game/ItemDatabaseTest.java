@@ -73,4 +73,32 @@ class ItemDatabaseTest {
     assertEquals("Black Sapphire Electrum Earring", items.get(0).getName());
   }
 
+  @Test
+  void getItemWithApostrophe() {
+    List<Item> items = itemDatabase.parse("Zlandicar's Talisman");
+    assertEquals(1, items.size());
+    assertEquals("Zlandicar's Talisman", items.get(0).getName());
+  }
+
+  @Test
+  void getItemWithBacktick() {
+    List<Item> items = itemDatabase.parse("Palladius` Axe of Slaughter");
+    assertEquals(1, items.size());
+    assertEquals("Palladius` Axe of Slaughter", items.get(0).getName());
+  }
+
+  @Test
+  void getItemBacktickInputForApostropheItem() {
+    List<Item> items = itemDatabase.parse("Zlandicar`s Talisman");
+    assertEquals(1, items.size());
+    assertEquals("Zlandicar's Talisman", items.get(0).getName());
+  }
+
+  @Test
+  void getItemApostropheInputForBacktickItem() {
+    List<Item> items = itemDatabase.parse("Palladius' Axe of Slaughter");
+    assertEquals(1, items.size());
+    assertEquals("Palladius` Axe of Slaughter", items.get(0).getName());
+  }
+
 }

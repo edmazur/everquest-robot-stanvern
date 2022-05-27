@@ -32,7 +32,7 @@ public class ItemDatabase {
         String name = parts[0];
         String url = parts[1];
         Item item = new Item(name, url);
-        itemsByNameBuilder.addKeyword(name, item);
+        itemsByNameBuilder.addKeyword(normalize(name), item);
       }
     } catch (FileNotFoundException e) {
       e.printStackTrace();
@@ -46,10 +46,17 @@ public class ItemDatabase {
 
   public List<Item> parse(String text) {
     List<Item> items = new ArrayList<>();
-    for (PayloadEmit<Item> payload : itemsByName.parseText(text)) {
+    for (PayloadEmit<Item> payload : itemsByName.parseText(normalize(text))) {
       items.add(payload.getPayload());
     }
     return items;
+  }
+
+  // Make apostrophes and backticks interchangeable:
+  // - Makes it easier for one-off manual lookups.
+  // - NinjaLooter replaces backticks with apostrophes.
+  private String normalize(String s) {
+    return s.replace("`", "'");
   }
 
 }
