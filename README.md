@@ -17,13 +17,13 @@ Run:
 ```
 $ git pull
 $ ./gradlew installDist
-$ ./build/install/everquest-robot-stanvern/bin/everquest-robot-stanvern
+$ ./build/install/everquest-robot-stanvern/bin/everquest-robot-stanvern YourCharacterName
 ```
 
 Development (Discord output only sent as DM, database writes skipped):
 
 ```
-$ ./gradlew run --args='--debug'
+$ ./gradlew run --args='YourCharacterName --debug'
 ```
 
 # Capabilities

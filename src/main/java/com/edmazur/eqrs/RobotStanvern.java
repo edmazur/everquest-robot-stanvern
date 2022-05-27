@@ -44,10 +44,19 @@ public class RobotStanvern {
   private static final Logger LOGGER = new Logger();
 
   public static void main(String[] args) {
-    Config config = new Config();
+    // Parse command line arguments.
+    // TODO: Use a proper library for this if it grows more complex.
+    if (args.length == 0) {
+      LOGGER.log("Usage: CharacterName [--debug]");
+    }
+    // TODO: Automatically switch between logs as you change characters.
+    // This is final to avoid a VariableDeclarationUsageDistance checkstyle warning.
+    // TODO: Disable that check?
+    final String character = args[0];
+    boolean enableDebug = args.length == 2 && args[1].equals("--debug");
 
-    // Check if debug mode is set.
-    if (args.length == 1 && args[0].equals("--debug")) {
+    Config config = new Config();
+    if (enableDebug) {
       config.enableDebug();
     }
 
@@ -135,8 +144,6 @@ public class RobotStanvern {
     scheduledExecutorService.scheduleAtFixedRate(todWindowSpeaker, 0, 1, TimeUnit.MINUTES);
 
     // Parse the log.
-    // TODO: Automatically switch between logs as you change characters.
-    String character = "Holecreep";
     EqLog eqLog = new EqLog(
         Paths.get(config.getString(Property.EVERQUEST_INSTALL_DIRECTORY)),
         ZoneId.of(config.getString(Property.TIMEZONE_GAME)),
