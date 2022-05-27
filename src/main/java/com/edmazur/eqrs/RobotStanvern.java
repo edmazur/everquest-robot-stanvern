@@ -128,7 +128,8 @@ public class RobotStanvern {
 
     // Add grats listener.
     GratsDetector gratsDetector = new GratsDetector();
-    GratsListener gratsListener = new GratsListener(discord, gratsDetector);
+    GratsListener gratsListener =
+        new GratsListener(discord, gratsDetector, itemDatabase, itemScreenshotter);
     eqLogListeners.add(gratsListener);
 
     // Add dice listener.

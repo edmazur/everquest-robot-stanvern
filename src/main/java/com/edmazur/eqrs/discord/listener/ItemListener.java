@@ -61,6 +61,7 @@ public class ItemListener implements MessageCreateListener {
       return;
     }
 
+    // TODO: Factor out the code that's repeated here and in GratsListener.
     MessageBuilder messageBuilder = new MessageBuilder().replyTo(event.getMessage());
     for (int i = 0; i < items.size(); i++) {
       Item item = items.get(i);

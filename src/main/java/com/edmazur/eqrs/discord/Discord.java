@@ -17,6 +17,7 @@ import org.javacord.api.entity.activity.ActivityType;
 import org.javacord.api.entity.channel.Channel;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.Messageable;
 import org.javacord.api.listener.message.MessageCreateListener;
 import org.javacord.api.util.logging.ExceptionLogger;
@@ -71,6 +72,10 @@ public class Discord {
     getMessageable(discordUser)
         .sendMessage(getMessage(message), image)
         .exceptionally(ExceptionLogger.get());
+  }
+
+  public void sendMessage(DiscordChannel discordChannel, MessageBuilder messageBuilder) {
+    messageBuilder.send(getMessageable(discordChannel));
   }
 
   public Optional<String> getLastMessageMatchingPredicate(
