@@ -101,4 +101,20 @@ class ItemDatabaseTest {
     assertEquals("Palladius` Axe of Slaughter", items.get(0).getName());
   }
 
+  @Test
+  void getItemSpammyItemDroppedWhenNotAlone() {
+    List<Item> items = itemDatabase.parse(
+        "Please read the requirements below !item: Zlandicar's Talisman (Sleeper's Tomb key)");
+    assertEquals(1, items.size());
+    assertEquals("Zlandicar's Talisman", items.get(0).getName());
+  }
+
+  @Test
+  void getItemSpammyItemNotDroppedWhenAlone() {
+    List<Item> items = itemDatabase.parse(
+        "Please read the requirements below !item: Sleeper's Tomb key)");
+    assertEquals(1, items.size());
+    assertEquals("Key", items.get(0).getName());
+  }
+
 }
