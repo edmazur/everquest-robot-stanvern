@@ -112,7 +112,7 @@ class ItemDatabaseTest {
   @Test
   void getItemSpammyItemNotDroppedWhenAlone() {
     List<Item> items = itemDatabase.parse(
-        "Please read the requirements below !item: Sleeper's Tomb key)");
+        "Please read the requirements below !item: Sleeper's Tomb key");
     assertEquals(1, items.size());
     assertEquals("Key", items.get(0).getName());
   }
