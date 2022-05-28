@@ -4,7 +4,6 @@ import com.edmazur.eqlp.EqLog;
 import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.discord.Discord;
-import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.discord.DiscordTableFormatter;
 import com.edmazur.eqrs.discord.listener.AnnouncementListener;
 import com.edmazur.eqrs.discord.listener.BatphoneListener;
@@ -68,12 +67,6 @@ public class RobotStanvern {
     }
 
     Discord discord = new Discord(config);
-
-    if (1 == 1) {
-      GameScreenshotter gameScreenshotter = new GameScreenshotter();
-      discord.sendMessage(DiscordChannel.ROBOT_STANVERN_TESTING, gameScreenshotter.get().get());
-      return;
-    }
 
     // Uncomment to send one-off images/messages.
     // TODO: Add a better way to send one-off images/messages that doesn't require code changes.
