@@ -71,10 +71,8 @@ public class GameScreenshotter {
   private File getScreenshot() throws IOException, InterruptedException {
     File file = File.createTempFile(this.getClass().getName() + "-", ".png");
     Runtime.getRuntime().exec(
-        new String[] {"import", "-window", GAME_CLIENT_WINDOW_TITLE, file.getAbsolutePath()});
-    // Give some time for the screenshot to complete.
-    // TODO: Check every 100ms or something for the file being ready.
-    Thread.sleep(1000 * 5);
+        new String[] {"import", "-window", GAME_CLIENT_WINDOW_TITLE,
+            file.getAbsolutePath()}).waitFor();
     return file;
   }
 
