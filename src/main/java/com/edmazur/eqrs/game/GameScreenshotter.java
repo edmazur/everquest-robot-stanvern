@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -13,6 +14,7 @@ public class GameScreenshotter {
   private static final Logger LOGGER = new Logger();
 
   private static final String GAME_CLIENT_WINDOW_TITLE = "EverQuest";
+  private static final BigDecimal GAMMA_CORRECTION = new BigDecimal("2");
 
   public Optional<File> get() {
     try {
@@ -27,7 +29,7 @@ public class GameScreenshotter {
       activateGameClient();
 
       // Take screenshot.
-      File file = getScreenshot();
+      File rawScreenshot = getScreenshot();
 
       // Re-minimize game client if needed.
       String gameClientPositionAfterActivating = getGameClientPosition();
@@ -40,7 +42,10 @@ public class GameScreenshotter {
       // Switch back to original desktop if needed.
       setDesktop(desktopBeforeActivating);
 
-      return Optional.of(file);
+      // Correct screenshot.
+      File correctedScreenshot = increaseGamma(rawScreenshot);
+
+      return Optional.of(correctedScreenshot);
     } catch (IOException | InterruptedException e) {
       LOGGER.log("Error getting screenshot");
       e.printStackTrace();
@@ -74,6 +79,15 @@ public class GameScreenshotter {
         new String[] {"import", "-window", GAME_CLIENT_WINDOW_TITLE,
             file.getAbsolutePath()}).waitFor();
     return file;
+  }
+
+  private File increaseGamma(File input)
+      throws IOException, InterruptedException {
+    File output = File.createTempFile(this.getClass().getName() + "-", ".png");
+    Runtime.getRuntime().exec(
+        new String[] {"convert", input.getAbsolutePath(), "-gamma", GAMMA_CORRECTION.toString(),
+            output.getAbsolutePath()}).waitFor();
+    return output;
   }
 
   private void minimizeGameClient() throws IOException {
