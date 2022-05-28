@@ -6,8 +6,10 @@ import com.edmazur.eqrs.RateLimiter;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.game.GameScreenshotter;
+import java.io.File;
 import java.time.Duration;
 import java.util.Map;
+import java.util.Optional;
 
 public class RaidTargetSpawnListener implements EqLogListener {
 
@@ -52,18 +54,16 @@ public class RaidTargetSpawnListener implements EqLogListener {
       // (trailing whitespace, /r, etc.).
       if (eqLogEvent.getPayload().startsWith(trigger)) {
         if (rateLimiter.getPermission()) {
-          if (BATPHONE) {
-            discord.sendMessage(
-                DiscordChannel.RAID_BATPHONE,
-                String.format(BATPHONE_MESSAGE, target),
-                gameScreenshotter.get());
+          DiscordChannel discordChannel =
+              BATPHONE ? DiscordChannel.RAID_BATPHONE : DiscordChannel.RAIDER_CHAT;
+          String message = String.format(BATPHONE ? BATPHONE_MESSAGE : REGULAR_MESSAGE, target);
+          Optional<File> maybeScreenshot = gameScreenshotter.get();
+
+          if (maybeScreenshot.isPresent()) {
+            discord.sendMessage(discordChannel, message, maybeScreenshot.get());
           } else {
-            discord.sendMessage(
-                DiscordChannel.RAIDER_CHAT,
-                String.format(REGULAR_MESSAGE, target),
-                gameScreenshotter.get());
+            discord.sendMessage(discordChannel, message);
           }
-          break;
         }
       }
     }
