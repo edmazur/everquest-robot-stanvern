@@ -5,8 +5,7 @@ import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.RateLimiter;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
-import java.io.File;
-import java.io.IOException;
+import com.edmazur.eqrs.game.GameScreenshotter;
 import java.time.Duration;
 import java.util.Map;
 
@@ -33,12 +32,14 @@ public class RaidTargetSpawnListener implements EqLogListener {
 
   private static final Duration RATE_LIMIT = Duration.ofHours(24);
 
+  private final GameScreenshotter gameScreenshotter;
   private final Discord discord;
 
   // TODO: Make this a per-target rate limiter if/when you add more targets.
   private final RateLimiter rateLimiter = new RateLimiter(RATE_LIMIT);
 
-  public RaidTargetSpawnListener(Discord discord) {
+  public RaidTargetSpawnListener(GameScreenshotter gameScreenshotter, Discord discord) {
+    this.gameScreenshotter = gameScreenshotter;
     this.discord = discord;
   }
 
@@ -55,34 +56,17 @@ public class RaidTargetSpawnListener implements EqLogListener {
             discord.sendMessage(
                 DiscordChannel.RAID_BATPHONE,
                 String.format(BATPHONE_MESSAGE, target),
-                getGameScreenshot());
+                gameScreenshotter.get());
           } else {
             discord.sendMessage(
                 DiscordChannel.RAIDER_CHAT,
                 String.format(REGULAR_MESSAGE, target),
-                getGameScreenshot());
+                gameScreenshotter.get());
           }
           break;
         }
       }
     }
-
-  }
-
-  private File getGameScreenshot() {
-    File file = null;
-    try {
-      file = File.createTempFile(this.getClass().getName() + "-", ".png");
-      Runtime.getRuntime().exec(
-          new String[] {"import", "-window", "EverQuest", file.getAbsolutePath()});
-      // Give some time for the screenshot to complete.
-      // TODO: Check every 100ms or something for the file being ready.
-      Thread.sleep(1000 * 5);
-    } catch (IOException | InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    return file;
   }
 
 }

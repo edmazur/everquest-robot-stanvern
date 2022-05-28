@@ -14,6 +14,7 @@ import com.edmazur.eqrs.discord.speaker.TodWindowSpeaker;
 import com.edmazur.eqrs.game.CharInfoOcrScrapeComparator;
 import com.edmazur.eqrs.game.CharInfoScraper;
 import com.edmazur.eqrs.game.ExpPercentToNextLevelScraper;
+import com.edmazur.eqrs.game.GameScreenshotter;
 import com.edmazur.eqrs.game.ItemDatabase;
 import com.edmazur.eqrs.game.ItemScreenshotter;
 import com.edmazur.eqrs.game.RaidTargetTableMaker;
@@ -109,7 +110,9 @@ public class RobotStanvern {
     eqLogListeners.add(heartbeatListener);
 
     // Add raid target spawn listener.
-    RaidTargetSpawnListener raidTargetSpawnListener = new RaidTargetSpawnListener(discord);
+    GameScreenshotter gameScreenshotter = new GameScreenshotter();
+    RaidTargetSpawnListener raidTargetSpawnListener =
+        new RaidTargetSpawnListener(gameScreenshotter, discord);
     eqLogListeners.add(raidTargetSpawnListener);
 
     // Add MotD listener.
