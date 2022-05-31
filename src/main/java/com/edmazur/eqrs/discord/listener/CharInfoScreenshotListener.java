@@ -21,7 +21,9 @@ import org.javacord.api.listener.message.MessageCreateListener;
 
 public class CharInfoScreenshotListener implements MessageCreateListener {
 
-  private static final DiscordChannel CHANNEL = DiscordChannel.BOT_BOOT_CAMP;
+  private static final List<DiscordChannel> CHANNELS = List.of(
+      DiscordChannel.BOT_BOOT_CAMP,
+      DiscordChannel.BOT_SCREAMING_ROOM);
   private static final Predicate<Message> PREDICATE = DiscordPredicate.hasImage();
 
   private static final File SUCCESS_IMAGE =
@@ -42,16 +44,21 @@ public class CharInfoScreenshotListener implements MessageCreateListener {
   }
 
   public void init() {
-    for (Message message :
-        discord.getUnrepliedMessagesMatchingPredicate(getChannelToReadFrom(), PREDICATE)) {
-      handle(message);
+    for (DiscordChannel discordChannel : getChannelsToReadFrom()) {
+      for (Message message :
+          discord.getUnrepliedMessagesMatchingPredicate(discordChannel, PREDICATE)) {
+        handle(message);
+      }
     }
   }
 
   @Override
   public void onMessageCreate(MessageCreateEvent event) {
-    if (getChannelToReadFrom().isEventChannel(event) && PREDICATE.test(event.getMessage())) {
-      handle(event.getMessage());
+    for (DiscordChannel discordChannel : getChannelsToReadFrom()) {
+      if (discordChannel.isEventChannel(event) && PREDICATE.test(event.getMessage())) {
+        handle(event.getMessage());
+        break;
+      }
     }
   }
 
@@ -95,11 +102,11 @@ public class CharInfoScreenshotListener implements MessageCreateListener {
     }).start();
   }
 
-  private DiscordChannel getChannelToReadFrom() {
+  private List<DiscordChannel> getChannelsToReadFrom() {
     if (config.getBoolean(Property.DEBUG)) {
-      return DiscordChannel.ROBOT_STANVERN_TESTING;
+      return List.of(DiscordChannel.ROBOT_STANVERN_TESTING);
     } else {
-      return CHANNEL;
+      return CHANNELS;
     }
   }
 
