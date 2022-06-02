@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
@@ -38,44 +39,51 @@ public class Discord {
     discordApi.updateActivity(ActivityType.WATCHING, "everything, always");
   }
 
-  public void sendMessage(DiscordChannel discordChannel, String message) {
-    getMessageable(discordChannel)
+  public CompletableFuture<Message> sendMessage(
+      DiscordChannel discordChannel, String message) {
+    return getMessageable(discordChannel)
         .sendMessage(getMessage(message))
         .exceptionally(ExceptionLogger.get());
   }
 
-  public void sendMessage(DiscordUser discordUser, String message) {
-    getMessageable(discordUser)
+  public CompletableFuture<Message> sendMessage(
+      DiscordUser discordUser, String message) {
+    return getMessageable(discordUser)
         .sendMessage(getMessage(message))
         .exceptionally(ExceptionLogger.get());
   }
 
-  public void sendMessage(DiscordChannel discordChannel, File image) {
-    getMessageable(discordChannel)
+  public CompletableFuture<Message> sendMessage(
+      DiscordChannel discordChannel, File image) {
+    return getMessageable(discordChannel)
         .sendMessage(image)
         .exceptionally(ExceptionLogger.get());
   }
 
-  public void sendMessage(DiscordUser discordUser, File image) {
-    getMessageable(discordUser)
+  public CompletableFuture<Message> sendMessage(
+      DiscordUser discordUser, File image) {
+    return getMessageable(discordUser)
         .sendMessage(image)
         .exceptionally(ExceptionLogger.get());
   }
 
-  public void sendMessage(DiscordChannel discordChannel, String message, File image) {
-    getMessageable(discordChannel)
+  public CompletableFuture<Message> sendMessage(
+      DiscordChannel discordChannel, String message, File image) {
+    return getMessageable(discordChannel)
         .sendMessage(getMessage(message), image)
         .exceptionally(ExceptionLogger.get());
   }
 
-  public void sendMessage(DiscordUser discordUser, String message, File image) {
-    getMessageable(discordUser)
+  public CompletableFuture<Message> sendMessage(
+      DiscordUser discordUser, String message, File image) {
+    return getMessageable(discordUser)
         .sendMessage(getMessage(message), image)
         .exceptionally(ExceptionLogger.get());
   }
 
-  public void sendMessage(DiscordChannel discordChannel, MessageBuilder messageBuilder) {
-    messageBuilder.send(getMessageable(discordChannel));
+  public CompletableFuture<Message> sendMessage(
+      DiscordChannel discordChannel, MessageBuilder messageBuilder) {
+    return messageBuilder.send(getMessageable(discordChannel));
   }
 
   public Optional<String> getLastMessageMatchingPredicate(

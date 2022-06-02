@@ -14,15 +14,17 @@ public class DiscordTableFormatter {
   private static final int SPACES_BETWEEN_COLUMNS = 4;
   private static final String COLUMN_SEPARATOR =
       String.join("", Collections.nCopies(SPACES_BETWEEN_COLUMNS, " "));
+  // Discord has a message size limit of 2000 characters. Limit messages to a bit less than this.
+  private static final int MESSAGE_SIZE_CAP = 1900;
 
   /**
-   * Formats the table for Discord.
+   * Formats the table for Discord in a series of messages.
    *
-   * <p>Returns one block of text per sub-table to avoid hitting Discord message size limits. This
-   * could probably be more handled more intelligently.
+   * <p>Returns one message per sub-table (with additional breaks within the table if needed) to
+   * avoid hitting Discord message size limits.
    */
-  public List<String> format(Table table) {
-    List<String> formattedTable = new ArrayList<>(table.getColumnCount());
+  public List<String> getMessages(Table table) {
+    List<String> messages = new ArrayList<>(table.getColumnCount());
     List<Integer> maxColumnWidths = table.getMaxColumnWidths();
     for (SubTable subTable : table.getSubTables()) {
       StringBuilder sb = new StringBuilder();
@@ -34,15 +36,23 @@ public class DiscordTableFormatter {
           Optional.empty()) + "\n");
       sb.append("`" + String.join("", Collections.nCopies(getWidth(table), "-")) + "`\n");
       for (DataRow dataRow : subTable.getDataRows()) {
-        sb.append(getRow(
+        String rowText = getRow(
             dataRow.getColumns(),
             table.getJustifications(),
             maxColumnWidths,
-            dataRow.getCodeFontEndIndex()) + "\n");
+            dataRow.getCodeFontEndIndex()) + "\n";
+
+        // If this row would put us over the message size limit, split it off into a new message.
+        if (sb.length() + rowText.length() > MESSAGE_SIZE_CAP) {
+          messages.add(sb.toString());
+          sb.setLength(0);
+        }
+
+        sb.append(rowText);
       }
-      formattedTable.add(sb.toString());
+      messages.add(sb.toString());
     }
-    return formattedTable;
+    return messages;
   }
 
   private int getWidth(Table table) {

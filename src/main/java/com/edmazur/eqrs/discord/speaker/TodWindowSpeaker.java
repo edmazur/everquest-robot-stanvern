@@ -38,8 +38,10 @@ public class TodWindowSpeaker implements Runnable {
       if (!config.getBoolean(Config.Property.DEBUG)) {
         discord.deleteMessagesMatchingPredicate(CHANNEL, DiscordPredicate.isFromYourself());
       }
-      for (String text : discordTableFormatter.format(table)) {
-        discord.sendMessage(CHANNEL, text);
+      for (String messages : discordTableFormatter.getMessages(table)) {
+        // Wait for the Future to complete before sending the next message. In testing, not having
+        // this in place led to out-of-order messages when they got sent in rapid succession.
+        discord.sendMessage(CHANNEL, messages).join();
       }
     } catch (Throwable t) {
       t.printStackTrace();
