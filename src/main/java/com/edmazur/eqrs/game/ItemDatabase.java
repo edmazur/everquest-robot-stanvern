@@ -73,15 +73,14 @@ public class ItemDatabase {
         seenSpammyItems.add(item);
       }
     }
-    if (seenSpammyItems.isEmpty()) {
-      return items;
-    } else {
-      // Return spammy items if and only if they are the only item on the list.
-      if (items.size() > 1) {
-        items.removeIf(item -> seenSpammyItems.contains(item));
-      }
-      return items;
+
+    // Spammy items should only be returned if they are the only item on the list, so if the list
+    // has more than one item, then remove all spammy items.
+    if (items.size() > 1) {
+      items.removeIf(item -> seenSpammyItems.contains(item));
     }
+
+    return items;
   }
 
   // Make apostrophes and backticks interchangeable:
