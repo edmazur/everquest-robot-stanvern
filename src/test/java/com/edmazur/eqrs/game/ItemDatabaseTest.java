@@ -117,4 +117,13 @@ class ItemDatabaseTest {
     assertEquals("Key", items.get(0).getName());
   }
 
+  @Test
+  void getItemDuplicatesRemoved() {
+    List<Item> items = itemDatabase.parse(
+        "~[Mask of Terror] - BID IN /GU, MIN 25 DKP. You MUST include the item name in your bid! "
+        + "Closing now. Mask of Terror 225 main reptilus gratss");
+    assertEquals(1, items.size());
+    assertEquals("Mask of Terror", items.get(0).getName());
+  }
+
 }

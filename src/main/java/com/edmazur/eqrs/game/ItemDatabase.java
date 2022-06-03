@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import org.ahocorasick.trie.PayloadEmit;
@@ -64,7 +65,7 @@ public class ItemDatabase {
   }
 
   public List<Item> parse(String text) {
-    List<Item> items = new ArrayList<>();
+    Set<Item> items = new LinkedHashSet<>();
     Set<Item> seenSpammyItems = new HashSet<>();
     for (PayloadEmit<Item> payload : itemsByName.parseText(normalize(text))) {
       Item item = payload.getPayload();
@@ -80,7 +81,7 @@ public class ItemDatabase {
       items.removeIf(item -> seenSpammyItems.contains(item));
     }
 
-    return items;
+    return new ArrayList<Item>(items);
   }
 
   // Make apostrophes and backticks interchangeable:
