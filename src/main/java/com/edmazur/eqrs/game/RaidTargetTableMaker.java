@@ -119,7 +119,8 @@ public class RaidTargetTableMaker {
         Duration timeLeft = Duration.between(now, relevantWindowTimestamp);
 
         DataRow dataRow = new DataRow();
-        dataRow.addColumn(raidTarget.getName());
+        dataRow.addColumn(raidTarget.getShortName().isPresent()
+            ? raidTarget.getShortName().get() : raidTarget.getName());
         dataRow.addColumn(formatHumanReadableDuration(timeLeft));
         dataRow.addColumn(formatHumanReadableTimestamp(relevantWindowTimestamp));
         if (SHOW_DISCORD_TIMESTAMPS) {

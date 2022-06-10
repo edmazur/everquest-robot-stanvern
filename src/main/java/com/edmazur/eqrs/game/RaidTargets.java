@@ -75,6 +75,7 @@ public class RaidTargets {
     for (int i = 0; i < raidTargetsJson.length(); i++) {
       JSONObject raidTargetJson = raidTargetsJson.getJSONObject(i);
       String name = raidTargetJson.getString("name");
+      String shortName = raidTargetJson.getString("shortName");
       Set<String> aliases = Set.of(raidTargetJson.getString("aliases").split(","));
       JSONArray windowsJson = raidTargetJson.getJSONArray("windows");
       List<Window> windows = new ArrayList<>(windowsJson.length());
@@ -85,7 +86,11 @@ public class RaidTargets {
         Window window = new Window(start, end);
         windows.add(window);
       }
-      RaidTarget raidTarget = new RaidTarget(name, aliases, windows);
+      RaidTarget raidTarget = new RaidTarget(
+          name,
+          shortName.isEmpty() ? Optional.empty() : Optional.of(shortName),
+          aliases,
+          windows);
       raidTargets.add(raidTarget);
     }
     this.raidTargets = raidTargets;
