@@ -67,9 +67,9 @@ public class RaidTargetTableMaker {
           headerRow
               .addColumn("Name", Justification.LEFT)
               .addColumn("Time Left", Justification.RIGHT)
-              .addColumn("Window Closes (ET)", Justification.LEFT);
+              .addColumn("Closes (ET)", Justification.LEFT);
           if (SHOW_DISCORD_TIMESTAMPS) {
-            headerRow.addColumn("Window Closes (local)", Justification.LEFT);
+            headerRow.addColumn("Closes (local)", Justification.LEFT);
           }
           break;
         case SOON:
@@ -78,9 +78,9 @@ public class RaidTargetTableMaker {
           headerRow
               .addColumn("Name", Justification.LEFT)
               .addColumn("Time Until", Justification.RIGHT)
-              .addColumn("Window Opens (ET)", Justification.LEFT);
+              .addColumn("Opens (ET)", Justification.LEFT);
           if (SHOW_DISCORD_TIMESTAMPS) {
-            headerRow.addColumn("Window Opens (local)", Justification.LEFT);
+            headerRow.addColumn("Opens (local)", Justification.LEFT);
           }
           break;
         case LATER:
@@ -89,9 +89,9 @@ public class RaidTargetTableMaker {
           headerRow
               .addColumn("Name", Justification.LEFT)
               .addColumn("Time Until", Justification.RIGHT)
-              .addColumn("Window Opens (ET)", Justification.LEFT);
+              .addColumn("Opens (ET)", Justification.LEFT);
           if (SHOW_DISCORD_TIMESTAMPS) {
-            headerRow.addColumn("Window Opens (local)", Justification.LEFT);
+            headerRow.addColumn("Opens (local)", Justification.LEFT);
           }
           break;
         default:
