@@ -14,6 +14,12 @@ public class HeaderRow {
     return this;
   }
 
+  public HeaderRow addEmptyColumn() {
+    this.columns.add("");
+    this.justifications.add(Justification.LEFT);
+    return this;
+  }
+
   public List<String> getColumns() {
     return columns;
   }

@@ -69,25 +69,25 @@ class WindowTest {
   private Window getNowWindow() {
     Instant start = now.minus(Duration.ofHours(1));
     Instant end = now.plus(Duration.ofHours(1));
-    return new Window(start, end);
+    return new Window(start, end, 0);
   }
 
   private Window getSoonWindow() {
     Instant start = now.plus(Window.Status.SOON_THRESHOLD.dividedBy(2));
     Instant end = start.plus(Duration.ofHours(1));
-    return new Window(start, end);
+    return new Window(start, end, 0);
   }
 
   private Window getLaterWindow() {
     Instant start = now.plus(Window.Status.SOON_THRESHOLD.multipliedBy(2));
     Instant end = start.plus(Duration.ofHours(1));
-    return new Window(start, end);
+    return new Window(start, end, 0);
   }
 
   private Window getPastWindow() {
     Instant start = now.minus(Duration.ofHours(1));
     Instant end = now.minus(Duration.ofHours(2));
-    return new Window(start, end);
+    return new Window(start, end, 0);
   }
 
 }

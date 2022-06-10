@@ -65,6 +65,7 @@ public class RaidTargetTableMaker {
         case NOW:
           subTable.setHeading("Targets in window **NOW**:");
           headerRow
+              .addEmptyColumn()
               .addColumn("Name", Justification.LEFT)
               .addColumn("Time Left", Justification.RIGHT)
               .addColumn("Closes (ET)", Justification.LEFT);
@@ -76,6 +77,7 @@ public class RaidTargetTableMaker {
           subTable.setHeading(
               "Targets in window **SOON** (under " + Window.Status.SOON_DESCRIPTION + "):");
           headerRow
+              .addEmptyColumn()
               .addColumn("Name", Justification.LEFT)
               .addColumn("Time Until", Justification.RIGHT)
               .addColumn("Opens (ET)", Justification.LEFT);
@@ -87,6 +89,7 @@ public class RaidTargetTableMaker {
           subTable.setHeading(
               "Targets in window **LATER** (over " + Window.Status.SOON_DESCRIPTION + "):");
           headerRow
+              .addEmptyColumn()
               .addColumn("Name", Justification.LEFT)
               .addColumn("Time Until", Justification.RIGHT)
               .addColumn("Opens (ET)", Justification.LEFT);
@@ -119,6 +122,8 @@ public class RaidTargetTableMaker {
         Duration timeLeft = Duration.between(now, relevantWindowTimestamp);
 
         DataRow dataRow = new DataRow();
+        dataRow.addColumn(window.getExtrapolationCount() == 0
+            ? "" : "[" + window.getExtrapolationCount() + "]");
         dataRow.addColumn(raidTarget.getShortName().isPresent()
             ? raidTarget.getShortName().get() : raidTarget.getName());
         dataRow.addColumn(formatHumanReadableDuration(timeLeft));

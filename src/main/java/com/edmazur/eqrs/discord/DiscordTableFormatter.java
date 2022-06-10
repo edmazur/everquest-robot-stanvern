@@ -7,13 +7,12 @@ import com.edmazur.eqrs.table.Table;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class DiscordTableFormatter {
 
-  private static final int SPACES_BETWEEN_COLUMNS = 4;
-  private static final String COLUMN_SEPARATOR =
-      String.join("", Collections.nCopies(SPACES_BETWEEN_COLUMNS, " "));
+  private static final int DEFAULT_SPACES_BETWEEN_COLUMNS = 4;
   // Discord has a message size limit of 2000 characters. Limit messages to a bit less than this.
   private static final int MESSAGE_SIZE_CAP = 1900;
 
@@ -23,7 +22,9 @@ public class DiscordTableFormatter {
    * <p>Returns one message per sub-table (with additional breaks within the table if needed) to
    * avoid hitting Discord message size limits.
    */
-  public List<String> getMessages(Table table) {
+  public List<String> getMessages(
+      Table table,
+      Map<Integer, Integer> columnIndexToCustomRightSpacing) {
     List<String> messages = new ArrayList<>(table.getColumnCount());
     List<Integer> maxColumnWidths = table.getMaxColumnWidths();
     for (SubTable subTable : table.getSubTables()) {
@@ -33,14 +34,19 @@ public class DiscordTableFormatter {
           subTable.getHeaderRow().getColumns(),
           table.getJustifications(),
           maxColumnWidths,
-          Optional.empty()) + "\n");
-      sb.append("`" + String.join("", Collections.nCopies(getWidth(table), "-")) + "`\n");
+          Optional.empty(),
+          columnIndexToCustomRightSpacing) + "\n");
+      sb.append("`"
+          + String.join(
+              "",
+              Collections.nCopies(getWidth(table, columnIndexToCustomRightSpacing), "-")) + "`\n");
       for (DataRow dataRow : subTable.getDataRows()) {
         String rowText = getRow(
             dataRow.getColumns(),
             table.getJustifications(),
             maxColumnWidths,
-            dataRow.getCodeFontEndIndex()) + "\n";
+            dataRow.getCodeFontEndIndex(),
+            columnIndexToCustomRightSpacing) + "\n";
 
         // If this row would put us over the message size limit, split it off into a new message.
         if (sb.length() + rowText.length() > MESSAGE_SIZE_CAP) {
@@ -55,12 +61,16 @@ public class DiscordTableFormatter {
     return messages;
   }
 
-  private int getWidth(Table table) {
+  private int getWidth(Table table, Map<Integer, Integer> columnIndexToCustomRightSpacing) {
     int width = 0;
     for (int maxColumnWidth : table.getMaxColumnWidths()) {
       width += maxColumnWidth;
     }
-    width += SPACES_BETWEEN_COLUMNS * (table.getColumnCount() - 1);
+    for (int customRightSpacing : columnIndexToCustomRightSpacing.values()) {
+      width += customRightSpacing;
+    }
+    width += DEFAULT_SPACES_BETWEEN_COLUMNS
+        * (table.getColumnCount() - columnIndexToCustomRightSpacing.size() - 1);
     return width;
   }
 
@@ -68,7 +78,8 @@ public class DiscordTableFormatter {
       List<String> values,
       List<Justification> justifications,
       List<Integer> maxColumnWidths,
-      Optional<Integer> codeFontEndIndex) {
+      Optional<Integer> codeFontEndIndex,
+      Map<Integer, Integer> columnIndexToCustomRightSpacing) {
     List<String> columns = new ArrayList<>(values.size());
     for (int i = 0; i < values.size(); i++) {
       String value = values.get(i);
@@ -84,7 +95,19 @@ public class DiscordTableFormatter {
     if (codeFontEndIndex.isEmpty()) {
       columns.set(columns.size() - 1, columns.get(columns.size() - 1) + "`");
     }
-    return String.join(COLUMN_SEPARATOR, columns);
+
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < columns.size(); i++) {
+      sb.append(columns.get(i));
+      // Add a column seperator to the right, but only if it's not the last column.
+      if (i < columns.size() - 1) {
+        int rightSpacing = columnIndexToCustomRightSpacing.containsKey(i)
+            ? columnIndexToCustomRightSpacing.get(i)
+            : DEFAULT_SPACES_BETWEEN_COLUMNS;
+        sb.append(String.join("", Collections.nCopies(rightSpacing, " ")));
+      }
+    }
+    return sb.toString();
   }
 
 }

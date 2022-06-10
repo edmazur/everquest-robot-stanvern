@@ -83,7 +83,8 @@ public class RaidTargets {
         JSONObject windowJson = windowsJson.getJSONObject(j);
         Instant start = Instant.ofEpochSecond(windowJson.getLong("start"));
         Instant end = Instant.ofEpochSecond(windowJson.getLong("end"));
-        Window window = new Window(start, end);
+        int extrapolationCount = windowJson.getInt("extrapolationCount");
+        Window window = new Window(start, end, extrapolationCount);
         windows.add(window);
       }
       RaidTarget raidTarget = new RaidTarget(

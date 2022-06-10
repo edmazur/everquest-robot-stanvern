@@ -7,6 +7,10 @@ public enum Justification {
   ;
 
   public String getFormatString(int desiredWidth) {
+    if (desiredWidth == 0) {
+      return "%s";
+    }
+
     switch (this) {
       case LEFT:
         return "%-" + desiredWidth + "s";

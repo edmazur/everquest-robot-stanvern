@@ -24,10 +24,12 @@ public class Window {
 
   private final Instant start;
   private final Instant end;
+  private final int extrapolationCount;
 
-  public Window(Instant start, Instant end) {
+  public Window(Instant start, Instant end, int extrapolationCount) {
     this.start = start;
     this.end = end;
+    this.extrapolationCount = extrapolationCount;
   }
 
   public Instant getStart() {
@@ -63,6 +65,10 @@ public class Window {
       }
     }
     throw new IllegalStateException("Could not find active window: " + windows);
+  }
+
+  public int getExtrapolationCount() {
+    return extrapolationCount;
   }
 
   /**
