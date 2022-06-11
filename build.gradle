@@ -25,6 +25,7 @@ dependencies {
   implementation 'org.javacord:javacord:3.4.0'
   implementation 'org.seleniumhq.selenium:selenium-java:4.0.0'
   testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+  testImplementation("org.mockito:mockito-core:3.+")
 }
 
 mainClassName = 'com.edmazur.eqrs.RobotStanvern'
@@ -36,6 +37,11 @@ task runGameTodDetectorBenchmark(type: JavaExec) {
 
 task runP99WikiItemReader(type: JavaExec) {
    main = 'com.edmazur.eqrs.game.P99WikiItemReader'
+   classpath = sourceSets.main.runtimeClasspath
+}
+
+task runTickContextAnalysis(type: JavaExec) {
+   main = 'com.edmazur.eqrs.game.listener.TickContextAnalysis'
    classpath = sourceSets.main.runtimeClasspath
 }
 
