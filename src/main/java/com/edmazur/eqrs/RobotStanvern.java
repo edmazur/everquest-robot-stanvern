@@ -21,6 +21,8 @@ import com.edmazur.eqrs.game.RaidTargetTableMaker;
 import com.edmazur.eqrs.game.RaidTargets;
 import com.edmazur.eqrs.game.listener.DiceDetector;
 import com.edmazur.eqrs.game.listener.DiceListener;
+import com.edmazur.eqrs.game.listener.EarthquakeDetector;
+import com.edmazur.eqrs.game.listener.EarthquakeListener;
 import com.edmazur.eqrs.game.listener.FteListener;
 import com.edmazur.eqrs.game.listener.GameTodDetector;
 import com.edmazur.eqrs.game.listener.GameTodListener;
@@ -139,6 +141,11 @@ public class RobotStanvern {
     DiceDetector diceDetector = new DiceDetector();
     DiceListener diceListener = new DiceListener(diceDetector, soundPlayer);
     eqLogListeners.add(diceListener);
+
+    // Add earthquake listener.
+    EarthquakeDetector earthquakeDetector = new EarthquakeDetector();
+    EarthquakeListener earthquakeListener = new EarthquakeListener(discord, earthquakeDetector);
+    eqLogListeners.add(earthquakeListener);
 
     // Add ToD window speaker.
     RaidTargetTableMaker raidTargetTableMaker = new RaidTargetTableMaker(config, raidTargets);

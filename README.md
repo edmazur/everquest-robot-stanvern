@@ -41,6 +41,7 @@ $ ./gradlew run --args='YourCharacterName --debug'
 - Game: Listens for ticks and their context in guild chat and sends to Discord.
 - Game: Listens for grats in guild chat and sends to Discord.
 - Game: Listens for dice rolls, then plays a sound on the local machine.
+- Game: Listens for earthquakes and sends to Discord.
 
 # TODO
 - Eliminate references to my local file system.
