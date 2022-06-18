@@ -74,11 +74,6 @@ public class DiscordTodListener implements MessageCreateListener {
 
   @Override
   public void onMessageCreate(MessageCreateEvent event) {
-    // Ignore yourself.
-    if (event.getMessageAuthor().isYourself()) {
-      return;
-    }
-
     boolean shouldConsiderMessage = config.getBoolean(Property.DEBUG)
         ? event.isPrivateMessage() && DiscordUser.EDMAZUR.isEventUser(event)
         : CHANNEL.isEventChannel(event);

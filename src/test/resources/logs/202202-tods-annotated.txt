@@ -1,0 +1,144 @@
+[Tue Feb 01 18:26:01 2022] Seancothery tells the guild, 'VIlefang FTE if anyone cares, possibly dead now if we want approx ToD logged' # Vilefang
+[Wed Feb 02 09:06:45 2022] Skyzzl tells the guild, 'TOD Terror so I can find in logs hehe' # Terror
+[Thu Feb 03 09:45:03 2022] Ohmat tells the guild, 'drad TOD' # Dread
+[Thu Feb 03 09:45:10 2022] Ohmat tells the guild, 'dread TOD even' # Dread
+[Thu Feb 03 09:48:15 2022] Ceit tells the guild, 'Terror ToD' # Terror
+[Thu Feb 03 09:48:15 2022] Ohmat tells the guild, 'terror tod' # Terror
+[Thu Feb 03 09:55:21 2022] Ceit tells the guild, 'Wraith ToD' # Wraith of a Shissir
+[Thu Feb 03 10:30:08 2022] Pyriox tells the guild, 'ToD Cazic Thule' # Cazic Thule
+[Thu Feb 03 10:58:23 2022] Abou tells the guild, 'King Tormax ToD' # King Tormax
+[Thu Feb 03 11:07:50 2022] Pyriox tells the guild, 'ToD Target' # -
+[Thu Feb 03 11:07:55 2022] Pyriox tells the guild, 'ToD Severilous' # Severilous
+[Thu Feb 03 13:22:08 2022] Zainne tells the guild, 'dain tod' # Dain Frostreaver IV
+[Thu Feb 03 13:54:28 2022] Gdoorf tells the guild, 'gozzrem tod' # Gozzrem
+[Thu Feb 03 16:30:31 2022] Zenithal tells the guild, 'looks like kingdom wipe 3&PCT; Klandi TOD' # -
+[Thu Feb 03 16:31:26 2022] Ohmat tells the guild, 'Klandi TOD to ST' # Klandicar
+[Thu Feb 03 18:33:13 2022] Fray tells the guild, 'telk TOD' # Telkorenar
+[Thu Feb 03 19:47:47 2022] Yober tells the guild, 'fesh tod' # Lord Feshlak
+[Thu Feb 03 20:06:18 2022] Sandoz tells the guild, 'TOD Lost Scroll' # -
+[Thu Feb 03 20:16:19 2022] Alou tells the guild, 'Vyemm ToD' # Lord Vyemm
+[Thu Feb 03 20:31:00 2022] Chalara tells the guild, 'tod vox' # Lady Vox
+[Thu Feb 03 20:52:22 2022] Belated tells the guild, 'naggy tod' # Lord Nagafen
+[Thu Feb 03 22:01:57 2022] Skyzzl tells the guild, 'so Lady M TOD?' # Lady Mirenilla
+[Thu Feb 03 22:52:49 2022] Lilsticky tells the guild, 'ToD for vindi' # Derakor the Vindicator
+[Thu Feb 03 23:14:46 2022] Yober tells the guild, 'vulak tod' # Vulak`Aerr
+[Sat Feb 05 16:10:30 2022] Arii tells the guild, 'VS tod' # Venril Sathir
+[Sat Feb 05 19:07:24 2022] Skyzzl tells the guild, 'VELK TOD' # Velketor the Sorcerer
+[Sat Feb 05 22:12:04 2022] Skyzzl tells the guild, 'DAIN TOD' # Dain Frostreaver IV
+[Sat Feb 05 22:25:58 2022] Boscogne tells the guild, 'Venril Sathir TOD' # Venril Sathir
+[Sat Feb 05 22:36:52 2022] Myzem tells the guild, 'guardian kozz FTE/tod' # Guardian Kozzalym
+[Sat Feb 05 23:58:43 2022] Braddles tells the guild, 'Eashen ToD' # Eashen of the Sky
+[Sun Feb 06 00:03:17 2022] Skyzzl tells the guild, 'Ikatiar TOD' # Ikatiar the Venom
+[Sun Feb 06 01:44:35 2022] Lavalamp tells the guild, 'lord vyemm TOD to SS/kingdom' # Lord Vyemm
+[Mon Feb 07 11:28:19 2022] Pikeme tells the guild, 'Vindi TOD' # Derakor the Vindicator
+[Mon Feb 07 15:49:54 2022] Basendil tells the guild, 'VSR ToD  (I assume based on enrage message)' # -
+[Tue Feb 08 11:05:35 2022] Abou tells the guild, 'Derakor ToD' # Derakor the Vindicator
+[Tue Feb 08 15:34:36 2022] Leafblade tells the guild, 'DREAD TOD' # Dread
+[Tue Feb 08 16:00:26 2022] Kaisa tells the guild, 'ToD Dread' # Dread
+[Tue Feb 08 17:37:29 2022] Kaisa tells the guild, 'Fright ToD' # Fright
+[Tue Feb 08 22:43:13 2022] Basendil tells the guild, 'Vindi ToD' # Derakor the Vindicator
+[Tue Feb 08 22:44:13 2022] Leafblade tells the guild, 'Wraith of a Shissir TOD' # Wraith of a Shissir
+[Tue Feb 08 22:46:28 2022] Leafblade tells the guild, 'Vilefang TOD then' # Vilefang
+[Wed Feb 09 01:13:32 2022] Skyzzl tells the guild, 'Terror TOD' # Terror
+[Wed Feb 09 10:59:48 2022] Skyzzl tells the guild, 'ok Velk TOD' # Velketor the Sorcerer
+[Thu Feb 10 11:57:27 2022] Mystre tells the guild, 'TOD Derakor the Vindicator' # Derakor the Vindicator
+[Thu Feb 10 12:14:13 2022] Sangore tells the guild, 'Vindi ToD a few mins ago' # -
+[Fri Feb 11 13:24:12 2022] Talumn tells the guild, 'fright tod' # Fright
+[Fri Feb 11 13:24:16 2022] Yiuman tells the guild, 'Fright TOD' # Fright
+[Fri Feb 11 16:48:32 2022] Leafblade tells the guild, 'Dread TOD' # Dread
+[Fri Feb 11 23:38:40 2022] Lilsticky tells the guild, 'Wraith of Shisssir tod' # Wraith of a Shissir
+[Sat Feb 12 03:25:03 2022] Grimga tells the guild, 'ToD Venril' # Venril Sathir
+[Sat Feb 12 03:28:40 2022] Lacrimosa tells the guild, 'TOD VS' # Venril Sathir
+[Sat Feb 12 11:23:55 2022] Skyzzl tells the guild, 'Velk TOD' # Velketor the Sorcerer
+[Sat Feb 12 12:18:22 2022] Skyzzl tells the guild, 'KDT TOD' # Keldor Dek`Torek
+[Sat Feb 12 12:38:50 2022] Skyzzl tells the guild, 'Vindi TOD' # Derakor the Vindicator
+[Sat Feb 12 15:53:40 2022] Haveil tells the guild, 'TOD a dracoliche -12' # -
+[Sat Feb 12 16:01:27 2022] Pyriox tells the guild, 'ToD wraith of a shissir' # Wraith of a Shissir
+[Sat Feb 12 17:11:52 2022] Kaisa tells the guild, 'ToD King Tormax' # King Tormax
+[Sat Feb 12 17:12:04 2022] Chalkdust tells the guild, 'TOD king tormax' # King Tormax
+[Sat Feb 12 18:34:13 2022] Rudyard tells the guild, 'Gorenaire ToD' # Gorenaire
+[Sat Feb 12 19:31:57 2022] Maxxxed tells the guild, 'Klandi TOD minus 5 mins from now' # -
+[Sat Feb 12 20:12:31 2022] Lujuriosax tells the guild, 'ToD Ikatiar the Venom' # Ikatiar the Venom
+[Sat Feb 12 21:14:28 2022] Kaisa tells the guild, 'ToD Jorlleag' # Jorlleag
+[Sat Feb 12 21:35:39 2022] Skyzzl tells the guild, 'TOD Zlexak' # Zlexak
+[Sat Feb 12 21:55:59 2022] Myze tells the guild, 'sevalak tod' # Sevalak
+[Sat Feb 12 22:00:58 2022] Skyzzl tells the guild, 'Cekenar TOD' # Cekenar
+[Sat Feb 12 22:01:01 2022] Kaisa tells the guild, 'ToD Cekenar' # Cekenar
+[Sun Feb 13 01:08:29 2022] Alou tells the guild, 'Dain Frostreaver IV ToD' # Dain Frostreaver IV
+[Sun Feb 13 03:26:06 2022] Menehune tells the guild, 'TOD Nillipuss' # -
+[Sun Feb 13 04:45:15 2022] Yober tells the guild, 'fesh tod' # Lord Feshlak
+[Sun Feb 13 12:28:33 2022] Skyzzl tells the guild, 'Vyemm TOD' # Lord Vyemm
+[Sun Feb 13 13:10:50 2022] Skyzzl tells the guild, 'Lady M TOD' # Lady Mirenilla
+[Sun Feb 13 13:59:27 2022] Skyzzl tells the guild, 'Lord Kreizenn TOD' # Lord Kreizenn
+[Tue Feb 15 10:51:53 2022] Gnonsense tells the guild, 'TOD Venril Sathir' # Venril Sathir
+[Tue Feb 15 11:18:02 2022] Charlesmage tells the guild, 'Wuoshi ToD' # Wuoshi
+[Tue Feb 15 13:23:19 2022] Skyzzl tells the guild, 'VELK TOD' # Velketor the Sorcerer
+[Tue Feb 15 14:15:21 2022] Leafblade tells the guild, 'Fright TOD' # Fright
+[Tue Feb 15 17:39:20 2022] Leafblade tells the guild, 'Dread TOD' # Dread
+[Tue Feb 15 17:43:09 2022] Leafblade tells the guild, 'broken golem tod' # -
+[Wed Feb 16 18:05:09 2022] Hernan tells the guild, 'KT ToD' # King Tormax
+[Wed Feb 16 18:05:10 2022] Pikeme tells the guild, 'King Tormax ToD' # King Tormax
+[Wed Feb 16 19:05:33 2022] Gnonsense tells the guild, 'TOD Lady Vox' # Lady Vox
+[Wed Feb 16 19:52:44 2022] Skyzzl tells the guild, 'Ikatiar TOD' # Ikatiar the Venom
+[Wed Feb 16 19:52:44 2022] Waskuh tells the guild, 'iki ToD' # Ikatiar the Venom
+[Wed Feb 16 19:52:46 2022] Kaisa tells the guild, 'ToD Ikatiar' # Ikatiar the Venom
+[Wed Feb 16 19:52:47 2022] Fray tells the guild, 'Ikky tod' # Ikatiar the Venom
+[Wed Feb 16 19:53:38 2022] Erry tells the guild, 'fay TOD btw' # Faydedar
+[Wed Feb 16 22:14:42 2022] Delrake tells the guild, 'Dagarn the Destroyer  TOD 7 min ago' # -
+[Thu Feb 17 22:14:23 2022] Skyzzl tells the guild, 'KDT TOD (-2 mins or so) in case nobody logged it' # -
+[Fri Feb 18 11:06:31 2022] Ximxam tells the guild, 'ToD' # -
+[Fri Feb 18 11:06:33 2022] Ximxam tells the guild, 'ToD Derakor the Vindicator' # Derakor the Vindicator
+[Sat Feb 19 15:44:49 2022] Myzem tells the guild, 'sev tod' # Severilous
+[Sat Feb 19 15:51:31 2022] Skyzzl tells the guild, 'Fright TOD' # Fright
+[Sat Feb 19 15:56:15 2022] Skyzzl tells the guild, 'Dread TOD' # Dread
+[Sat Feb 19 16:01:20 2022] Skyzzl tells the guild, 'Terror TOD' # Terror
+[Sat Feb 19 16:06:40 2022] Gortex tells the guild, 'TOD Dain' # Dain Frostreaver IV
+[Sat Feb 19 16:10:43 2022] Skyzzl tells the guild, 'TOD draco' # a dracoliche
+[Sat Feb 19 16:23:57 2022] Skyzzl tells the guild, 'Kelorek TOD' # Kelorek`Dar
+[Sat Feb 19 17:12:58 2022] Inni tells the guild, 'ToD STatue' # The Statue of Rallos Zek
+[Sat Feb 19 17:28:00 2022] Skyzzl tells the guild, 'Ikatiar TOD' # Ikatiar the Venom
+[Sat Feb 19 18:04:19 2022] Kaisa tells the guild, 'ToD Eashen' # Eashen of the Sky
+[Sat Feb 19 18:36:24 2022] Kaisa tells the guild, 'ToD aary' # Aaryonar
+[Sat Feb 19 19:04:14 2022] Kaisa tells the guild, 'ToD Lord Vyemm' # Lord Vyemm
+[Sat Feb 19 19:36:01 2022] Pyriox tells the guild, 'ToD CT' # Cazic Thule
+[Sat Feb 19 19:38:37 2022] Xythe tells the guild, 'Fay dead to Castle, TOD' # Faydedar
+[Sat Feb 19 19:49:50 2022] Punchum tells the guild, 'Goz Tod ~10ish mins ago ... FoH' # -
+[Sat Feb 19 20:16:46 2022] Skyzzl tells the guild, 'zlexak TOD' # Zlexak
+[Sat Feb 19 20:47:16 2022] Skyzzl tells the guild, 'sevalak tod' # Sevalak
+[Sat Feb 19 20:50:37 2022] Kaisa tells the guild, 'ToD Cekenar' # Cekenar
+[Sun Feb 20 00:31:50 2022] Skyzzl tells the guild, 'Koi TOD' # Lord Koi`Doken
+[Sun Feb 20 01:43:26 2022] Leshau tells the guild, 'telk tod' # Telkorenar
+[Sun Feb 20 21:33:30 2022] Ziralc tells the guild, 'Vidni !ToD' # Derakor the Vindicator
+[Mon Feb 21 05:12:45 2022] Menehune tells the guild, 'LODI TOD' # Lodizal
+[Mon Feb 21 11:54:39 2022] Kaisa tells the guild, 'prolly ToD KDT' # Keldor Dek`Torek
+[Mon Feb 21 12:02:21 2022] Kaisa tells the guild, 'ToD Keldor Dek`Torek' # Keldor Dek`Torek
+[Tue Feb 22 11:50:17 2022] Skyzzl tells the guild, 'Dread TOD' # Dread
+[Tue Feb 22 14:54:30 2022] Leafblade tells the guild, 'Terror TOD' # Terror
+[Tue Feb 22 18:39:37 2022] Arii tells the guild, 'VS tod' # Venril Sathir
+[Tue Feb 22 23:19:24 2022] Skyzzl tells the guild, 'vilefang TOD if we didn't get it' # Vilefang
+[Wed Feb 23 11:07:26 2022] Treun tells the guild, 'Lodizal tod' # Lodizal
+[Thu Feb 24 07:26:14 2022] Xydra tells the guild, 'tod book' # Book of Souls
+[Thu Feb 24 16:27:15 2022] Kaisa tells the guild, 'ToD Statue' # The Statue of Rallos Zek
+[Thu Feb 24 17:00:58 2022] Kaisa tells the guild, 'ToD KDT' # Keldor Dek`Torek
+[Fri Feb 25 23:07:33 2022] Sandoz tells the guild, 'TOD The Tangrin -5mins' # -
+[Sat Feb 26 00:06:14 2022] Skyzzl tells the guild, 'Velk TOD' # Velketor the Sorcerer
+[Sat Feb 26 11:19:29 2022] Robomonk tells the guild, 'Gorenaire ToD roughly' # Gorenaire
+[Sat Feb 26 13:58:13 2022] Skyzzl tells the guild, 'iki tod 2 mins ago i guess' # -
+[Sat Feb 26 15:26:19 2022] Yober tells the guild, 'Cekenar tod' # Cekenar
+[Sat Feb 26 15:51:39 2022] Kaisa tells the guild, 'ToD Gozzrem' # Gozzrem
+[Sat Feb 26 16:37:25 2022] Skyzzl tells the guild, 'sevalak tod' # Sevalak
+[Sat Feb 26 16:42:00 2022] Pikerexe tells the guild, 'Keldorak TOD ' # Kelorek`Dar
+[Sat Feb 26 18:17:48 2022] Skyzzl tells the guild, 'Aary TOD bitchezzzz' # Aaryonar
+[Sun Feb 27 01:19:47 2022] Yober tells the guild, 'doze tod plus or minus a few minutes' # -
+[Sun Feb 27 01:49:23 2022] Yober tells the guild, 'tod' # -
+[Sun Feb 27 11:09:34 2022] Skyzzl tells the guild, 'telk TOD' # Telkorenar
+[Sun Feb 27 12:29:31 2022] Gratton tells the guild, 'Feshlak ToD' # Lord Feshlak
+[Sun Feb 27 13:49:21 2022] Kaisa tells the guild, 'ToD Vyemm' # Lord Vyemm
+[Sun Feb 27 14:01:36 2022] Chalkdust tells the guild, 'KOI tod' # Lord Koi`Doken
+[Sun Feb 27 16:25:15 2022] Kaisa tells the guild, 'ToD Jorlleag' # Jorlleag
+[Sun Feb 27 16:31:37 2022] Maxxxed tells the guild, 'Lady nev TOD' # Lady Nevederia
+[Sun Feb 27 17:08:18 2022] Kaisa tells the guild, 'ToD Kreizenn' # Lord Kreizenn
+[Sun Feb 27 19:52:20 2022] Yiumanii tells the guild, 'Target TOD' # -
+[Sun Feb 27 19:52:28 2022] Yiumanii tells the guild, 'Narandi TOD' # Narandi the Wretched
+[Sun Feb 27 21:02:33 2022] Karloth tells the guild, 'Vindi ToD' # Derakor the Vindicator
+[Mon Feb 28 21:42:27 2022] Hernan tells the guild, 'Velk ToD' # Velketor the Sorcerer

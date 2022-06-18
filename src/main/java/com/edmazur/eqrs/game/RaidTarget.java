@@ -30,6 +30,10 @@ public class RaidTarget {
     return shortName;
   }
 
+  public Set<String> getAliases() {
+    return aliases;
+  }
+
   public List<Window> getWindows() {
     return windows;
   }

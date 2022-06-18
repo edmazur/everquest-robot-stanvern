@@ -26,6 +26,7 @@ import com.edmazur.eqrs.game.listener.EarthquakeListener;
 import com.edmazur.eqrs.game.listener.FteListener;
 import com.edmazur.eqrs.game.listener.GameTodDetector;
 import com.edmazur.eqrs.game.listener.GameTodListener;
+import com.edmazur.eqrs.game.listener.GameTodParser;
 import com.edmazur.eqrs.game.listener.GratsDetector;
 import com.edmazur.eqrs.game.listener.GratsListener;
 import com.edmazur.eqrs.game.listener.HeartbeatListener;
@@ -123,7 +124,8 @@ public class RobotStanvern {
 
     // Add ToD listener.
     GameTodDetector gameTodDetector = new GameTodDetector();
-    GameTodListener gameTodListener = new GameTodListener(discord, gameTodDetector);
+    GameTodParser gameTodParser = new GameTodParser(raidTargets);
+    GameTodListener gameTodListener = new GameTodListener(discord, gameTodDetector, gameTodParser);
     eqLogListeners.add(gameTodListener);
 
     // Add tick listener.

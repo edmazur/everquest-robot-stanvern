@@ -36,6 +36,15 @@ public class RaidTargets {
   }
 
   /**
+   * Gets all raid targets.
+   *
+   * <p>Almost always stale read (exception: first call, if updateCache() not called before).
+   */
+  public List<RaidTarget> getAllStaleAllowed() {
+    return getAllInternal();
+  }
+
+  /**
    * Gets the raid target matching the name. Search is case-insensitive and will match on aliases.
    *
    * <p>Almost always stale read (exception: first call, if updateCache() not called before).

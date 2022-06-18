@@ -37,7 +37,7 @@ $ ./gradlew run --args='YourCharacterName --debug'
 - Game: Listens for raid target spawns and sends a Discord message/screenshot to a channel/user and/or plays a sound on the local machine.
 - Game: Detects inactivity and sends a Discord message to a user.
 - Game: Listens for MotD messages and sends to Discord.
-- Game: Listens for ToD reports in guild chat and sends to Discord.
+- Game: Listens for ToD reports in guild chat, sends to Discord, and tries to automatically record.
 - Game: Listens for ticks and their context in guild chat and sends to Discord.
 - Game: Listens for grats in guild chat and sends to Discord.
 - Game: Listens for dice rolls, then plays a sound on the local machine.
