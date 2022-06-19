@@ -22,6 +22,8 @@ public class GameTodParser {
   // Heuristics based on offline historical data analysis.
   private static final Set<String> RELATIVE_TOD_INDICATORS =
       new HashSet<>(Arrays.asList("sec", "min", "hour"));
+  private static final Set<String> NON_TOD_INDICATORS =
+      new HashSet<>(Arrays.asList("skip"));
   private static final int MIN_LENGTH_TO_ALLOW_FUZZY_MATCH = 5;
   private static final int MAX_EDIT_DISTANCE = 2;
 
@@ -51,6 +53,18 @@ public class GameTodParser {
       }
     }
     if (containsDigit || containsRelativeTodIndicator) {
+      return Optional.empty();
+    }
+
+    // Give up if there's any indication that this is a non-ToD.
+    boolean containsNonTodIndicator = false;
+    for (String nonTodIndicator : NON_TOD_INDICATORS) {
+      if (guildChatText.contains(nonTodIndicator)) {
+        containsNonTodIndicator = true;
+        break;
+      }
+    }
+    if (containsNonTodIndicator) {
       return Optional.empty();
     }
 
