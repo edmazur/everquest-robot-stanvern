@@ -55,7 +55,8 @@ class GameTodParserTest {
     if (expectingSuccessfulParse && !parseResult.isPresent()) {
       fail("Expected to be able to parse: " + input);
     } else if (!expectingSuccessfulParse && parseResult.isPresent()) {
-      fail("Did not expect to be able to parse: " + input);
+      fail("Did not expect to be able to parse: " + input + " (parsed as "
+          + parseResult.get().getRaidTarget().getName() + ")");
     } else if (expectingSuccessfulParse) {
       assertEquals(expectedOutput, parseResult.get().getRaidTarget().getName(),
           "Error parsing: " + input);
