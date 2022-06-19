@@ -16,9 +16,9 @@ import java.util.List;
 public class GameTodDetectorBenchmark {
 
   private static final File EXPECTED_PRESENT = new File(
-      "/home/mazur/git/everquest-robot-stanvern/src/test/resources/logs/202202-tods-present.txt");
+      "/home/mazur/git/everquest-robot-stanvern/src/test/resources/logs/tods-present.txt");
   private static final File EXPECTED_ABSENT = new File(
-      "/home/mazur/git/everquest-robot-stanvern/src/test/resources/logs/202202-tods-absent.txt");
+      "/home/mazur/git/everquest-robot-stanvern/src/test/resources/logs/tods-absent.txt");
 
   private static final int EXAMPLES_TO_PRINT = 10;
 
