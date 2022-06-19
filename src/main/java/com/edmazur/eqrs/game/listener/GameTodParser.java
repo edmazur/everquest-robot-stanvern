@@ -89,9 +89,10 @@ public class GameTodParser {
   // TODO: Factor this out somewhere and re-use it in the Discord parser too.
   private Optional<RaidTarget> getRaidTargetFuzzyMatch(String text) {
     LevenshteinDistance editDistanceCalculator = new LevenshteinDistance(MAX_EDIT_DISTANCE);
-    RaidTarget bestMatchRaidTarget = null;
-    int bestMatchEditDistance = Integer.MAX_VALUE;
+    RaidTarget bestFuzzyMatchRaidTarget = null;
+    int bestFuzzyMatchEditDistance = Integer.MAX_VALUE;
     List<String> parts = new ArrayList<>(Arrays.asList(text.split("\\s+")));
+
     // For each possible substring (broken up by whitespace)...
     for (int start = 0; start < parts.size(); start++) {
       for (int end = start + 1; end < parts.size() + 1; end++) {
@@ -107,12 +108,12 @@ public class GameTodParser {
             if (allowFuzzyMatch) {
               // If fuzzy match and it's better than what's been seen so far, save result.
               int editDistance = editDistanceCalculator.apply(nameForMatching, subText);
-              if (editDistance != -1 && editDistance < bestMatchEditDistance) {
+              if (editDistance != -1 && editDistance < bestFuzzyMatchEditDistance) {
                 if (DEBUG) {
                   System.out.println("Found fuzzy match: " + subText);
                 }
-                bestMatchRaidTarget = raidTarget;
-                bestMatchEditDistance = editDistance;
+                bestFuzzyMatchRaidTarget = raidTarget;
+                bestFuzzyMatchEditDistance = editDistance;
               }
             } else {
               // If exact match, return early.
@@ -127,7 +128,8 @@ public class GameTodParser {
         }
       }
     }
-    return Optional.ofNullable(bestMatchRaidTarget);
+
+    return Optional.ofNullable(bestFuzzyMatchRaidTarget);
   }
 
   private static Set<String> getNamesForMatching(RaidTarget raidTarget) {
@@ -140,7 +142,7 @@ public class GameTodParser {
     return names;
   }
 
-  private Optional<String> getGuildChatMessage(EqLogEvent eqLogEvent) {
+  private static Optional<String> getGuildChatMessage(EqLogEvent eqLogEvent) {
     Matcher matcher = GUILD_CHAT_PATTERN.matcher(eqLogEvent.getPayload());
     if (!matcher.matches()) {
       return Optional.empty();
