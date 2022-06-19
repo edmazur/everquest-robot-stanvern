@@ -19,6 +19,8 @@ import org.apache.commons.text.similarity.LevenshteinDistance;
 
 public class GameTodParser {
 
+  private static final boolean DEBUG = false;
+
   private static final Pattern GUILD_CHAT_PATTERN =
       Pattern.compile("(?:\\p{Alpha}+ tells the guild|You say to your guild), '(.+)'");
 
@@ -106,12 +108,18 @@ public class GameTodParser {
               // If fuzzy match and it's better than what's been seen so far, save result.
               int editDistance = editDistanceCalculator.apply(nameForMatching, subText);
               if (editDistance != -1 && editDistance < bestMatchEditDistance) {
+                if (DEBUG) {
+                  System.out.println("Found fuzzy match: " + subText);
+                }
                 bestMatchRaidTarget = raidTarget;
                 bestMatchEditDistance = editDistance;
               }
             } else {
               // If exact match, return early.
               if (subText.equals(nameForMatching)) {
+                if (DEBUG) {
+                  System.out.println("Found exact match: " + subText);
+                }
                 return Optional.of(raidTarget);
               }
             }
