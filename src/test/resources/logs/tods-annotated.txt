@@ -142,4 +142,5 @@
 [Sun Feb 27 19:52:28 2022] Yiumanii tells the guild, 'Narandi TOD' # Narandi the Wretched
 [Sun Feb 27 21:02:33 2022] Karloth tells the guild, 'Vindi ToD' # Derakor the Vindicator
 [Mon Feb 28 21:42:27 2022] Hernan tells the guild, 'Velk ToD' # Velketor the Sorcerer
+[Sat Jun 18 18:34:03 2022] You say to your guild, 'test test test - i'm going to say a fake tod to test something, it's not real - test test test' # -
 [Sat Jun 18 23:39:53 2022] Tidus tells the guild, 'lodi tod *skip*' # -
