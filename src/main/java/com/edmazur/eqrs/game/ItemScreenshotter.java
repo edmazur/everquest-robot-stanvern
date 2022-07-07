@@ -12,8 +12,10 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 public class ItemScreenshotter {
 
+  // TODO: This breaks every time your local Chrome version gets updated. Figure out a way to
+  // mitigate that.
   private static final String CHROME_DRIVER =
-      "/home/mazur/git/everquest-robot-stanvern/src/main/resources/chromedriver-101.0.4951.41";
+      "/home/mazur/git/everquest-robot-stanvern/src/main/resources/chromedriver-103.0.5060.53";
 
   public File get(Item item) {
     System.setProperty("webdriver.chrome.driver", CHROME_DRIVER);
