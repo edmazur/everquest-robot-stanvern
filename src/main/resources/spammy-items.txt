@@ -1,3 +1,6 @@
 Ale
+File
 Key
+Note
 Pick
+Stein
