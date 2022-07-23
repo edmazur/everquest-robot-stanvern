@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 import org.javacord.api.entity.channel.ServerChannel;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;
@@ -68,14 +69,18 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
 
   @Override
   public void onMessageEdit(MessageEditEvent event) {
-    onMessage(
-        event.getChannel(),
-        // TODO: Probably need to make this more robust - I think this depends on the original
-        // message which may or may not be in the cache.
-        event.getMessage().get().getLastEditTimestamp().get(),
-        event.getMessageAuthor().isPresent() ? event.getMessageAuthor().get().getDisplayName() : "",
-        event.getNewContent(),
-        MessageType.EDIT);
+    try {
+      onMessage(
+          event.getChannel(),
+          event.requestMessage().get().getLastEditTimestamp().get(),
+          event.getMessageAuthor().isPresent()
+              ? event.getMessageAuthor().get().getDisplayName() : "",
+          event.getNewContent(),
+          MessageType.EDIT);
+    } catch (InterruptedException | ExecutionException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
   private void onMessage(
