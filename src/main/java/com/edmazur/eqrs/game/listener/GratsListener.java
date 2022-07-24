@@ -2,6 +2,7 @@ package com.edmazur.eqrs.game.listener;
 
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqlp.EqLogListener;
+import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.game.Item;
@@ -12,18 +13,22 @@ import org.javacord.api.entity.message.MessageBuilder;
 
 public class GratsListener implements EqLogListener {
 
-  private static final DiscordChannel OUTPUT_CHANNEL = DiscordChannel.FOW_RAID_TICKS_AND_GRATSS;
+  private static final DiscordChannel PROD_CHANNEL = DiscordChannel.FOW_RAID_TICKS_AND_GRATSS;
+  private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_GENERAL;
 
+  private final Config config;
   private final Discord discord;
   private final GratsDetector gratsDetector;
   private final ItemDatabase itemDatabase;
   private final ItemScreenshotter itemScreenshotter;
 
   public GratsListener(
+      Config config,
       Discord discord,
       GratsDetector gratsDetector,
       ItemDatabase itemDatabase,
       ItemScreenshotter itemScreenshotter) {
+    this.config = config;
     this.discord = discord;
     this.gratsDetector = gratsDetector;
     this.itemDatabase = itemDatabase;
@@ -47,7 +52,15 @@ public class GratsListener implements EqLogListener {
         Item item = items.get(i);
         messageBuilder.addAttachment(itemScreenshotter.get(item));
       }
-      discord.sendMessage(OUTPUT_CHANNEL, messageBuilder);
+      discord.sendMessage(getChannel(), messageBuilder);
+    }
+  }
+
+  private DiscordChannel getChannel() {
+    if (config.getBoolean(Config.Property.DEBUG)) {
+      return TEST_CHANNEL;
+    } else {
+      return PROD_CHANNEL;
     }
   }
 

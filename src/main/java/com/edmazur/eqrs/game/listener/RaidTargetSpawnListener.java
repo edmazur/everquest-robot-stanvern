@@ -2,6 +2,7 @@ package com.edmazur.eqrs.game.listener;
 
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqlp.EqLogListener;
+import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.RateLimiter;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
@@ -14,6 +15,11 @@ import java.util.Optional;
 public class RaidTargetSpawnListener implements EqLogListener {
 
   private static final Boolean BATPHONE = false;
+
+  private static final DiscordChannel PROD_BATPHONE_CHANNEL = DiscordChannel.FOW_RAID_BATPHONE;
+  private static final DiscordChannel PROD_NONBATPHONE_CHANNEL = DiscordChannel.FOW_RAIDER_CHAT;
+  private static final DiscordChannel TEST_BATPHONE_CHANNEL = DiscordChannel.TEST_BATPHONE;
+  private static final DiscordChannel TEST_NONBATPHONE_CHANNEL = DiscordChannel.TEST_GENERAL;
 
   private static final String REGULAR_MESSAGE =
       "@everyone %s POP! Stanvern's stream should be up if you want to confirm. "
@@ -34,13 +40,18 @@ public class RaidTargetSpawnListener implements EqLogListener {
 
   private static final Duration RATE_LIMIT = Duration.ofHours(24);
 
+  private final Config config;
   private final GameScreenshotter gameScreenshotter;
   private final Discord discord;
 
   // TODO: Make this a per-target rate limiter if/when you add more targets.
   private final RateLimiter rateLimiter = new RateLimiter(RATE_LIMIT);
 
-  public RaidTargetSpawnListener(GameScreenshotter gameScreenshotter, Discord discord) {
+  public RaidTargetSpawnListener(
+      Config config,
+      GameScreenshotter gameScreenshotter,
+      Discord discord) {
+    this.config = config;
     this.gameScreenshotter = gameScreenshotter;
     this.discord = discord;
   }
@@ -54,18 +65,24 @@ public class RaidTargetSpawnListener implements EqLogListener {
       // (trailing whitespace, /r, etc.).
       if (eqLogEvent.getPayload().startsWith(trigger)) {
         if (rateLimiter.getPermission()) {
-          DiscordChannel discordChannel =
-              BATPHONE ? DiscordChannel.FOW_RAID_BATPHONE : DiscordChannel.FOW_RAIDER_CHAT;
           String message = String.format(BATPHONE ? BATPHONE_MESSAGE : REGULAR_MESSAGE, target);
           Optional<File> maybeScreenshot = gameScreenshotter.get();
 
           if (maybeScreenshot.isPresent()) {
-            discord.sendMessage(discordChannel, message, maybeScreenshot.get());
+            discord.sendMessage(getChannel(), message, maybeScreenshot.get());
           } else {
-            discord.sendMessage(discordChannel, message);
+            discord.sendMessage(getChannel(), message);
           }
         }
       }
+    }
+  }
+
+  private DiscordChannel getChannel() {
+    if (config.getBoolean(Config.Property.DEBUG)) {
+      return BATPHONE ? TEST_BATPHONE_CHANNEL : TEST_NONBATPHONE_CHANNEL;
+    } else {
+      return BATPHONE ? PROD_BATPHONE_CHANNEL : PROD_NONBATPHONE_CHANNEL;
     }
   }
 

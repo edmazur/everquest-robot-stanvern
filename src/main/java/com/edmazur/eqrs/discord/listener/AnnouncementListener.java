@@ -23,13 +23,20 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
 
   private static final Logger LOGGER = new Logger();
 
-  private static final List<DiscordChannel> CHANNELS_TO_READ_FROM = Arrays.asList(
+  private static final List<DiscordChannel> PROD_CHANNELS_TO_READ_FROM = Arrays.asList(
       DiscordChannel.FOW_RAID_BATPHONE,
       DiscordChannel.FOW_AFTERHOURS_BATPHONE,
       DiscordChannel.FOW_GUILD_ANNOUNCEMENTS);
 
-  private static final DiscordChannel CHANNEL_TO_WRITE_TO =
+  private static final List<DiscordChannel> TEST_CHANNELS_TO_READ_FROM = Arrays.asList(
+      DiscordChannel.TEST_BATPHONE,
+      DiscordChannel.TEST_ANNOUNCEMENTS);
+
+  private static final DiscordChannel PROD_CHANNEL_TO_WRITE_TO =
       DiscordChannel.FOW_ANNOUNCEMENT_AUDIT;
+
+  private static final DiscordChannel TEST_CHANNEL_TO_WRITE_TO =
+      DiscordChannel.TEST_ANNOUNCEMENT_AUDIT;
 
   private enum MessageType {
     CREATE("New"),
@@ -93,7 +100,7 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
     if (config.getBoolean(Property.DEBUG)) {
       isChannelToReadFrom = DiscordChannel.TEST_BATPHONE.isEventChannel(channel);
     } else {
-      for (DiscordChannel channelToReadFrom : CHANNELS_TO_READ_FROM) {
+      for (DiscordChannel channelToReadFrom : getChannelsToReadFrom()) {
         if (channelToReadFrom.isEventChannel(channel)) {
           isChannelToReadFrom = true;
           break;
@@ -116,7 +123,23 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
           instant.atZone(ZoneId.of(config.getString(Property.TIMEZONE_GUILD)))
               .format(DateTimeFormatter.RFC_1123_DATE_TIME),
           content);
-      discord.sendMessage(CHANNEL_TO_WRITE_TO, auditMessage);
+      discord.sendMessage(getChannelToWriteTo(), auditMessage);
+    }
+  }
+
+  private List<DiscordChannel> getChannelsToReadFrom() {
+    if (config.getBoolean(Config.Property.DEBUG)) {
+      return TEST_CHANNELS_TO_READ_FROM;
+    } else {
+      return PROD_CHANNELS_TO_READ_FROM;
+    }
+  }
+
+  private DiscordChannel getChannelToWriteTo() {
+    if (config.getBoolean(Config.Property.DEBUG)) {
+      return TEST_CHANNEL_TO_WRITE_TO;
+    } else {
+      return PROD_CHANNEL_TO_WRITE_TO;
     }
   }
 

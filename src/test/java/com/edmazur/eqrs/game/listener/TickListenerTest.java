@@ -7,6 +7,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.edmazur.eqlp.EqLogEvent;
+import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 
 class TickListenerTest {
 
+  @Mock private Config mockConfig;
   @Mock private Discord mockDiscord;
 
   private TickListener tickListener;
@@ -25,7 +27,7 @@ class TickListenerTest {
   @BeforeEach
   void init() {
     MockitoAnnotations.initMocks(this);
-    tickListener = new TickListener(mockDiscord, new TickDetector());
+    tickListener = new TickListener(mockConfig, mockDiscord, new TickDetector());
   }
 
   @Test

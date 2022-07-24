@@ -1,7 +1,6 @@
 package com.edmazur.eqrs.discord;
 
 import com.edmazur.eqrs.Config;
-import com.edmazur.eqrs.Config.Property;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,17 +18,15 @@ import org.javacord.api.entity.channel.Channel;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageBuilder;
-import org.javacord.api.entity.message.Messageable;
+import org.javacord.api.entity.user.User;
 import org.javacord.api.listener.message.MessageCreateListener;
 import org.javacord.api.util.logging.ExceptionLogger;
 
 public class Discord {
 
-  private final Config config;
   private final DiscordApi discordApi;
 
   public Discord(Config config) {
-    this.config = config;
     discordApi = new DiscordApiBuilder()
         .setToken(config.getString(Config.Property.DISCORD_PRIVATE_KEY))
         .login()
@@ -41,49 +38,49 @@ public class Discord {
 
   public CompletableFuture<Message> sendMessage(
       DiscordChannel discordChannel, String message) {
-    return getMessageable(discordChannel)
-        .sendMessage(getMessage(message))
+    return getTextChannel(discordChannel)
+        .sendMessage(message)
         .exceptionally(ExceptionLogger.get());
   }
 
   public CompletableFuture<Message> sendMessage(
       DiscordUser discordUser, String message) {
-    return getMessageable(discordUser)
-        .sendMessage(getMessage(message))
+    return getUser(discordUser)
+        .sendMessage(message)
         .exceptionally(ExceptionLogger.get());
   }
 
   public CompletableFuture<Message> sendMessage(
       DiscordChannel discordChannel, File image) {
-    return getMessageable(discordChannel)
+    return getTextChannel(discordChannel)
         .sendMessage(image)
         .exceptionally(ExceptionLogger.get());
   }
 
   public CompletableFuture<Message> sendMessage(
       DiscordUser discordUser, File image) {
-    return getMessageable(discordUser)
+    return getUser(discordUser)
         .sendMessage(image)
         .exceptionally(ExceptionLogger.get());
   }
 
   public CompletableFuture<Message> sendMessage(
       DiscordChannel discordChannel, String message, File image) {
-    return getMessageable(discordChannel)
-        .sendMessage(getMessage(message), image)
+    return getTextChannel(discordChannel)
+        .sendMessage(message, image)
         .exceptionally(ExceptionLogger.get());
   }
 
   public CompletableFuture<Message> sendMessage(
       DiscordUser discordUser, String message, File image) {
-    return getMessageable(discordUser)
-        .sendMessage(getMessage(message), image)
+    return getUser(discordUser)
+        .sendMessage(message, image)
         .exceptionally(ExceptionLogger.get());
   }
 
   public CompletableFuture<Message> sendMessage(
       DiscordChannel discordChannel, MessageBuilder messageBuilder) {
-    return messageBuilder.send(getMessageable(discordChannel));
+    return messageBuilder.send(getTextChannel(discordChannel));
   }
 
   public Optional<String> getLastMessageMatchingPredicate(
@@ -158,21 +155,8 @@ public class Discord {
     return channel;
   }
 
-  private Messageable getMessageable(DiscordChannel discordChannel) {
-    if (config.getBoolean(Property.DEBUG)) {
-      return getMessageable(DiscordUser.EDMAZUR);
-    }
-
-    return getTextChannel(discordChannel);
-  }
-
-  private Messageable getMessageable(DiscordUser discordUser) {
+  private User getUser(DiscordUser discordUser) {
     return discordApi.getUserById(discordUser.getId()).join();
-  }
-
-  // TODO: Maybe work this into the image-only sendMessage() variants.
-  private String getMessage(String message) {
-    return config.getBoolean(Property.DEBUG) ? "(debug mode enabled)\n" + message : message;
   }
 
   public void addListener(MessageCreateListener listener) {

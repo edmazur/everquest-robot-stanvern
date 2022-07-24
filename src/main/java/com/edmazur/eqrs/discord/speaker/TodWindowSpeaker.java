@@ -11,7 +11,8 @@ import java.util.Map;
 
 public class TodWindowSpeaker implements Runnable {
 
-  private static final DiscordChannel CHANNEL = DiscordChannel.FOW_TIMERS;
+  private static final DiscordChannel PROD_CHANNEL = DiscordChannel.FOW_TIMERS;
+  private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_TIMERS;
 
   private final Config config;
   private final Discord discord;
@@ -33,13 +34,8 @@ public class TodWindowSpeaker implements Runnable {
   public void run() {
     try {
       Table table = raidTargetTableMaker.make();
-      // Delete channel contents only when *not* in debug mode. The current debug setup for Discord
-      // interactions doesn't play with this well.
-      // TODO: Remove this restriction once a better test setup is in place.
-      if (!config.getBoolean(Config.Property.DEBUG)) {
-        discord.deleteMessagesMatchingPredicate(CHANNEL, DiscordPredicate.isFromYourself());
-      }
-      discord.sendMessage(CHANNEL,
+      discord.deleteMessagesMatchingPredicate(getChannel(), DiscordPredicate.isFromYourself());
+      discord.sendMessage(getChannel(),
           "**What does `[N]` mean?**\n"
           + "- If a number appears before a name, it means the window is extrapolated.\n"
           + "- `[1]` indicates that the previous ToD was missed, `[2]` indicates that the 2 "
@@ -53,10 +49,18 @@ public class TodWindowSpeaker implements Runnable {
       for (String messages : discordTableFormatter.getMessages(table, Map.of(0, 1))) {
         // Wait for the Future to complete before sending the next message. In testing, not having
         // this in place led to out-of-order messages when they got sent in rapid succession.
-        discord.sendMessage(CHANNEL, messages).join();
+        discord.sendMessage(getChannel(), messages).join();
       }
     } catch (Throwable t) {
       t.printStackTrace();
+    }
+  }
+
+  private DiscordChannel getChannel() {
+    if (config.getBoolean(Config.Property.DEBUG)) {
+      return TEST_CHANNEL;
+    } else {
+      return PROD_CHANNEL;
     }
   }
 

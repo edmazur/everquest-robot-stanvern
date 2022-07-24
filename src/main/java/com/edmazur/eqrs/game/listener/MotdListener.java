@@ -2,6 +2,7 @@ package com.edmazur.eqrs.game.listener;
 
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqlp.EqLogListener;
+import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
@@ -18,11 +19,14 @@ public class MotdListener implements EqLogListener {
   private static final Pattern DISCORD_MOTD_PATTERN =
       Pattern.compile("`" + GAME_MOTD_PATTERN.pattern() + "`");
 
-  private static final DiscordChannel MOTD_CHANNEL = DiscordChannel.FOW_RAIDER_GMOTD;
+  private static final DiscordChannel PROD_CHANNEL = DiscordChannel.FOW_RAIDER_GMOTD;
+  private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_GENERAL;
 
+  private final Config config;
   private final Discord discord;
 
-  public MotdListener(Discord discord) {
+  public MotdListener(Config config, Discord discord) {
+    this.config = config;
     this.discord = discord;
   }
 
@@ -42,7 +46,7 @@ public class MotdListener implements EqLogListener {
 
       // TODO: Maybe avoid sending multiple MotDs in quick succession (e.g. from fixing typos) by
       // waiting a bit and only sending latest MotD.
-      discord.sendMessage(MOTD_CHANNEL, "`" + eqLogEvent.getPayload() + "`");
+      discord.sendMessage(getChannel(), "`" + eqLogEvent.getPayload() + "`");
     }
   }
 
@@ -51,7 +55,7 @@ public class MotdListener implements EqLogListener {
    */
   public Optional<String> getCurrentMotd() {
     Optional<String> maybeMotd = discord.getLastMessageMatchingPredicate(
-        MOTD_CHANNEL,
+        getChannel(),
         DiscordPredicate.isFromYourself().and(
             DiscordPredicate.textMatchesPattern(DISCORD_MOTD_PATTERN)));
     if (maybeMotd.isEmpty()) {
@@ -59,6 +63,14 @@ public class MotdListener implements EqLogListener {
     } else {
       String motd = maybeMotd.get();
       return Optional.of(motd.substring(1, motd.length() - 1));
+    }
+  }
+
+  private DiscordChannel getChannel() {
+    if (config.getBoolean(Config.Property.DEBUG)) {
+      return TEST_CHANNEL;
+    } else {
+      return PROD_CHANNEL;
     }
   }
 

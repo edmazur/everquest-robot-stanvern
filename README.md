@@ -20,7 +20,7 @@ $ ./gradlew installDist
 $ ./build/install/everquest-robot-stanvern/bin/everquest-robot-stanvern YourCharacterName
 ```
 
-Development (Discord output only sent as DM, database writes skipped):
+Development (Discord interactions restricted to test server, database writes skipped):
 
 ```
 $ ./gradlew run --args='YourCharacterName --debug'

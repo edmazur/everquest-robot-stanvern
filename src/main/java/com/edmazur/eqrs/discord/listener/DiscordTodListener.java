@@ -1,11 +1,9 @@
 package com.edmazur.eqrs.discord.listener;
 
 import com.edmazur.eqrs.Config;
-import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.Database;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
-import com.edmazur.eqrs.discord.DiscordUser;
 import com.edmazur.eqrs.game.RaidTarget;
 import com.edmazur.eqrs.game.RaidTargets;
 import java.awt.Color;
@@ -50,7 +48,8 @@ public class DiscordTodListener implements MessageCreateListener {
   private static final DateTimeFormatter DATE_TIME_FORMATTER =
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-  private static final DiscordChannel CHANNEL = DiscordChannel.FOW_TOD;
+  private static final DiscordChannel PROD_CHANNEL = DiscordChannel.FOW_TOD;
+  private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_TOD;
 
   private static final File SUCCESS_IMAGE =
       new File("/home/mazur/eclipse-workspace/RobotStanvern/img/str.png");
@@ -74,10 +73,7 @@ public class DiscordTodListener implements MessageCreateListener {
 
   @Override
   public void onMessageCreate(MessageCreateEvent event) {
-    boolean shouldConsiderMessage = config.getBoolean(Property.DEBUG)
-        ? event.isPrivateMessage() && DiscordUser.EDMAZUR.isEventUser(event)
-        : CHANNEL.isEventChannel(event);
-    if (shouldConsiderMessage) {
+    if (getChannel().isEventChannel(event)) {
       Matcher helpMatcher = HELP_PATTERN.matcher(event.getMessageContent());
       if (helpMatcher.matches()) {
         event.getMessage().reply(
@@ -277,6 +273,14 @@ public class DiscordTodListener implements MessageCreateListener {
 
   private long getUnixTimestamp(LocalDateTime localDateTime) {
     return localDateTime.atZone(ZoneId.of("America/New_York")).toEpochSecond();
+  }
+
+  private DiscordChannel getChannel() {
+    if (config.getBoolean(Config.Property.DEBUG)) {
+      return TEST_CHANNEL;
+    } else {
+      return PROD_CHANNEL;
+    }
   }
 
 }

@@ -104,7 +104,7 @@ public class RobotStanvern {
     List<EqLogListener> eqLogListeners = new ArrayList<>();
 
     // Add FTE listener.
-    eqLogListeners.add(new FteListener(discord));
+    eqLogListeners.add(new FteListener(config, discord));
 
     // Add heartbeat listener.
     HeartbeatListener heartbeatListener = new HeartbeatListener(discord);
@@ -115,28 +115,29 @@ public class RobotStanvern {
     // Add raid target spawn listener.
     GameScreenshotter gameScreenshotter = new GameScreenshotter();
     RaidTargetSpawnListener raidTargetSpawnListener =
-        new RaidTargetSpawnListener(gameScreenshotter, discord);
+        new RaidTargetSpawnListener(config, gameScreenshotter, discord);
     eqLogListeners.add(raidTargetSpawnListener);
 
     // Add MotD listener.
-    MotdListener motdListener = new MotdListener(discord);
+    MotdListener motdListener = new MotdListener(config, discord);
     eqLogListeners.add(motdListener);
 
     // Add ToD listener.
     GameTodDetector gameTodDetector = new GameTodDetector();
     GameTodParser gameTodParser = new GameTodParser(raidTargets);
-    GameTodListener gameTodListener = new GameTodListener(discord, gameTodDetector, gameTodParser);
+    GameTodListener gameTodListener =
+        new GameTodListener(config, discord, gameTodDetector, gameTodParser);
     eqLogListeners.add(gameTodListener);
 
     // Add tick listener.
     TickDetector tickDetector = new TickDetector();
-    TickListener tickListener = new TickListener(discord, tickDetector);
+    TickListener tickListener = new TickListener(config, discord, tickDetector);
     eqLogListeners.add(tickListener);
 
     // Add grats listener.
     GratsDetector gratsDetector = new GratsDetector();
     GratsListener gratsListener =
-        new GratsListener(discord, gratsDetector, itemDatabase, itemScreenshotter);
+        new GratsListener(config, discord, gratsDetector, itemDatabase, itemScreenshotter);
     eqLogListeners.add(gratsListener);
 
     // Add dice listener.
@@ -146,7 +147,8 @@ public class RobotStanvern {
 
     // Add earthquake listener.
     EarthquakeDetector earthquakeDetector = new EarthquakeDetector();
-    EarthquakeListener earthquakeListener = new EarthquakeListener(discord, earthquakeDetector);
+    EarthquakeListener earthquakeListener =
+        new EarthquakeListener(config, discord, earthquakeDetector);
     eqLogListeners.add(earthquakeListener);
 
     // Add ToD window speaker.
