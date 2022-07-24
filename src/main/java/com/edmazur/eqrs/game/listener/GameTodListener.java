@@ -14,7 +14,7 @@ public class GameTodListener implements EqLogListener {
   private static final DateTimeFormatter DATE_TIME_FORMATTER =
       DateTimeFormatter.ofPattern("M/d HH:mm:ss");
 
-  private static final DiscordChannel OUTPUT_CHANNEL = DiscordChannel.TOD;
+  private static final DiscordChannel OUTPUT_CHANNEL = DiscordChannel.FOW_TOD;
 
   private final Discord discord;
   private final GameTodDetector gameTodDetector;

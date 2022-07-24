@@ -50,7 +50,7 @@ public class DiscordTodListener implements MessageCreateListener {
   private static final DateTimeFormatter DATE_TIME_FORMATTER =
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-  private static final DiscordChannel CHANNEL = DiscordChannel.TOD;
+  private static final DiscordChannel CHANNEL = DiscordChannel.FOW_TOD;
 
   private static final File SUCCESS_IMAGE =
       new File("/home/mazur/eclipse-workspace/RobotStanvern/img/str.png");

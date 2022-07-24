@@ -28,7 +28,7 @@ public class FteListener implements EqLogListener {
       if (SEND_DISCORD_MESSAGE_AS_DM) {
         discord.sendMessage(DiscordUser.EDMAZUR, message);
       } else {
-        discord.sendMessage(DiscordChannel.RAIDER_CHAT, message);
+        discord.sendMessage(DiscordChannel.FOW_RAIDER_CHAT, message);
       }
     }
   }

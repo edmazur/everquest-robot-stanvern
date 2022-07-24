@@ -7,7 +7,7 @@ import com.edmazur.eqrs.discord.DiscordChannel;
 
 public class EarthquakeListener implements EqLogListener {
 
-  private static final DiscordChannel OUTPUT_CHANNEL = DiscordChannel.RAIDER_CHAT;
+  private static final DiscordChannel OUTPUT_CHANNEL = DiscordChannel.FOW_RAIDER_CHAT;
 
   private final Discord discord;
   private final EarthquakeDetector earthquakeDetector;

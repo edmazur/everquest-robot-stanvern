@@ -22,8 +22,8 @@ import org.javacord.api.listener.message.MessageCreateListener;
 public class CharInfoScreenshotListener implements MessageCreateListener {
 
   private static final List<DiscordChannel> CHANNELS = List.of(
-      DiscordChannel.BOT_BOOT_CAMP,
-      DiscordChannel.BOT_SCREAMING_ROOM);
+      DiscordChannel.FOW_BOT_BOOT_CAMP,
+      DiscordChannel.FOW_BOT_SCREAMING_ROOM);
   private static final Predicate<Message> PREDICATE = DiscordPredicate.hasImage();
 
   private static final File SUCCESS_IMAGE =
@@ -104,7 +104,7 @@ public class CharInfoScreenshotListener implements MessageCreateListener {
 
   private List<DiscordChannel> getChannelsToReadFrom() {
     if (config.getBoolean(Property.DEBUG)) {
-      return List.of(DiscordChannel.ROBOT_STANVERN_TESTING);
+      return List.of(DiscordChannel.TEST_GENERAL);
     } else {
       return CHANNELS;
     }

@@ -16,7 +16,7 @@ public class TickListener implements EqLogListener {
 
   private static final Logger LOGGER = new Logger();
 
-  private static final DiscordChannel OUTPUT_CHANNEL = DiscordChannel.RAID_TICKS_AND_GRATSS;
+  private static final DiscordChannel OUTPUT_CHANNEL = DiscordChannel.FOW_RAID_TICKS_AND_GRATSS;
   // Keep these 2 constants in sync.
   private static final Duration MAXIMUM_CONTEXT_GAP = Duration.ofSeconds(15);
   private static final String MAXIMUM_CONTEXT_GAP_DESCRIPTION = "15 seconds";

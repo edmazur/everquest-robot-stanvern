@@ -55,7 +55,7 @@ public class RaidTargetSpawnListener implements EqLogListener {
       if (eqLogEvent.getPayload().startsWith(trigger)) {
         if (rateLimiter.getPermission()) {
           DiscordChannel discordChannel =
-              BATPHONE ? DiscordChannel.RAID_BATPHONE : DiscordChannel.RAIDER_CHAT;
+              BATPHONE ? DiscordChannel.FOW_RAID_BATPHONE : DiscordChannel.FOW_RAIDER_CHAT;
           String message = String.format(BATPHONE ? BATPHONE_MESSAGE : REGULAR_MESSAGE, target);
           Optional<File> maybeScreenshot = gameScreenshotter.get();
 

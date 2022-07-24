@@ -24,12 +24,12 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
   private static final Logger LOGGER = new Logger();
 
   private static final List<DiscordChannel> CHANNELS_TO_READ_FROM = Arrays.asList(
-      DiscordChannel.RAID_BATPHONE,
-      DiscordChannel.AFTERHOURS_BATPHONE,
-      DiscordChannel.GUILD_ANNOUNCEMENTS);
+      DiscordChannel.FOW_RAID_BATPHONE,
+      DiscordChannel.FOW_AFTERHOURS_BATPHONE,
+      DiscordChannel.FOW_GUILD_ANNOUNCEMENTS);
 
   private static final DiscordChannel CHANNEL_TO_WRITE_TO =
-      DiscordChannel.ANNOUNCEMENT_AUDIT;
+      DiscordChannel.FOW_ANNOUNCEMENT_AUDIT;
 
   private enum MessageType {
     CREATE("New"),
@@ -91,7 +91,7 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
       MessageType messageType) {
     boolean isChannelToReadFrom = false;
     if (config.getBoolean(Property.DEBUG)) {
-      isChannelToReadFrom = DiscordChannel.ROBOT_STANVERN_TESTING.isEventChannel(channel);
+      isChannelToReadFrom = DiscordChannel.TEST_BATPHONE.isEventChannel(channel);
     } else {
       for (DiscordChannel channelToReadFrom : CHANNELS_TO_READ_FROM) {
         if (channelToReadFrom.isEventChannel(channel)) {

@@ -21,8 +21,8 @@ public class BatphoneListener implements MessageCreateListener {
   private static final Logger LOGGER = new Logger();
 
   private static final List<DiscordChannel> CHANNELS_TO_READ_FROM = Arrays.asList(
-      DiscordChannel.RAID_BATPHONE,
-      DiscordChannel.AFTERHOURS_BATPHONE);
+      DiscordChannel.FOW_RAID_BATPHONE,
+      DiscordChannel.FOW_AFTERHOURS_BATPHONE);
 
   private final Config config;
   private final Discord discord;
@@ -42,7 +42,7 @@ public class BatphoneListener implements MessageCreateListener {
   public void onMessageCreate(MessageCreateEvent event) {
     boolean isChannelToReadFrom = false;
     if (config.getBoolean(Property.DEBUG)) {
-      isChannelToReadFrom = DiscordChannel.ROBOT_STANVERN_TESTING.isEventChannel(event);
+      isChannelToReadFrom = DiscordChannel.TEST_BATPHONE.isEventChannel(event);
     } else {
       for (DiscordChannel channelToReadFrom : CHANNELS_TO_READ_FROM) {
         if (channelToReadFrom.isEventChannel(event)) {

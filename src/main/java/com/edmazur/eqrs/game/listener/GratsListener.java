@@ -12,7 +12,7 @@ import org.javacord.api.entity.message.MessageBuilder;
 
 public class GratsListener implements EqLogListener {
 
-  private static final DiscordChannel OUTPUT_CHANNEL = DiscordChannel.RAID_TICKS_AND_GRATSS;
+  private static final DiscordChannel OUTPUT_CHANNEL = DiscordChannel.FOW_RAID_TICKS_AND_GRATSS;
 
   private final Discord discord;
   private final GratsDetector gratsDetector;

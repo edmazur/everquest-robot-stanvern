@@ -18,7 +18,7 @@ public class MotdListener implements EqLogListener {
   private static final Pattern DISCORD_MOTD_PATTERN =
       Pattern.compile("`" + GAME_MOTD_PATTERN.pattern() + "`");
 
-  private static final DiscordChannel MOTD_CHANNEL = DiscordChannel.RAIDER_GMOTD;
+  private static final DiscordChannel MOTD_CHANNEL = DiscordChannel.FOW_RAIDER_GMOTD;
 
   private final Discord discord;
 

@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class TodWindowSpeaker implements Runnable {
 
-  private static final DiscordChannel CHANNEL = DiscordChannel.TIMERS;
+  private static final DiscordChannel CHANNEL = DiscordChannel.FOW_TIMERS;
 
   private final Config config;
   private final Discord discord;
