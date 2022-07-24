@@ -20,8 +20,8 @@ public class TickListener implements EqLogListener {
   private static final DiscordChannel PROD_CHANNEL = DiscordChannel.FOW_RAID_TICKS_AND_GRATSS;
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_GENERAL;
   // Keep these 2 constants in sync.
-  private static final Duration MAXIMUM_CONTEXT_GAP = Duration.ofSeconds(15);
-  private static final String MAXIMUM_CONTEXT_GAP_DESCRIPTION = "15 seconds";
+  private static final Duration MAXIMUM_CONTEXT_GAP = Duration.ofSeconds(60);
+  private static final String MAXIMUM_CONTEXT_GAP_DESCRIPTION = "60 seconds";
 
   private static final Pattern GUILD_CHAT_PATTERN = Pattern.compile("^(.+) tells the guild, '.*");
 

@@ -61,7 +61,7 @@ class TickListenerTest {
     assertEquals(
         "⬆️ Possible tick context, ET: "
             + "`[Fri Jun 10 23:00:05 2022] Stanvern tells the guild, 'context in time'` "
-            + "(tick-taker's next message within 15 seconds)",
+            + "(tick-taker's next message within 60 seconds)",
         messages.get(1));
   }
 
