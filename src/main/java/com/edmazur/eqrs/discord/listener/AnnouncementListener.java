@@ -97,14 +97,10 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
       String content,
       MessageType messageType) {
     boolean isChannelToReadFrom = false;
-    if (config.getBoolean(Property.DEBUG)) {
-      isChannelToReadFrom = DiscordChannel.TEST_BATPHONE.isEventChannel(channel);
-    } else {
-      for (DiscordChannel channelToReadFrom : getChannelsToReadFrom()) {
-        if (channelToReadFrom.isEventChannel(channel)) {
-          isChannelToReadFrom = true;
-          break;
-        }
+    for (DiscordChannel channelToReadFrom : getChannelsToReadFrom()) {
+      if (channelToReadFrom.isEventChannel(channel)) {
+        isChannelToReadFrom = true;
+        break;
       }
     }
 
