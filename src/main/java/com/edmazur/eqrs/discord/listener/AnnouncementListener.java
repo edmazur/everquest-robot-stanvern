@@ -118,7 +118,7 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
           maybeServerChannel.get().getName(),
           instant.atZone(ZoneId.of(config.getString(Property.TIMEZONE_GUILD)))
               .format(DateTimeFormatter.RFC_1123_DATE_TIME),
-          content);
+          stripMentions(content));
       discord.sendMessage(getChannelToWriteTo(), auditMessage);
     }
   }
@@ -137,6 +137,17 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
     } else {
       return PROD_CHANNEL_TO_WRITE_TO;
     }
+  }
+
+  /*
+   * Strips all mentions (@here, @everyone, custom roles, etc.) from the content.
+   */
+  private String stripMentions(String content) {
+    // TODO: Make this more robust by avoiding stripping from non-role usage of @. I assume there's
+    // some way to inspect the message to differentiate something like "@everyone hi" vs. something
+    // like "blah blah random @ blah blah" (couldn't think of a good example for the non-role usage,
+    // hence this being a TODO for an edge case that'll probably be very rare).
+    return content.replace("@", "@ ");
   }
 
 }
