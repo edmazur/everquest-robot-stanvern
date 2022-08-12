@@ -45,7 +45,10 @@ public class TodWindowSpeaker implements Runnable {
           + "\n"
           + "**Is there another way to view this data?**\n"
           + "- Yes! See http://edmazur.com/eq (username/password is pinned in #tod).\n"
-          + "- Extrapolated windows are also easier to visualize/understand in that UI.");
+          + "- Extrapolated windows are also easier to visualize/understand in that UI.\n"
+          + "\n"
+          + "**How do I avoid being continuously pinged by this channel?**\n"
+          + "- Permanently mute it. The bot continously deletes and reposts every minute.");
       for (String messages : discordTableFormatter.getMessages(table, Map.of(0, 1))) {
         // Wait for the Future to complete before sending the next message. In testing, not having
         // this in place led to out-of-order messages when they got sent in rapid succession.
