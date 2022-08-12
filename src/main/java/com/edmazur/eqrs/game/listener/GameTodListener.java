@@ -6,6 +6,7 @@ import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import org.javacord.api.entity.message.Message;
@@ -15,7 +16,9 @@ public class GameTodListener implements EqLogListener {
   private static final DateTimeFormatter DATE_TIME_FORMATTER =
       DateTimeFormatter.ofPattern("M/d HH:mm:ss");
 
-  private static final DiscordChannel PROD_CHANNEL = DiscordChannel.FOW_TOD;
+  private static final List<DiscordChannel> PROD_CHANNELS = List.of(
+      DiscordChannel.FOW_TOD,
+      DiscordChannel.TBD_TOD);
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_TOD;
 
   private final Config config;
@@ -37,11 +40,13 @@ public class GameTodListener implements EqLogListener {
   @Override
   public void onEvent(EqLogEvent eqLogEvent) {
     if (gameTodDetector.containsTod(eqLogEvent)) {
-      CompletableFuture<Message> messageFuture = discord.sendMessage(
-          getChannel(), "⏲ Possible ToD sighting, ET: `" + eqLogEvent.getFullLine() + "`");
-      Optional<GameTodParseResult> maybeGameTodParseResult = gameTodParser.parse(eqLogEvent);
-      if (maybeGameTodParseResult.isPresent()) {
-        messageFuture.join().reply(getTodInput(maybeGameTodParseResult.get()));
+      for (DiscordChannel discordChannel : getChannels()) {
+        CompletableFuture<Message> messageFuture = discord.sendMessage(
+            discordChannel, "⏲ Possible ToD sighting, ET: `" + eqLogEvent.getFullLine() + "`");
+        Optional<GameTodParseResult> maybeGameTodParseResult = gameTodParser.parse(eqLogEvent);
+        if (maybeGameTodParseResult.isPresent()) {
+          messageFuture.join().reply(getTodInput(maybeGameTodParseResult.get()));
+        }
       }
     }
   }
@@ -52,11 +57,11 @@ public class GameTodListener implements EqLogListener {
         DATE_TIME_FORMATTER.format(gameTodParseResult.getTimeOfDeath()));
   }
 
-  private DiscordChannel getChannel() {
+  private List<DiscordChannel> getChannels() {
     if (config.getBoolean(Config.Property.DEBUG)) {
-      return TEST_CHANNEL;
+      return List.of(TEST_CHANNEL);
     } else {
-      return PROD_CHANNEL;
+      return PROD_CHANNELS;
     }
   }
 

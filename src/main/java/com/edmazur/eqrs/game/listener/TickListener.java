@@ -8,6 +8,7 @@ import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -17,7 +18,9 @@ public class TickListener implements EqLogListener {
 
   private static final Logger LOGGER = new Logger();
 
-  private static final DiscordChannel PROD_CHANNEL = DiscordChannel.FOW_RAID_TICKS_AND_GRATSS;
+  private static final List<DiscordChannel> PROD_CHANNELS = List.of(
+      DiscordChannel.FOW_RAID_TICKS_AND_GRATSS,
+      DiscordChannel.TBD_TICKS_AND_GRATS);
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_GENERAL;
   // Keep these 2 constants in sync.
   private static final Duration MAXIMUM_CONTEXT_GAP = Duration.ofSeconds(60);
@@ -41,9 +44,11 @@ public class TickListener implements EqLogListener {
   public void onEvent(EqLogEvent eqLogEvent) {
     Optional<String> maybeGuildChatAuthor = getGuildChatAuthor(eqLogEvent);
     if (tickDetector.containsTick(eqLogEvent)) {
-      discord.sendMessage(
-          getChannel(),
-          "🎟️ Possible tick sighting, ET: `" + eqLogEvent.getFullLine() + "`");
+      for (DiscordChannel discordChannel : getChannels()) {
+        discord.sendMessage(
+            discordChannel,
+            "🎟️ Possible tick sighting, ET: `" + eqLogEvent.getFullLine() + "`");
+      }
       if (maybeGuildChatAuthor.isEmpty()) {
         LOGGER.log("Could not get tick taker from: " + eqLogEvent.getFullLine());
       } else {
@@ -54,10 +59,12 @@ public class TickListener implements EqLogListener {
         && eqLogEvent.getTimestamp().isBefore(
             tickTakersToTicks.get(maybeGuildChatAuthor.get()).getTimestamp()
                 .plus(MAXIMUM_CONTEXT_GAP))) {
-      discord.sendMessage(
-          getChannel(),
-          "⬆️ Possible tick context, ET: `" + eqLogEvent.getFullLine()
-              + "` (tick-taker's next message within " + MAXIMUM_CONTEXT_GAP_DESCRIPTION + ")");
+      for (DiscordChannel discordChannel : getChannels()) {
+        discord.sendMessage(
+            discordChannel,
+            "⬆️ Possible tick context, ET: `" + eqLogEvent.getFullLine()
+                + "` (tick-taker's next message within " + MAXIMUM_CONTEXT_GAP_DESCRIPTION + ")");
+      }
       tickTakersToTicks.remove(maybeGuildChatAuthor.get());
     }
   }
@@ -71,11 +78,11 @@ public class TickListener implements EqLogListener {
     }
   }
 
-  private DiscordChannel getChannel() {
+  private List<DiscordChannel> getChannels() {
     if (config.getBoolean(Config.Property.DEBUG)) {
-      return TEST_CHANNEL;
+      return List.of(TEST_CHANNEL);
     } else {
-      return PROD_CHANNEL;
+      return PROD_CHANNELS;
     }
   }
 

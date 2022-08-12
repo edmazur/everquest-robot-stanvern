@@ -9,6 +9,7 @@ import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.game.GameScreenshotter;
 import java.io.File;
 import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -16,8 +17,12 @@ public class RaidTargetSpawnListener implements EqLogListener {
 
   private static final Boolean BATPHONE = false;
 
-  private static final DiscordChannel PROD_BATPHONE_CHANNEL = DiscordChannel.FOW_RAID_BATPHONE;
-  private static final DiscordChannel PROD_NONBATPHONE_CHANNEL = DiscordChannel.FOW_RAIDER_CHAT;
+  private static final List<DiscordChannel> PROD_BATPHONE_CHANNELS = List.of(
+      DiscordChannel.FOW_RAID_BATPHONE,
+      DiscordChannel.TBD_BATPHONE);
+  private static final List<DiscordChannel> PROD_NONBATPHONE_CHANNELS = List.of(
+      DiscordChannel.FOW_RAIDER_CHAT,
+      DiscordChannel.TBD_RAIDER_CHAT);
   private static final DiscordChannel TEST_BATPHONE_CHANNEL = DiscordChannel.TEST_BATPHONE;
   private static final DiscordChannel TEST_NONBATPHONE_CHANNEL = DiscordChannel.TEST_GENERAL;
 
@@ -68,21 +73,23 @@ public class RaidTargetSpawnListener implements EqLogListener {
           String message = String.format(BATPHONE ? BATPHONE_MESSAGE : REGULAR_MESSAGE, target);
           Optional<File> maybeScreenshot = gameScreenshotter.get();
 
-          if (maybeScreenshot.isPresent()) {
-            discord.sendMessage(getChannel(), message, maybeScreenshot.get());
-          } else {
-            discord.sendMessage(getChannel(), message);
+          for (DiscordChannel discordChannel : getChannels()) {
+            if (maybeScreenshot.isPresent()) {
+              discord.sendMessage(discordChannel, message, maybeScreenshot.get());
+            } else {
+              discord.sendMessage(discordChannel, message);
+            }
           }
         }
       }
     }
   }
 
-  private DiscordChannel getChannel() {
+  private List<DiscordChannel> getChannels() {
     if (config.getBoolean(Config.Property.DEBUG)) {
-      return BATPHONE ? TEST_BATPHONE_CHANNEL : TEST_NONBATPHONE_CHANNEL;
+      return BATPHONE ? List.of(TEST_BATPHONE_CHANNEL) : List.of(TEST_NONBATPHONE_CHANNEL);
     } else {
-      return BATPHONE ? PROD_BATPHONE_CHANNEL : PROD_NONBATPHONE_CHANNEL;
+      return BATPHONE ? PROD_BATPHONE_CHANNELS : PROD_NONBATPHONE_CHANNELS;
     }
   }
 

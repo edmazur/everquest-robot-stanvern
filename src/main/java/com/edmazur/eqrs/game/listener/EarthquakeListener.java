@@ -5,10 +5,13 @@ import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
+import java.util.List;
 
 public class EarthquakeListener implements EqLogListener {
 
-  private static final DiscordChannel PROD_CHANNEL = DiscordChannel.FOW_RAIDER_CHAT;
+  private static final List<DiscordChannel> PROD_CHANNELS = List.of(
+      DiscordChannel.FOW_RAIDER_CHAT,
+      DiscordChannel.TBD_RAIDER_CHAT);
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_GENERAL;
 
   private final Config config;
@@ -24,17 +27,19 @@ public class EarthquakeListener implements EqLogListener {
   @Override
   public void onEvent(EqLogEvent eqLogEvent) {
     if (earthquakeDetector.containsEarthquake(eqLogEvent)) {
-      discord.sendMessage(
-          getChannel(),
-          "@everyone️ Possible earthquake, ET: `" + eqLogEvent.getFullLine() + "`");
+      for (DiscordChannel discordChannel : getChannels()) {
+        discord.sendMessage(
+            discordChannel,
+            "@everyone️ Possible earthquake, ET: `" + eqLogEvent.getFullLine() + "`");
+      }
     }
   }
 
-  private DiscordChannel getChannel() {
+  private List<DiscordChannel> getChannels() {
     if (config.getBoolean(Config.Property.DEBUG)) {
-      return TEST_CHANNEL;
+      return List.of(TEST_CHANNEL);
     } else {
-      return PROD_CHANNEL;
+      return PROD_CHANNELS;
     }
   }
 

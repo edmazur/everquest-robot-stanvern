@@ -13,7 +13,9 @@ import org.javacord.api.entity.message.MessageBuilder;
 
 public class GratsListener implements EqLogListener {
 
-  private static final DiscordChannel PROD_CHANNEL = DiscordChannel.FOW_RAID_TICKS_AND_GRATSS;
+  private static final List<DiscordChannel> PROD_CHANNELS = List.of(
+      DiscordChannel.FOW_RAID_TICKS_AND_GRATSS,
+      DiscordChannel.TBD_TICKS_AND_GRATS);
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_GENERAL;
 
   private final Config config;
@@ -52,15 +54,17 @@ public class GratsListener implements EqLogListener {
         Item item = items.get(i);
         messageBuilder.addAttachment(itemScreenshotter.get(item));
       }
-      discord.sendMessage(getChannel(), messageBuilder);
+      for (DiscordChannel discordChannel : getChannels()) {
+        discord.sendMessage(discordChannel, messageBuilder);
+      }
     }
   }
 
-  private DiscordChannel getChannel() {
+  private List<DiscordChannel> getChannels() {
     if (config.getBoolean(Config.Property.DEBUG)) {
-      return TEST_CHANNEL;
+      return List.of(TEST_CHANNEL);
     } else {
-      return PROD_CHANNEL;
+      return PROD_CHANNELS;
     }
   }
 
