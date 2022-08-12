@@ -19,7 +19,7 @@ import org.javacord.api.event.message.MessageEditEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 import org.javacord.api.listener.message.MessageEditListener;
 
-public class AnnouncementListener implements MessageCreateListener, MessageEditListener {
+public class AuditListener implements MessageCreateListener, MessageEditListener {
 
   private static final Logger LOGGER = new Logger();
 
@@ -57,7 +57,7 @@ public class AnnouncementListener implements MessageCreateListener, MessageEditL
   private final Config config;
   private final Discord discord;
 
-  public AnnouncementListener(Config config, Discord discord) {
+  public AuditListener(Config config, Discord discord) {
     this.config = config;
     this.discord = discord;
     this.discord.addListener(this);

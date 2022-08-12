@@ -5,7 +5,7 @@ import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordTableFormatter;
-import com.edmazur.eqrs.discord.listener.AnnouncementListener;
+import com.edmazur.eqrs.discord.listener.AuditListener;
 import com.edmazur.eqrs.discord.listener.BatphoneListener;
 import com.edmazur.eqrs.discord.listener.CharInfoScreenshotListener;
 import com.edmazur.eqrs.discord.listener.DiscordTodListener;
@@ -88,7 +88,7 @@ public class RobotStanvern {
     // TODO: Set this up more like how game log messages are received centrally and passed out to
     // listeners?
     new DiscordTodListener(config, discord, database, raidTargets);
-    new AnnouncementListener(config, discord);
+    new AuditListener(config, discord);
     new BatphoneListener(config, discord, pager, soundPlayer);
     Ocr ocr = new Ocr();
     CharInfoOcrScrapeComparator charInfoOcrScrapeComparator = new CharInfoOcrScrapeComparator();
