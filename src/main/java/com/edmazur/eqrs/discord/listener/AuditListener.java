@@ -96,15 +96,7 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
       String author,
       String content,
       MessageType messageType) {
-    boolean isChannelToReadFrom = false;
-    for (DiscordChannel channelToReadFrom : getChannelsToReadFrom()) {
-      if (channelToReadFrom.isEventChannel(channel)) {
-        isChannelToReadFrom = true;
-        break;
-      }
-    }
-
-    if (isChannelToReadFrom) {
+    if (DiscordChannel.containsEventChannel(channel, getChannelsToReadFrom())) {
       Optional<ServerChannel> maybeServerChannel = channel.asServerChannel();
       if (maybeServerChannel.isEmpty()) {
         return;

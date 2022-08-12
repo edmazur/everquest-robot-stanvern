@@ -1,5 +1,6 @@
 package com.edmazur.eqrs.discord;
 
+import java.util.List;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;
 
@@ -57,6 +58,20 @@ public enum DiscordChannel {
 
   public boolean isEventChannel(TextChannel channel) {
     return channel.getId() == id;
+  }
+
+  public static boolean containsEventChannel(
+      MessageCreateEvent event, List<DiscordChannel> haystack) {
+    return containsEventChannel(event.getChannel(), haystack);
+  }
+
+  public static boolean containsEventChannel(TextChannel needle, List<DiscordChannel> haystack) {
+    for (DiscordChannel hay : haystack) {
+      if (hay.getId() == needle.getId()) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }

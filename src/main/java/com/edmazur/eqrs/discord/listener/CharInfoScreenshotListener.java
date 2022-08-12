@@ -54,11 +54,9 @@ public class CharInfoScreenshotListener implements MessageCreateListener {
 
   @Override
   public void onMessageCreate(MessageCreateEvent event) {
-    for (DiscordChannel discordChannel : getChannelsToReadFrom()) {
-      if (discordChannel.isEventChannel(event) && PREDICATE.test(event.getMessage())) {
-        handle(event.getMessage());
-        break;
-      }
+    if (DiscordChannel.containsEventChannel(event, getChannelsToReadFrom())
+        && PREDICATE.test(event.getMessage())) {
+      handle(event.getMessage());
     }
   }
 
