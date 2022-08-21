@@ -55,8 +55,7 @@ public class DiscordTodListener implements MessageCreateListener {
       DiscordChannel.TBD_TOD);
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_TOD;
 
-  private static final File SUCCESS_IMAGE =
-      new File("/home/mazur/eclipse-workspace/RobotStanvern/img/str.png");
+  private static final File SUCCESS_IMAGE = new File("src/main/resources/str.png");
 
   private final Config config;
   private final Discord discord;
