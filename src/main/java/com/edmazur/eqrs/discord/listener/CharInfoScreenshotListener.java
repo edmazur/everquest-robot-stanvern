@@ -26,8 +26,7 @@ public class CharInfoScreenshotListener implements MessageCreateListener {
       DiscordChannel.FOW_BOT_SCREAMING_ROOM);
   private static final Predicate<Message> PREDICATE = DiscordPredicate.hasImage();
 
-  private static final File SUCCESS_IMAGE =
-      new File("/home/mazur/eclipse-workspace/RobotStanvern/img/str.png");
+  private static final File SUCCESS_IMAGE = new File("src/main/resources/str.png");
 
   private Config config;
   private Discord discord;
