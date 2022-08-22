@@ -21,6 +21,11 @@ import org.javacord.api.listener.message.MessageCreateListener;
 
 public class CharInfoScreenshotListener implements MessageCreateListener {
 
+  // TODO: Either delete all the OCR stuff or permanently enable it. Currently doing this half-in,
+  // half-out approach while setting up new lightweight server. Once it's stable, temporarily
+  // re-enable the OCR stuff and see if the server can handle the load.
+  private static final boolean ENABLE = false;
+
   private static final List<DiscordChannel> CHANNELS = List.of(
       DiscordChannel.FOW_BOT_BOOT_CAMP,
       DiscordChannel.FOW_BOT_SCREAMING_ROOM);
@@ -43,6 +48,10 @@ public class CharInfoScreenshotListener implements MessageCreateListener {
   }
 
   public void init() {
+    if (!ENABLE) {
+      return;
+    }
+
     for (DiscordChannel discordChannel : getChannelsToReadFrom()) {
       for (Message message :
           discord.getUnrepliedMessagesMatchingPredicate(discordChannel, PREDICATE)) {
@@ -53,6 +62,10 @@ public class CharInfoScreenshotListener implements MessageCreateListener {
 
   @Override
   public void onMessageCreate(MessageCreateEvent event) {
+    if (!ENABLE) {
+      return;
+    }
+
     if (DiscordChannel.containsEventChannel(event, getChannelsToReadFrom())
         && PREDICATE.test(event.getMessage())) {
       handle(event.getMessage());
