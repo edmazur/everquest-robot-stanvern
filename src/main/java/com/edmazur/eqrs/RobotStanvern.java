@@ -34,6 +34,8 @@ import com.edmazur.eqrs.game.listener.MotdListener;
 import com.edmazur.eqrs.game.listener.RaidTargetSpawnListener;
 import com.edmazur.eqrs.game.listener.TickDetector;
 import com.edmazur.eqrs.game.listener.TickListener;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -174,8 +176,13 @@ public class RobotStanvern {
       try {
         eqLog.run();
       } catch (Exception e) {
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stringWriter);
+        e.printStackTrace(printWriter);
+        String stackTrace = stringWriter.toString();
         LOGGER.log(
-            "Uncaught exception from main thread, restarting. This generally should not happen.");
+            "Uncaught exception from main thread, restarting. This generally should not happen.\n"
+            + stackTrace);
       }
     }
   }

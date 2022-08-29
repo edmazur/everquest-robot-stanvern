@@ -149,7 +149,9 @@ public class Discord {
   private TextChannel getTextChannel(DiscordChannel discordChannel) {
     Optional<Channel> maybeChannel = discordApi.getChannelById(discordChannel.getId());
     if (maybeChannel.isEmpty()) {
-      System.err.println("Could not find channel: " + discordChannel);
+      // TODO: Handle this more gracefully. The main way this can get triggered is if a Discord
+      // channel currently in use by the bot suddenly gets deleted, which should be fairly rare.
+      throw new IllegalStateException("Could not find channel: " + discordChannel);
     }
     TextChannel channel = maybeChannel.get().asTextChannel().get();
     return channel;
