@@ -24,6 +24,7 @@ class GameTodParserTest {
       "/home/mazur/git/everquest-robot-stanvern/src/test/resources/logs/tods-annotated.txt");
 
   private static GameTodParser gameTodParser;
+  private static GameTodDetector gameTodDetector;
 
   @BeforeAll
   static void init() {
@@ -33,6 +34,7 @@ class GameTodParserTest {
     Json json = new Json();
     RaidTargets raidTargets = new RaidTargets(config, json);
     gameTodParser = new GameTodParser(raidTargets);
+    gameTodDetector = new GameTodDetector();
   }
 
   private static List<Arguments> provideTestCases() throws IOException {
@@ -51,7 +53,8 @@ class GameTodParserTest {
     String expectedOutput = parts[1];
     boolean expectingSuccessfulParse = !expectedOutput.equals("-");
     EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(input).get();
-    Optional<GameTodParseResult> parseResult = gameTodParser.parse(eqLogEvent);
+    Optional<GameTodParseResult> parseResult =
+        gameTodParser.parse(eqLogEvent, gameTodDetector.getTodMessage(eqLogEvent).get());
     if (expectingSuccessfulParse && !parseResult.isPresent()) {
       fail("Expected to be able to parse: " + input);
     } else if (!expectingSuccessfulParse && parseResult.isPresent()) {

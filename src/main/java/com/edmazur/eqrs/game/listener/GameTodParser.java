@@ -13,16 +13,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
 public class GameTodParser {
 
   private static final boolean DEBUG = false;
-
-  private static final Pattern GUILD_CHAT_PATTERN =
-      Pattern.compile("(?:\\p{Alpha}+ tells the guild|You say to your guild), '(.+)'");
 
   // Heuristics based on offline historical data analysis.
   private static final Set<String> RELATIVE_TOD_INDICATORS =
@@ -42,21 +37,17 @@ public class GameTodParser {
     this.raidTargets = raidTargets;
   }
 
-  public Optional<GameTodParseResult> parse(EqLogEvent eqLogEvent) {
-    Optional<String> maybeGuildChatText = getGuildChatMessage(eqLogEvent);
-    if (maybeGuildChatText.isEmpty()) {
-      return Optional.empty();
-    }
-    String guildChatText = maybeGuildChatText.get().toLowerCase();
-
-    // Remove stuff that can get in the way of target detection: "tod" and extra whitespace.
-    guildChatText = guildChatText.replace("tod", "").trim();
+  public Optional<GameTodParseResult> parse(EqLogEvent eqLogEvent, String todMessage) {
+    // Remove stuff that can get in the way of target detection: uppercase, "tod", and extra
+    // whitespace.
+    todMessage = todMessage.toLowerCase();
+    todMessage = todMessage.replace("tod", "").trim();
 
     // Give up if there's any indication that this is a relative ToD.
-    boolean containsDigit = guildChatText.matches(".*\\d.*");
+    boolean containsDigit = todMessage.matches(".*\\d.*");
     boolean containsRelativeTodIndicator = false;
     for (String relativeTodIndicator : RELATIVE_TOD_INDICATORS) {
-      if (guildChatText.contains(relativeTodIndicator)) {
+      if (todMessage.contains(relativeTodIndicator)) {
         containsRelativeTodIndicator = true;
         break;
       }
@@ -68,7 +59,7 @@ public class GameTodParser {
     // Give up if there's any indication that this is a non-ToD.
     boolean containsNonTodIndicator = false;
     for (String nonTodIndicator : NON_TOD_INDICATORS) {
-      if (guildChatText.contains(nonTodIndicator)) {
+      if (todMessage.contains(nonTodIndicator)) {
         containsNonTodIndicator = true;
         break;
       }
@@ -77,7 +68,7 @@ public class GameTodParser {
       return Optional.empty();
     }
 
-    Optional<RaidTarget> maybeRaidTarget = getRaidTargetFuzzyMatch(guildChatText);
+    Optional<RaidTarget> maybeRaidTarget = getRaidTargetFuzzyMatch(todMessage);
     if (maybeRaidTarget.isEmpty()) {
       return Optional.empty();
     }
@@ -140,14 +131,6 @@ public class GameTodParser {
     // TODO: Fix this somewhere else further upstream.
     names.remove("");
     return names;
-  }
-
-  private static Optional<String> getGuildChatMessage(EqLogEvent eqLogEvent) {
-    Matcher matcher = GUILD_CHAT_PATTERN.matcher(eqLogEvent.getPayload());
-    if (!matcher.matches()) {
-      return Optional.empty();
-    }
-    return Optional.of(matcher.group(1));
   }
 
 }

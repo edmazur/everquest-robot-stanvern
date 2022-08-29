@@ -72,7 +72,7 @@ public class GameTodDetectorBenchmark {
     GameTodDetector gameTodDetector = new GameTodDetector();
     List<EqLogEvent> incorrectDetections = new ArrayList<>();
     for (EqLogEvent eqLogEvent : eqLogEvents) {
-      if (gameTodDetector.containsTod(eqLogEvent) != expectingTod) {
+      if (gameTodDetector.getTodMessage(eqLogEvent).isPresent() != expectingTod) {
         incorrectDetections.add(eqLogEvent);
       }
     }
