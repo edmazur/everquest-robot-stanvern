@@ -33,8 +33,7 @@ public class GameTodParser {
   public Optional<GameTodParseResult> parse(EqLogEvent eqLogEvent, String todMessage) {
     // Remove stuff that can get in the way of target detection: uppercase, "tod", and extra
     // whitespace.
-    todMessage = todMessage.toLowerCase();
-    todMessage = todMessage.replace("tod", "").trim();
+    todMessage = todMessage.toLowerCase().replace("tod", "").trim();
 
     // Give up if there's any indication that this is a relative ToD.
     boolean containsDigit = todMessage.matches(".*\\d.*");
