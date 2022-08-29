@@ -1,7 +1,5 @@
 package com.edmazur.eqrs.game.listener;
 
-import static java.util.Map.entry;
-
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.game.RaidTarget;
 import com.edmazur.eqrs.game.RaidTargets;
@@ -10,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.apache.commons.text.similarity.LevenshteinDistance;
@@ -24,10 +21,6 @@ public class GameTodParser {
       new HashSet<>(Arrays.asList("sec", "min", "hour"));
   private static final Set<String> NON_TOD_INDICATORS =
       new HashSet<>(Arrays.asList("?", "skip", "unsure"));
-  // One-off bad fuzzy match cases where they can't be tuned out with other parameters.
-  private static final Map<String, String> BLOCKLISTED_FUZZY_MATCHES = Map.ofEntries(
-      entry("real", "dread")
-  );
   private static final int MIN_LENGTH_TO_ALLOW_FUZZY_MATCH = 5;
   private static final int MAX_EDIT_DISTANCE = 1;
 
@@ -91,12 +84,7 @@ public class GameTodParser {
         // ...and for each possible target...
         for (RaidTarget raidTarget : raidTargets.getAllStaleAllowed()) {
           for (String nameForMatching : getNamesForMatching(raidTarget)) {
-            boolean isBlockedlistedFuzzyMatch = BLOCKLISTED_FUZZY_MATCHES.containsKey(subText)
-                && BLOCKLISTED_FUZZY_MATCHES.get(subText).equals(nameForMatching);
-            boolean allowFuzzyMatch =
-                nameForMatching.length() >= MIN_LENGTH_TO_ALLOW_FUZZY_MATCH
-                && !isBlockedlistedFuzzyMatch;
-            if (allowFuzzyMatch) {
+            if (nameForMatching.length() >= MIN_LENGTH_TO_ALLOW_FUZZY_MATCH) {
               // If fuzzy match and it's better than what's been seen so far, save result.
               int editDistance = editDistanceCalculator.apply(nameForMatching, subText);
               if (editDistance != -1 && editDistance < bestFuzzyMatchEditDistance) {
