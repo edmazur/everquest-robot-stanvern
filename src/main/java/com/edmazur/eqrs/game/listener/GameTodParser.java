@@ -20,7 +20,7 @@ public class GameTodParser {
   private static final Set<String> RELATIVE_TOD_INDICATORS =
       new HashSet<>(Arrays.asList("sec", "min", "hour"));
   private static final Set<String> NON_TOD_INDICATORS =
-      new HashSet<>(Arrays.asList("?", "skip", "unsure"));
+      new HashSet<>(Arrays.asList("skip", "unsure"));
   private static final int MIN_LENGTH_TO_ALLOW_FUZZY_MATCH = 5;
   private static final int MAX_EDIT_DISTANCE = 1;
 
@@ -30,43 +30,43 @@ public class GameTodParser {
     this.raidTargets = raidTargets;
   }
 
-  public Optional<GameTodParseResult> parse(EqLogEvent eqLogEvent, String todMessage) {
+  public GameTodParseResult parse(EqLogEvent eqLogEvent, String todMessage) {
     // Remove stuff that can get in the way of target detection: uppercase, "tod", and extra
     // whitespace.
     todMessage = todMessage.toLowerCase().replace("tod", "").trim();
 
-    // Give up if there's any indication that this is a relative ToD.
-    boolean containsDigit = todMessage.matches(".*\\d.*");
-    boolean containsRelativeTodIndicator = false;
-    for (String relativeTodIndicator : RELATIVE_TOD_INDICATORS) {
-      if (todMessage.contains(relativeTodIndicator)) {
-        containsRelativeTodIndicator = true;
-        break;
-      }
-    }
-    if (containsDigit || containsRelativeTodIndicator) {
-      return Optional.empty();
-    }
-
     // Give up if there's any indication that this is a non-ToD.
-    boolean containsNonTodIndicator = false;
+    if (todMessage.contains("?")) {
+      return GameTodParseResult.fail("Saw a question mark, which means this might be a question "
+          + "about a ToD");
+    }
     for (String nonTodIndicator : NON_TOD_INDICATORS) {
       if (todMessage.contains(nonTodIndicator)) {
-        containsNonTodIndicator = true;
-        break;
+        return GameTodParseResult.fail("Saw `" + nonTodIndicator + "`, which means this might not "
+            + "be a ToD");
       }
     }
-    if (containsNonTodIndicator) {
-      return Optional.empty();
+
+    // Give up if there's any indication that this is a relative ToD.
+    if (todMessage.matches(".*\\d.*")) {
+      return GameTodParseResult.fail("Saw a number, which means this might be a relative ToD, "
+          + "which I'm not smart enough to auto-parse");
+    }
+    for (String relativeTodIndicator : RELATIVE_TOD_INDICATORS) {
+      if (todMessage.contains(relativeTodIndicator)) {
+        return GameTodParseResult.fail(
+            "Saw `" + relativeTodIndicator + "`, which means this might be a relative ToD, which "
+                + "I'm not smart enough to auto-parse");
+      }
     }
 
     Optional<RaidTarget> maybeRaidTarget = getRaidTargetFuzzyMatch(todMessage);
     if (maybeRaidTarget.isEmpty()) {
-      return Optional.empty();
+      return GameTodParseResult.fail("Did not find a known target name");
     }
     RaidTarget raidTarget = maybeRaidTarget.get();
     LocalDateTime timeOfDeath = eqLogEvent.getTimestamp();
-    return Optional.of(new GameTodParseResult(raidTarget, timeOfDeath));
+    return GameTodParseResult.success(raidTarget, timeOfDeath);
   }
 
   // TODO: Factor this out somewhere and re-use it in the Discord parser too.

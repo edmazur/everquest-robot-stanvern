@@ -42,12 +42,17 @@ public class GameTodListener implements EqLogListener {
     Optional<String> maybeTodMessage = gameTodDetector.getTodMessage(eqLogEvent);
     if (maybeTodMessage.isPresent()) {
       for (DiscordChannel discordChannel : getChannels()) {
-        CompletableFuture<Message> messageFuture = discord.sendMessage(
-            discordChannel, "⏲ Possible ToD sighting, ET: `" + eqLogEvent.getFullLine() + "`");
-        Optional<GameTodParseResult> maybeGameTodParseResult =
+        GameTodParseResult gameTodParseResult =
             gameTodParser.parse(eqLogEvent, maybeTodMessage.get());
-        if (maybeGameTodParseResult.isPresent()) {
-          messageFuture.join().reply(getTodInput(maybeGameTodParseResult.get()));
+        String discordMessage = "⏲ Possible ToD sighting, ET: `" + eqLogEvent.getFullLine() + "`";
+        if (!gameTodParseResult.wasSuccessfullyParsed()) {
+          discordMessage +=
+              " (**not** auto-parsing, reason: " + gameTodParseResult.getError() + ")";
+        }
+        CompletableFuture<Message> messageFuture =
+            discord.sendMessage(discordChannel, discordMessage);
+        if (gameTodParseResult.wasSuccessfullyParsed()) {
+          messageFuture.join().reply(getTodInput(gameTodParseResult));
         }
       }
     }
