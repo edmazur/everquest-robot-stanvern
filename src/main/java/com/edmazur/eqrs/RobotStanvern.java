@@ -159,18 +159,25 @@ public class RobotStanvern {
     scheduledExecutorService.scheduleAtFixedRate(todWindowSpeaker, 0, 1, TimeUnit.MINUTES);
 
     // Parse the log.
-    EqLog eqLog = new EqLog(
-        Paths.get(config.getString(Property.EVERQUEST_INSTALL_DIRECTORY)),
-        ZoneId.of(config.getString(Property.TIMEZONE_GAME)),
-        config.getString(Property.EVERQUEST_SERVER),
-        character,
-        Instant.now(),
-        Instant.MAX);
-    LOGGER.log("Reading log from: " + character);
-    for (EqLogListener eqLogListener : eqLogListeners) {
-      eqLog.addListener(eqLogListener);
+    while (true) {
+      EqLog eqLog = new EqLog(
+          Paths.get(config.getString(Property.EVERQUEST_INSTALL_DIRECTORY)),
+          ZoneId.of(config.getString(Property.TIMEZONE_GAME)),
+          config.getString(Property.EVERQUEST_SERVER),
+          character,
+          Instant.now(),
+          Instant.MAX);
+      LOGGER.log("Reading log from: " + character);
+      for (EqLogListener eqLogListener : eqLogListeners) {
+        eqLog.addListener(eqLogListener);
+      }
+      try {
+        eqLog.run();
+      } catch (Exception e) {
+        LOGGER.log(
+            "Uncaught exception from main thread, restarting. This generally should not happen.");
+      }
     }
-    eqLog.run();
   }
 
 }
