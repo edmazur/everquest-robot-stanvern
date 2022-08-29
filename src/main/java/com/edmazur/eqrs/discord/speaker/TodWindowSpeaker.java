@@ -15,7 +15,7 @@ public class TodWindowSpeaker implements Runnable {
 
   private static final List<DiscordChannel> PROD_CHANNELS = Arrays.asList(
       DiscordChannel.FOW_TIMERS,
-      DiscordChannel.TBD_TIMERS);
+      DiscordChannel.GG_TIMERS);
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_TIMERS;
 
   private final Config config;

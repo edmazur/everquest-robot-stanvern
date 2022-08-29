@@ -52,7 +52,7 @@ public class DiscordTodListener implements MessageCreateListener {
 
   private static final List<DiscordChannel> PROD_CHANNELS = Arrays.asList(
       DiscordChannel.FOW_TOD,
-      DiscordChannel.TBD_TOD);
+      DiscordChannel.GG_TOD);
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_TOD;
 
   private static final File SUCCESS_IMAGE = new File("src/main/resources/str.png");

@@ -22,7 +22,7 @@ public class MotdListener implements EqLogListener {
 
   private static final List<DiscordChannel> PROD_CHANNELS = List.of(
       DiscordChannel.FOW_RAIDER_GMOTD,
-      DiscordChannel.TBD_GMOTD);
+      DiscordChannel.GG_GMOTD);
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_GENERAL;
 
   private final Config config;

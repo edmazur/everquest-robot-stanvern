@@ -19,10 +19,10 @@ public class RaidTargetSpawnListener implements EqLogListener {
 
   private static final List<DiscordChannel> PROD_BATPHONE_CHANNELS = List.of(
       DiscordChannel.FOW_RAID_BATPHONE,
-      DiscordChannel.TBD_BATPHONE);
+      DiscordChannel.GG_BATPHONE);
   private static final List<DiscordChannel> PROD_NONBATPHONE_CHANNELS = List.of(
       DiscordChannel.FOW_RAIDER_CHAT,
-      DiscordChannel.TBD_RAIDER_CHAT);
+      DiscordChannel.GG_MEMBERS_CHAT);
   private static final DiscordChannel TEST_BATPHONE_CHANNEL = DiscordChannel.TEST_BATPHONE;
   private static final DiscordChannel TEST_NONBATPHONE_CHANNEL = DiscordChannel.TEST_GENERAL;
 

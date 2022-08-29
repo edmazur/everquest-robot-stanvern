@@ -18,7 +18,7 @@ public class GameTodListener implements EqLogListener {
 
   private static final List<DiscordChannel> PROD_CHANNELS = List.of(
       DiscordChannel.FOW_TOD,
-      DiscordChannel.TBD_TOD);
+      DiscordChannel.GG_TOD);
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_TOD;
 
   private final Config config;

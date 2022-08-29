@@ -11,7 +11,7 @@ public class EarthquakeListener implements EqLogListener {
 
   private static final List<DiscordChannel> PROD_CHANNELS = List.of(
       DiscordChannel.FOW_RAIDER_CHAT,
-      DiscordChannel.TBD_RAIDER_CHAT);
+      DiscordChannel.GG_MEMBERS_CHAT);
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_GENERAL;
 
   private final Config config;
