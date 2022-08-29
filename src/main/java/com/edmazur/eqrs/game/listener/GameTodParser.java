@@ -23,13 +23,13 @@ public class GameTodParser {
   private static final Set<String> RELATIVE_TOD_INDICATORS =
       new HashSet<>(Arrays.asList("sec", "min", "hour"));
   private static final Set<String> NON_TOD_INDICATORS =
-      new HashSet<>(Arrays.asList("skip"));
+      new HashSet<>(Arrays.asList("?", "skip", "unsure"));
   // One-off bad fuzzy match cases where they can't be tuned out with other parameters.
   private static final Map<String, String> BLOCKLISTED_FUZZY_MATCHES = Map.ofEntries(
       entry("real", "dread")
   );
   private static final int MIN_LENGTH_TO_ALLOW_FUZZY_MATCH = 5;
-  private static final int MAX_EDIT_DISTANCE = 2;
+  private static final int MAX_EDIT_DISTANCE = 1;
 
   private RaidTargets raidTargets;
 

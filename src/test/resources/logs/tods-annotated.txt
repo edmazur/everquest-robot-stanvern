@@ -19,7 +19,7 @@
 [Thu Feb 03 20:16:19 2022] Alou tells the guild, 'Vyemm ToD' # Lord Vyemm
 [Thu Feb 03 20:31:00 2022] Chalara tells the guild, 'tod vox' # Lady Vox
 [Thu Feb 03 20:52:22 2022] Belated tells the guild, 'naggy tod' # Lord Nagafen
-[Thu Feb 03 22:01:57 2022] Skyzzl tells the guild, 'so Lady M TOD?' # Lady Mirenilla
+[Thu Feb 03 22:01:57 2022] Skyzzl tells the guild, 'so Lady M TOD?' # -
 [Thu Feb 03 22:52:49 2022] Lilsticky tells the guild, 'ToD for vindi' # Derakor the Vindicator
 [Thu Feb 03 23:14:46 2022] Yober tells the guild, 'vulak tod' # Vulak`Aerr
 [Sat Feb 05 16:10:30 2022] Arii tells the guild, 'VS tod' # Venril Sathir
@@ -108,7 +108,7 @@
 [Sat Feb 19 20:50:37 2022] Kaisa tells the guild, 'ToD Cekenar' # Cekenar
 [Sun Feb 20 00:31:50 2022] Skyzzl tells the guild, 'Koi TOD' # Lord Koi`Doken
 [Sun Feb 20 01:43:26 2022] Leshau tells the guild, 'telk tod' # Telkorenar
-[Sun Feb 20 21:33:30 2022] Ziralc tells the guild, 'Vidni !ToD' # Derakor the Vindicator
+[Sun Feb 20 21:33:30 2022] Ziralc tells the guild, 'Vidni !ToD' # -
 [Mon Feb 21 05:12:45 2022] Menehune tells the guild, 'LODI TOD' # Lodizal
 [Mon Feb 21 11:54:39 2022] Kaisa tells the guild, 'prolly ToD KDT' # Keldor Dek`Torek
 [Mon Feb 21 12:02:21 2022] Kaisa tells the guild, 'ToD Keldor Dek`Torek' # Keldor Dek`Torek
@@ -127,7 +127,7 @@
 [Sat Feb 26 15:26:19 2022] Yober tells the guild, 'Cekenar tod' # Cekenar
 [Sat Feb 26 15:51:39 2022] Kaisa tells the guild, 'ToD Gozzrem' # Gozzrem
 [Sat Feb 26 16:37:25 2022] Skyzzl tells the guild, 'sevalak tod' # Sevalak
-[Sat Feb 26 16:42:00 2022] Pikerexe tells the guild, 'Keldorak TOD ' # Kelorek`Dar
+[Sat Feb 26 16:42:00 2022] Pikerexe tells the guild, 'Keldorak TOD ' # -
 [Sat Feb 26 18:17:48 2022] Skyzzl tells the guild, 'Aary TOD bitchezzzz' # Aaryonar
 [Sun Feb 27 01:19:47 2022] Yober tells the guild, 'doze tod plus or minus a few minutes' # -
 [Sun Feb 27 01:49:23 2022] Yober tells the guild, 'tod' # -
@@ -144,3 +144,10 @@
 [Mon Feb 28 21:42:27 2022] Hernan tells the guild, 'Velk ToD' # Velketor the Sorcerer
 [Sat Jun 18 18:34:03 2022] You say to your guild, 'test test test - i'm going to say a fake tod to test something, it's not real - test test test' # -
 [Sat Jun 18 23:39:53 2022] Tidus tells the guild, 'lodi tod *skip*' # -
+[Wed Jun 29 03:29:12 2022] Mikhal tells the guild, 'Lord K tod' # -
+[Wed Jun 22 01:42:16 2022] Chandelure tells the guild, 'vox not up, unsure of TOD, figured i'd check' # -
+[Mon Aug 01 09:58:48 2022] Basen tells the guild, 'weird, not that it matters, but I can't find the AoW ToD in my logs' # -
+[Mon Aug 08 08:04:29 2022] Zainne tells the guild, 'might just take the tod' # -
+[Sun Aug 14 08:40:49 2022] Brett tells the guild, 'tod Gula' # -
+[Mon Aug 15 19:42:20 2022] Screeching tells the guild, 'it was +1 off my tod from last night' # -
+[Sat Aug 27 00:55:55 2022] Gutless tells the guild, 'where do i find that ToD channel?' # -
