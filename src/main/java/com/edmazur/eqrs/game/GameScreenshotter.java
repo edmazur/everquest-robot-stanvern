@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class GameScreenshotter {
@@ -71,6 +72,10 @@ public class GameScreenshotter {
     Runtime.getRuntime().exec(
         new String[] {"xdotool", "search", "--name", "^" + GAME_CLIENT_WINDOW_TITLE + "$",
             "windowactivate", "--sync"}).waitFor();
+    // In theory, the waitFor() call above should mean that the game client is definitely activated
+    // at this point. In practice, the screenshot still sometimes comes out stale. Sleep briefly
+    // here to try to increase the likelihood of the game client truly being activated.
+    TimeUnit.SECONDS.sleep(1);
   }
 
   private File getScreenshot() throws IOException, InterruptedException {
