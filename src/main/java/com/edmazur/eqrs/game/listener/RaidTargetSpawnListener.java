@@ -27,7 +27,7 @@ public class RaidTargetSpawnListener implements EqLogListener {
   private static final DiscordChannel TEST_NONBATPHONE_CHANNEL = DiscordChannel.TEST_GENERAL;
 
   private static final String REGULAR_MESSAGE =
-      "@everyone %s POP! Stanvern's stream should be up if you want to confirm. "
+      "@everyone %s POP! Stanvern's stream might be up if you want to confirm. "
       + "Stay tuned for a decision from an officer on whether we will contest it. Be ready in case "
       + "we do!\n"
       + "\n"
@@ -35,7 +35,7 @@ public class RaidTargetSpawnListener implements EqLogListener {
       + "Broadcast System). I'm just a dumb robot and I'm really sorry if I made a mistake!)";
 
   private static final String BATPHONE_MESSAGE =
-      "@everyone %s POP! Go go go! Stanvern's stream should be up if you want to confirm.\n"
+      "@everyone %s POP! Go go go! Stanvern's stream might be up if you want to confirm.\n"
       + "\n"
       + "(Disclaimer: This is an automated message, brought to you by S.E.B.S. (Stanvern Emergency "
       + "Broadcast System). I'm just a dumb robot and I'm really sorry if I made a mistake!)";
