@@ -1,7 +1,10 @@
 Ale
 File
+Horn
 Key
 Note
 Pick
+Pot
 Rod
 Stein
+Wand
