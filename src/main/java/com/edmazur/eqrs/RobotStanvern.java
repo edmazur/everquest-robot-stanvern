@@ -123,7 +123,7 @@ public class RobotStanvern {
     eqLogListeners.add(motdListener);
 
     // Add ToD listener.
-    GameTodDetector gameTodDetector = new GameTodDetector();
+    GameTodDetector gameTodDetector = new GameTodDetector(config);
     GameTodParser gameTodParser = new GameTodParser(raidTargets);
     GameTodListener gameTodListener =
         new GameTodListener(config, discord, gameTodDetector, gameTodParser);
@@ -135,7 +135,7 @@ public class RobotStanvern {
     eqLogListeners.add(tickListener);
 
     // Add grats listener.
-    GratsDetector gratsDetector = new GratsDetector();
+    GratsDetector gratsDetector = new GratsDetector(config);
     GratsListener gratsListener =
         new GratsListener(config, discord, gratsDetector, itemDatabase, itemScreenshotter);
     eqLogListeners.add(gratsListener);

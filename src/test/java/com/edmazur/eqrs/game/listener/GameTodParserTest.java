@@ -34,7 +34,7 @@ class GameTodParserTest {
     Json json = new Json();
     RaidTargets raidTargets = new RaidTargets(config, json);
     gameTodParser = new GameTodParser(raidTargets);
-    gameTodDetector = new GameTodDetector();
+    gameTodDetector = new GameTodDetector(config);
   }
 
   private static List<Arguments> provideTestCases() throws IOException {

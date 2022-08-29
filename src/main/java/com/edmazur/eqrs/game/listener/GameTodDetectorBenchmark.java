@@ -3,6 +3,7 @@
 package com.edmazur.eqrs.game.listener;
 
 import com.edmazur.eqlp.EqLogEvent;
+import com.edmazur.eqrs.Config;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -69,7 +70,8 @@ public class GameTodDetectorBenchmark {
   }
 
   private static List<EqLogEvent> runBenchmark(List<EqLogEvent> eqLogEvents, boolean expectingTod) {
-    GameTodDetector gameTodDetector = new GameTodDetector();
+    Config config = new Config();
+    GameTodDetector gameTodDetector = new GameTodDetector(config);
     List<EqLogEvent> incorrectDetections = new ArrayList<>();
     for (EqLogEvent eqLogEvent : eqLogEvents) {
       if (gameTodDetector.getTodMessage(eqLogEvent).isPresent() != expectingTod) {
