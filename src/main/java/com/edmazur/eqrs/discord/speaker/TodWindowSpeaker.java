@@ -40,6 +40,11 @@ public class TodWindowSpeaker implements Runnable {
       Table table = raidTargetTableMaker.make();
       for (DiscordChannel discordChannel : getChannels()) {
         discord.deleteMessagesMatchingPredicate(discordChannel, DiscordPredicate.isFromYourself());
+        for (String messages : discordTableFormatter.getMessages(table, Map.of(0, 1))) {
+          // Wait for the Future to complete before sending the next message. In testing, not having
+          // this in place led to out-of-order messages when they got sent in rapid succession.
+          discord.sendMessage(discordChannel, messages).join();
+        }
         discord.sendMessage(discordChannel,
             "**What does `[N]` mean?**\n"
             + "- If a number appears before a name, it means the window is extrapolated.\n"
@@ -54,11 +59,6 @@ public class TodWindowSpeaker implements Runnable {
             + "\n"
             + "**How do I avoid being continuously pinged by this channel?**\n"
             + "- Permanently mute it. The bot continously deletes and reposts every minute.");
-        for (String messages : discordTableFormatter.getMessages(table, Map.of(0, 1))) {
-          // Wait for the Future to complete before sending the next message. In testing, not having
-          // this in place led to out-of-order messages when they got sent in rapid succession.
-          discord.sendMessage(discordChannel, messages).join();
-        }
       }
     } catch (Throwable t) {
       t.printStackTrace();
