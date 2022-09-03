@@ -17,10 +17,8 @@ import org.ahocorasick.trie.PayloadTrie.PayloadTrieBuilder;
 
 public class ItemDatabase {
 
-  private static final File ITEM_FILE =
-      new File("/home/mazur/git/everquest-robot-stanvern/src/main/resources/items.txt");
-  private static final File SPAMMY_ITEM_FILE =
-      new File("/home/mazur/git/everquest-robot-stanvern/src/main/resources/spammy-items.txt");
+  private static final File ITEM_FILE = new File("src/main/resources/items.txt");
+  private static final File SPAMMY_ITEM_FILE = new File("src/main/resources/spammy-items.txt");
 
   private PayloadTrie<Item> itemsByName;
   private Set<String> spammyItems;

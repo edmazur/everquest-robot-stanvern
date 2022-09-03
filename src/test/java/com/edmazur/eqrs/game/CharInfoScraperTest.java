@@ -12,8 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class CharInfoScraperTest {
 
-  private static final String IMAGE_DIRECTORY =
-      "/home/mazur/git/everquest-robot-stanvern/src/test/resources/screenshots";
+  private static final String IMAGE_DIRECTORY = "src/test/resources/screenshots";
 
   private CharInfoScraper charInfoScraper;
 

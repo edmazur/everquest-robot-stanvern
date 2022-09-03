@@ -4,12 +4,12 @@ import java.io.IOException;
 
 public class SoundPlayer {
 
+  private static final String SOUND_PATH = "src/main/resources";
+
   public enum Sound {
 
-    DICE("/home/mazur/git/everquest-robot-stanvern/src/main/resources/dice.mp3"),
-
-    ITS_TIME_TO_SLAY_THE_DRAGON(
-        "/home/mazur/eclipse-workspace/RobotStanvern/audio/time-to-slay-the-dragon.mp3"),
+    DICE("dice.mp3"),
+    ITS_TIME_TO_SLAY_THE_DRAGON("its-time-to-slay-the-dragon.mp3"),
 
     ;
 
@@ -20,7 +20,7 @@ public class SoundPlayer {
     }
 
     private String getPath() {
-      return path;
+      return SOUND_PATH + "/" + path;
     }
 
   }

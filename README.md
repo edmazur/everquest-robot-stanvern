@@ -44,7 +44,6 @@ $ ./gradlew run --args='YourCharacterName --debug'
 - Game: Listens for earthquakes and sends to Discord.
 
 # TODO
-- Eliminate references to my local file system.
 - Eliminate Runtime.exec() usage.
 - Eliminate System.err/System.out logging.
 - Add unit tests.

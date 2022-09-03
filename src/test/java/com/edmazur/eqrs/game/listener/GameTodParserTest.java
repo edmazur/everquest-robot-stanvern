@@ -19,8 +19,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class GameTodParserTest {
 
-  private static final File TEST_CASE_FILE = new File(
-      "/home/mazur/git/everquest-robot-stanvern/src/test/resources/logs/tods-annotated.txt");
+  private static final File TEST_CASE_FILE = new File("src/test/resources/logs/tods-annotated.txt");
 
   private static GameTodParser gameTodParser;
   private static GameTodDetector gameTodDetector;
