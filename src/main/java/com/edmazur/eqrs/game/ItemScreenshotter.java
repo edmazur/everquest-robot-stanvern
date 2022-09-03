@@ -1,5 +1,6 @@
 package com.edmazur.eqrs.game;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import java.io.File;
 import java.util.UUID;
 import org.openqa.selenium.By;
@@ -12,12 +13,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 public class ItemScreenshotter {
 
-  // TODO: This breaks every time your local Chrome version gets updated. Figure out a way to
-  // mitigate that.
-  private static final String CHROME_DRIVER = "src/main/resources/chromedriver-103.0.5060.53";
-
   public File get(Item item) {
-    System.setProperty("webdriver.chrome.driver", CHROME_DRIVER);
+    WebDriverManager.chromedriver().setup();
     ChromeOptions options = new ChromeOptions();
     options.addArguments("--headless");
     options.addArguments("--window-size=1980,960");
