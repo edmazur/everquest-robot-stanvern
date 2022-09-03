@@ -65,7 +65,7 @@
 [Sat Feb 12 22:00:58 2022] Skyzzl tells the guild, 'Cekenar TOD' # Cekenar
 [Sat Feb 12 22:01:01 2022] Kaisa tells the guild, 'ToD Cekenar' # Cekenar
 [Sun Feb 13 01:08:29 2022] Alou tells the guild, 'Dain Frostreaver IV ToD' # Dain Frostreaver IV
-[Sun Feb 13 03:26:06 2022] Menehune tells the guild, 'TOD Nillipuss' # Error: Did not find a known target name
+[Sun Feb 13 03:26:06 2022] Menehune tells the guild, 'TOD Nillipuss' # Nillipuss
 [Sun Feb 13 04:45:15 2022] Yober tells the guild, 'fesh tod' # Lord Feshlak
 [Sun Feb 13 12:28:33 2022] Skyzzl tells the guild, 'Vyemm TOD' # Lord Vyemm
 [Sun Feb 13 13:10:50 2022] Skyzzl tells the guild, 'Lady M TOD' # Lady Mirenilla
