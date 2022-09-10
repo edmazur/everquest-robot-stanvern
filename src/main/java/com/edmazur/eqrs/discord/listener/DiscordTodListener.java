@@ -135,7 +135,7 @@ public class DiscordTodListener implements MessageCreateListener {
           return;
         }
         LocalDateTime timestamp = maybeTimestamp.get();
-        if (timestamp.compareTo(LocalDateTime.now()) > 0) {
+        if (timestamp.isAfter(LocalDateTime.now())) {
           event.addReactionsToMessage("❌");
           event.getMessage().reply(
               "Sorry, ToD cannot be in the future: `" + timestampToParse + "`");
@@ -182,7 +182,7 @@ public class DiscordTodListener implements MessageCreateListener {
           return;
         }
         LocalDateTime timestamp = maybeTimestamp.get();
-        if (timestamp.compareTo(LocalDateTime.now()) > 0) {
+        if (timestamp.isAfter(LocalDateTime.now())) {
           event.addReactionsToMessage("❌");
           event.getMessage().reply(
               "Sorry, quake time cannot be in the future: `" + timestampToParse + "`");
