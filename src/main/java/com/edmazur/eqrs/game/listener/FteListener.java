@@ -13,7 +13,7 @@ public class FteListener implements EqLogListener {
 
   private static final boolean SEND_DISCORD_MESSAGE_AS_DM = true;
 
-  private static final DiscordChannel PROD_CHANNEL = DiscordChannel.FOW_RAIDER_CHAT;
+  private static final DiscordChannel PROD_CHANNEL = DiscordChannel.GG_MEMBERS_CHAT;
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_GENERAL;
 
   private static final Pattern FTE_PATTERN = Pattern.compile(".+ engages \\w+!");

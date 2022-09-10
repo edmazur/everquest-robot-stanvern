@@ -26,9 +26,7 @@ public class CharInfoScreenshotListener implements MessageCreateListener {
   // re-enable the OCR stuff and see if the server can handle the load.
   private static final boolean ENABLE = false;
 
-  private static final List<DiscordChannel> CHANNELS = List.of(
-      DiscordChannel.FOW_BOT_BOOT_CAMP,
-      DiscordChannel.FOW_BOT_SCREAMING_ROOM);
+  private static final DiscordChannel CHANNEL = DiscordChannel.TEST_GENERAL;
   private static final Predicate<Message> PREDICATE = DiscordPredicate.hasImage();
 
   private static final File SUCCESS_IMAGE = new File("src/main/resources/str.png");
@@ -52,11 +50,8 @@ public class CharInfoScreenshotListener implements MessageCreateListener {
       return;
     }
 
-    for (DiscordChannel discordChannel : getChannelsToReadFrom()) {
-      for (Message message :
-          discord.getUnrepliedMessagesMatchingPredicate(discordChannel, PREDICATE)) {
-        handle(message);
-      }
+    for (Message message : discord.getUnrepliedMessagesMatchingPredicate(getChannel(), PREDICATE)) {
+      handle(message);
     }
   }
 
@@ -66,8 +61,7 @@ public class CharInfoScreenshotListener implements MessageCreateListener {
       return;
     }
 
-    if (DiscordChannel.containsEventChannel(event, getChannelsToReadFrom())
-        && PREDICATE.test(event.getMessage())) {
+    if (getChannel().isEventChannel(event) && PREDICATE.test(event.getMessage())) {
       handle(event.getMessage());
     }
   }
@@ -112,11 +106,11 @@ public class CharInfoScreenshotListener implements MessageCreateListener {
     }).start();
   }
 
-  private List<DiscordChannel> getChannelsToReadFrom() {
+  private DiscordChannel getChannel() {
     if (config.getBoolean(Property.DEBUG)) {
-      return List.of(DiscordChannel.TEST_GENERAL);
+      return DiscordChannel.TEST_GENERAL;
     } else {
-      return CHANNELS;
+      return CHANNEL;
     }
   }
 

@@ -21,8 +21,7 @@ public class BatphoneListener implements MessageCreateListener {
   private static final Logger LOGGER = new Logger();
 
   private static final List<DiscordChannel> CHANNELS_TO_READ_FROM = Arrays.asList(
-      DiscordChannel.FOW_RAID_BATPHONE,
-      DiscordChannel.FOW_AFTERHOURS_BATPHONE);
+      DiscordChannel.GG_BATPHONE);
 
   private final Config config;
   private final Discord discord;

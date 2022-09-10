@@ -12,8 +12,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,9 +48,7 @@ public class DiscordTodListener implements MessageCreateListener {
   private static final DateTimeFormatter DATE_TIME_FORMATTER =
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-  private static final List<DiscordChannel> PROD_CHANNELS = Arrays.asList(
-      DiscordChannel.FOW_TOD,
-      DiscordChannel.GG_TOD);
+  private static final DiscordChannel PROD_CHANNEL = DiscordChannel.GG_TOD;
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_TOD;
 
   private static final File SUCCESS_IMAGE = new File("src/main/resources/str.png");
@@ -76,7 +72,7 @@ public class DiscordTodListener implements MessageCreateListener {
 
   @Override
   public void onMessageCreate(MessageCreateEvent event) {
-    if (DiscordChannel.containsEventChannel(event, getChannels())) {
+    if (getChannel().isEventChannel(event)) {
       Matcher helpMatcher = HELP_PATTERN.matcher(event.getMessageContent());
       if (helpMatcher.matches()) {
         event.getMessage().reply(
@@ -278,11 +274,11 @@ public class DiscordTodListener implements MessageCreateListener {
     return localDateTime.atZone(ZoneId.of("America/New_York")).toEpochSecond();
   }
 
-  private List<DiscordChannel> getChannels() {
+  private DiscordChannel getChannel() {
     if (config.getBoolean(Config.Property.DEBUG)) {
-      return List.of(TEST_CHANNEL);
+      return TEST_CHANNEL;
     } else {
-      return PROD_CHANNELS;
+      return PROD_CHANNEL;
     }
   }
 

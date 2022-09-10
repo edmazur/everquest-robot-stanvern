@@ -35,7 +35,7 @@ class TickListenerTest {
     EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
         "[Fri Jun 10 23:00:00 2022] Stanvern tells the guild, 'TICK'").get();
     tickListener.onEvent(eqLogEvent);
-    verify(mockDiscord, times(2)).sendMessage(any(DiscordChannel.class), eq(
+    verify(mockDiscord).sendMessage(any(DiscordChannel.class), eq(
         "🎟️ Possible tick sighting, ET: "
         + "`[Fri Jun 10 23:00:00 2022] Stanvern tells the guild, 'TICK'`"));
   }
@@ -52,26 +52,17 @@ class TickListenerTest {
     tickListener.onEvent(eqLogEvent2);
     tickListener.onEvent(eqLogEvent3);
     ArgumentCaptor<String> messagesCaptor = ArgumentCaptor.forClass(String.class);
-    verify(mockDiscord, times(4)).sendMessage(any(DiscordChannel.class), messagesCaptor.capture());
+    verify(mockDiscord, times(2)).sendMessage(any(DiscordChannel.class), messagesCaptor.capture());
     List<String> messages = messagesCaptor.getAllValues();
     assertEquals(
         "🎟️ Possible tick sighting, ET: "
             + "`[Fri Jun 10 23:00:00 2022] Stanvern tells the guild, 'TICK'`",
         messages.get(0));
     assertEquals(
-        "🎟️ Possible tick sighting, ET: "
-            + "`[Fri Jun 10 23:00:00 2022] Stanvern tells the guild, 'TICK'`",
+        "⬆️ Possible tick context, ET: "
+            + "`[Fri Jun 10 23:00:05 2022] Stanvern tells the guild, 'context in time'` "
+            + "(tick-taker's next message within 60 seconds)",
         messages.get(1));
-    assertEquals(
-        "⬆️ Possible tick context, ET: "
-            + "`[Fri Jun 10 23:00:05 2022] Stanvern tells the guild, 'context in time'` "
-            + "(tick-taker's next message within 60 seconds)",
-        messages.get(2));
-    assertEquals(
-        "⬆️ Possible tick context, ET: "
-            + "`[Fri Jun 10 23:00:05 2022] Stanvern tells the guild, 'context in time'` "
-            + "(tick-taker's next message within 60 seconds)",
-        messages.get(3));
   }
 
   @Test
@@ -83,16 +74,12 @@ class TickListenerTest {
     tickListener.onEvent(eqLogEvent1);
     tickListener.onEvent(eqLogEvent2);
     ArgumentCaptor<String> messagesCaptor = ArgumentCaptor.forClass(String.class);
-    verify(mockDiscord, times(2)).sendMessage(any(DiscordChannel.class), messagesCaptor.capture());
+    verify(mockDiscord).sendMessage(any(DiscordChannel.class), messagesCaptor.capture());
     List<String> messages = messagesCaptor.getAllValues();
     assertEquals(
         "🎟️ Possible tick sighting, ET: "
             + "`[Fri Jun 10 23:00:00 2022] Stanvern tells the guild, 'TICK'`",
         messages.get(0));
-    assertEquals(
-        "🎟️ Possible tick sighting, ET: "
-            + "`[Fri Jun 10 23:00:00 2022] Stanvern tells the guild, 'TICK'`",
-        messages.get(1));
   }
 
 }

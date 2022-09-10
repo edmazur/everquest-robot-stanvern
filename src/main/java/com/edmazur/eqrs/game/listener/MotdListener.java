@@ -7,7 +7,6 @@ import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.discord.DiscordPredicate;
-import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,9 +19,7 @@ public class MotdListener implements EqLogListener {
   private static final Pattern DISCORD_MOTD_PATTERN =
       Pattern.compile("`" + GAME_MOTD_PATTERN.pattern() + "`");
 
-  private static final List<DiscordChannel> PROD_CHANNELS = List.of(
-      DiscordChannel.FOW_RAIDER_GMOTD,
-      DiscordChannel.GG_GMOTD);
+  private static final DiscordChannel PROD_CHANNEL = DiscordChannel.GG_GMOTD;
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_GENERAL;
 
   private final Config config;
@@ -37,21 +34,19 @@ public class MotdListener implements EqLogListener {
   public void onEvent(EqLogEvent eqLogEvent) {
     Matcher matcher = GAME_MOTD_PATTERN.matcher(eqLogEvent.getPayload());
     if (matcher.matches()) {
-      for (DiscordChannel discordChannel : getChannels()) {
-        // Avoid repeating the same MotD when you manually /get or login.
-        Optional<String> maybeCurrentMotd = getCurrentMotd(discordChannel);
-        if (maybeCurrentMotd.isEmpty()) {
-          LOGGER.log("Could not read current MotD from Discord. This should not happen.");
-        } else {
-          if (maybeCurrentMotd.get().equals(eqLogEvent.getPayload())) {
-            continue;
-          }
+      // Avoid repeating the same MotD when you manually /get or login.
+      Optional<String> maybeCurrentMotd = getCurrentMotd(getChannel());
+      if (maybeCurrentMotd.isEmpty()) {
+        LOGGER.log("Could not read current MotD from Discord. This should not happen.");
+      } else {
+        if (maybeCurrentMotd.get().equals(eqLogEvent.getPayload())) {
+          return;
         }
-
-        // TODO: Maybe avoid sending multiple MotDs in quick succession (e.g. from fixing typos) by
-        // waiting a bit and only sending latest MotD.
-        discord.sendMessage(discordChannel, "`" + eqLogEvent.getPayload() + "`");
       }
+
+      // TODO: Maybe avoid sending multiple MotDs in quick succession (e.g. from fixing typos) by
+      // waiting a bit and only sending latest MotD.
+      discord.sendMessage(getChannel(), "`" + eqLogEvent.getPayload() + "`");
     }
   }
 
@@ -71,11 +66,11 @@ public class MotdListener implements EqLogListener {
     }
   }
 
-  private List<DiscordChannel> getChannels() {
+  private DiscordChannel getChannel() {
     if (config.getBoolean(Config.Property.DEBUG)) {
-      return List.of(TEST_CHANNEL);
+      return TEST_CHANNEL;
     } else {
-      return PROD_CHANNELS;
+      return PROD_CHANNEL;
     }
   }
 
