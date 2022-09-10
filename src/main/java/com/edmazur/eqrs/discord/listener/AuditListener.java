@@ -11,6 +11,7 @@ import com.edmazur.eqrs.discord.DiscordChannel;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -30,11 +31,18 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
           entry(DiscordCategory.GG_PHONES, DiscordChannel.GG_PHONE_AUDIT),
           entry(DiscordCategory.GG_IMPORTANT, DiscordChannel.GG_IMPORTANT_AUDIT)
       );
+  private static final List<DiscordChannel> PROD_UNAUDITED_CHANNELS = List.of(
+      DiscordChannel.GG_GMOTD,
+      DiscordChannel.GG_TICKS_AND_GRATS,
+      DiscordChannel.GG_TIMERS,
+      DiscordChannel.GG_TOD);
 
   private static final Map<DiscordCategory, DiscordChannel> TEST_CATEGORY_CHANNEL_MAP =
       Map.ofEntries(
           entry(DiscordCategory.TEST_IMPORATNT, DiscordChannel.TEST_IMPORTANT_AUDIT)
       );
+  private static final List<DiscordChannel> TEST_UNAUDITED_CHANNELS = List.of(
+      DiscordChannel.TEST_UNAUDITED);
 
   private enum MessageType {
     CREATE("New"),
@@ -89,16 +97,18 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
   }
 
   private void onMessage(
-      TextChannel channel,
+      TextChannel eventChannel,
       Instant instant,
       String author,
       String content,
       MessageType messageType) {
     for (Map.Entry<DiscordCategory, DiscordChannel> mapEntry : getCategoryChannelMap().entrySet()) {
-      DiscordCategory discordCategory = mapEntry.getKey();
-      DiscordChannel discordChannel = mapEntry.getValue();
-      if (discordCategory.isEventChannel(channel) && !discordChannel.isEventChannel(channel)) {
-        Optional<ServerChannel> maybeServerChannel = channel.asServerChannel();
+      DiscordCategory discordCategoryToAudit = mapEntry.getKey();
+      DiscordChannel discordChannelToWriteAuditLogTo = mapEntry.getValue();
+      if (discordCategoryToAudit.isEventChannel(eventChannel)
+          && !discordChannelToWriteAuditLogTo.isEventChannel(eventChannel)
+          && !DiscordChannel.containsEventChannel(eventChannel, getUnauditedChannels())) {
+        Optional<ServerChannel> maybeServerChannel = eventChannel.asServerChannel();
         if (maybeServerChannel.isEmpty()) {
           return;
         }
@@ -112,7 +122,7 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
             instant.atZone(ZoneId.of(config.getString(Property.TIMEZONE_GUILD)))
                 .format(DateTimeFormatter.RFC_1123_DATE_TIME),
             stripMentions(content));
-        discord.sendMessage(discordChannel, auditMessage);
+        discord.sendMessage(discordChannelToWriteAuditLogTo, auditMessage);
         break;
       }
     }
@@ -123,6 +133,14 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
       return TEST_CATEGORY_CHANNEL_MAP;
     } else {
       return PROD_CATEGORY_CHANNEL_MAP;
+    }
+  }
+
+  private List<DiscordChannel> getUnauditedChannels() {
+    if (config.getBoolean(Config.Property.DEBUG)) {
+      return TEST_UNAUDITED_CHANNELS;
+    } else {
+      return PROD_UNAUDITED_CHANNELS;
     }
   }
 
