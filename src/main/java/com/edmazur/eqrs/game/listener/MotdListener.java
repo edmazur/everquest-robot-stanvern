@@ -44,8 +44,6 @@ public class MotdListener implements EqLogListener {
         }
       }
 
-      // TODO: Maybe avoid sending multiple MotDs in quick succession (e.g. from fixing typos) by
-      // waiting a bit and only sending latest MotD.
       discord.sendMessage(getChannel(), "`" + eqLogEvent.getPayload() + "`");
     }
   }
