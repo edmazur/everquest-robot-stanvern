@@ -45,8 +45,8 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
   // TODO: Add a test setup for this once the FoW stuff is torn down.
   private static final Map<DiscordCategory, DiscordChannel> PROD_CATEGORY_CHANNEL_MAP =
       Map.ofEntries(
-          entry(DiscordCategory.TBD_PHONES, DiscordChannel.GG_PHONE_AUDIT),
-          entry(DiscordCategory.TBD_IMPORTANT, DiscordChannel.GG_IMPORTANT_AUDIT)
+          entry(DiscordCategory.GG_PHONES, DiscordChannel.GG_PHONE_AUDIT),
+          entry(DiscordCategory.GG_IMPORTANT, DiscordChannel.GG_IMPORTANT_AUDIT)
       );
 
   private enum MessageType {

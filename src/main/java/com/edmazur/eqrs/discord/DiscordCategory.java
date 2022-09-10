@@ -8,9 +8,9 @@ import org.javacord.api.event.message.MessageCreateEvent;
 
 public enum DiscordCategory {
 
-  // TBD server.
-  TBD_PHONES(1007149113957171220L),
-  TBD_IMPORTANT(1007150532919558266L),
+  // GG server.
+  GG_PHONES(1007149113957171220L),
+  GG_IMPORTANT(1007150532919558266L),
 
   ;
 
