@@ -4,6 +4,7 @@ import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.game.RaidTarget;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,6 +17,7 @@ public class Database {
   private static final int MYSQL_PORT = 3306;
 
   private static final String UPDATE_TOD_SQL = "UPDATE tods SET tod = '%s' WHERE target = '%s';";
+  private static final String GET_QUAKE_SQL = "SELECT lastquake FROM quakes;";
   private static final String UPDATE_QUAKE_SQL = "UPDATE quakes SET lastquake = '%s'";
 
   private static final DateTimeFormatter DATE_TIME_FORMATTER =
@@ -33,6 +35,21 @@ public class Database {
         DATE_TIME_FORMATTER.format(tod),
         raidTarget.getName());
     update(query);
+  }
+
+  public LocalDateTime getQuakeTime() {
+    try {
+      ResultSet resultSet = getConnection().createStatement().executeQuery(GET_QUAKE_SQL);
+      if (resultSet.next()) {
+        return resultSet.getTimestamp(1).toLocalDateTime();
+      } else {
+        LOGGER.log("Tried to get quake time, but no rows returned from database.");
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    // TODO: Handle this more gracefully.
+    throw new RuntimeException("Unable to get quake time");
   }
 
   public void updateQuakeTime(LocalDateTime quakeTime) {

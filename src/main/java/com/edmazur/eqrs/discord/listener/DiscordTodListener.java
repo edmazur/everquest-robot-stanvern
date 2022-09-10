@@ -123,7 +123,9 @@ public class DiscordTodListener implements MessageCreateListener {
               + "\n" + HELP_TARGET);
           return;
         }
-        RaidTarget raidTarget = maybeRaidTarget.get();
+        // This is final to avoid a VariableDeclarationUsageDistance checkstyle warning.
+        // TODO: Disable that check?
+        final RaidTarget raidTarget = maybeRaidTarget.get();
 
         // Parse timestamp.
         String timestampToParse = todParseMatcher.group(2);
@@ -139,6 +141,14 @@ public class DiscordTodListener implements MessageCreateListener {
           event.addReactionsToMessage("❌");
           event.getMessage().reply(
               "Sorry, ToD cannot be in the future: `" + timestampToParse + "`");
+          return;
+        }
+        LocalDateTime quakeTime = database.getQuakeTime();
+        if (timestamp.isBefore(quakeTime)) {
+          event.addReactionsToMessage("❌");
+          event.getMessage().reply(
+              "Sorry, ToD cannot be before quake time (" + DATE_TIME_FORMATTER.format(quakeTime)
+                  + " ET)");
           return;
         }
         String timeSince = "~" + getTimeSince(timestamp) + " ago";
