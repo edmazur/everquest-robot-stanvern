@@ -11,8 +11,6 @@ import com.edmazur.eqrs.discord.DiscordChannel;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -26,21 +24,6 @@ import org.javacord.api.listener.message.MessageEditListener;
 public class AuditListener implements MessageCreateListener, MessageEditListener {
 
   private static final Logger LOGGER = new Logger();
-
-  private static final List<DiscordChannel> PROD_CHANNELS_TO_READ_FROM = Arrays.asList(
-      DiscordChannel.FOW_RAID_BATPHONE,
-      DiscordChannel.FOW_AFTERHOURS_BATPHONE,
-      DiscordChannel.FOW_GUILD_ANNOUNCEMENTS);
-
-  private static final List<DiscordChannel> TEST_CHANNELS_TO_READ_FROM = Arrays.asList(
-      DiscordChannel.TEST_BATPHONE,
-      DiscordChannel.TEST_ANNOUNCEMENTS);
-
-  private static final DiscordChannel PROD_CHANNEL_TO_WRITE_TO =
-      DiscordChannel.FOW_ANNOUNCEMENT_AUDIT;
-
-  private static final DiscordChannel TEST_CHANNEL_TO_WRITE_TO =
-      DiscordChannel.TEST_ANNOUNCEMENT_AUDIT;
 
   // TODO: Add a test setup for this once the FoW stuff is torn down.
   private static final Map<DiscordCategory, DiscordChannel> PROD_CATEGORY_CHANNEL_MAP =
@@ -83,25 +66,12 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
         event.getMessageAuthor().getDisplayName(),
         event.getMessageContent(),
         MessageType.CREATE);
-    onMessageLegacy(
-        event.getChannel(),
-        event.getMessage().getCreationTimestamp(),
-        event.getMessageAuthor().getDisplayName(),
-        event.getMessageContent(),
-        MessageType.CREATE);
   }
 
   @Override
   public void onMessageEdit(MessageEditEvent event) {
     try {
       onMessage(
-          event.getChannel(),
-          event.requestMessage().get().getLastEditTimestamp().get(),
-          event.getMessageAuthor().isPresent()
-              ? event.getMessageAuthor().get().getDisplayName() : "",
-          event.getNewContent(),
-          MessageType.EDIT);
-      onMessageLegacy(
           event.getChannel(),
           event.requestMessage().get().getLastEditTimestamp().get(),
           event.getMessageAuthor().isPresent()
@@ -141,48 +111,6 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
         discord.sendMessage(discordChannel, auditMessage);
         break;
       }
-    }
-  }
-
-  // TODO: Remove this once the FoW stuff is torn down.
-  private void onMessageLegacy(
-      TextChannel channel,
-      Instant instant,
-      String author,
-      String content,
-      MessageType messageType) {
-    if (DiscordChannel.containsEventChannel(channel, getChannelsToReadFrom())) {
-      Optional<ServerChannel> maybeServerChannel = channel.asServerChannel();
-      if (maybeServerChannel.isEmpty()) {
-        return;
-      }
-      // TODO: Make the #channel linked.
-      // TODO: Maybe make the user linked.
-      // TODO: Use an "embed" with nice colors/images for different channels.
-      String auditMessage = String.format("**%s** message from **%s** in **#%s** at **%s**:\n%s",
-          messageType.getDescription(),
-          author,
-          maybeServerChannel.get().getName(),
-          instant.atZone(ZoneId.of(config.getString(Property.TIMEZONE_GUILD)))
-              .format(DateTimeFormatter.RFC_1123_DATE_TIME),
-          stripMentions(content));
-      discord.sendMessage(getChannelToWriteTo(), auditMessage);
-    }
-  }
-
-  private List<DiscordChannel> getChannelsToReadFrom() {
-    if (config.getBoolean(Config.Property.DEBUG)) {
-      return TEST_CHANNELS_TO_READ_FROM;
-    } else {
-      return PROD_CHANNELS_TO_READ_FROM;
-    }
-  }
-
-  private DiscordChannel getChannelToWriteTo() {
-    if (config.getBoolean(Config.Property.DEBUG)) {
-      return TEST_CHANNEL_TO_WRITE_TO;
-    } else {
-      return PROD_CHANNEL_TO_WRITE_TO;
     }
   }
 
