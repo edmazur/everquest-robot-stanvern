@@ -12,6 +12,9 @@ public enum DiscordCategory {
   GG_PHONES(1007149113957171220L),
   GG_IMPORTANT(1007150532919558266L),
 
+  // Test server.
+  TEST_IMPORATNT(1018118373223174224L),
+
   ;
 
   private final Long id;

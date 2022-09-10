@@ -25,11 +25,15 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
 
   private static final Logger LOGGER = new Logger();
 
-  // TODO: Add a test setup for this once the FoW stuff is torn down.
   private static final Map<DiscordCategory, DiscordChannel> PROD_CATEGORY_CHANNEL_MAP =
       Map.ofEntries(
           entry(DiscordCategory.GG_PHONES, DiscordChannel.GG_PHONE_AUDIT),
           entry(DiscordCategory.GG_IMPORTANT, DiscordChannel.GG_IMPORTANT_AUDIT)
+      );
+
+  private static final Map<DiscordCategory, DiscordChannel> TEST_CATEGORY_CHANNEL_MAP =
+      Map.ofEntries(
+          entry(DiscordCategory.TEST_IMPORATNT, DiscordChannel.TEST_IMPORTANT_AUDIT)
       );
 
   private enum MessageType {
@@ -116,7 +120,7 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
 
   private Map<DiscordCategory, DiscordChannel> getCategoryChannelMap() {
     if (config.getBoolean(Config.Property.DEBUG)) {
-      return Map.of();
+      return TEST_CATEGORY_CHANNEL_MAP;
     } else {
       return PROD_CATEGORY_CHANNEL_MAP;
     }
