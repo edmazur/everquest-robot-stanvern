@@ -28,8 +28,9 @@ public class RaidTargetTableMaker {
 
   private static final String HUMAN_READABLE_TIMESTAMP_PATTERN = "EEE HH:mm:ss";
 
-  private static final int MIN_PROGRESS_BAR_WIDTH = 2;
-  private static final int MAX_PROGRESS_BAR_WIDTH = 24;
+  // TODO: Remove the ability to set different progress bar widths if you keep this as a constant.
+  private static final int MIN_PROGRESS_BAR_WIDTH = 16;
+  private static final int MAX_PROGRESS_BAR_WIDTH = 16;
 
   private final RaidTargets raidTargets;
   private final DateTimeFormatter humanReadableTimestampFormatter;
@@ -71,7 +72,7 @@ public class RaidTargetTableMaker {
               .addEmptyColumn()
               .addColumn("Name", Justification.LEFT)
               .addColumn("Time Left", Justification.RIGHT)
-              .addColumn("Closes (ET)", Justification.LEFT);
+              .addColumn("Closes (ET)", Justification.RIGHT);
           if (SHOW_DISCORD_TIMESTAMPS) {
             headerRow.addColumn("Closes (local)", Justification.LEFT);
           }
@@ -83,7 +84,7 @@ public class RaidTargetTableMaker {
               .addEmptyColumn()
               .addColumn("Name", Justification.LEFT)
               .addColumn("Time Until", Justification.RIGHT)
-              .addColumn("Opens (ET)", Justification.LEFT);
+              .addColumn("Opens (ET)", Justification.RIGHT);
           if (SHOW_DISCORD_TIMESTAMPS) {
             headerRow.addColumn("Opens (local)", Justification.LEFT);
           }
@@ -95,7 +96,7 @@ public class RaidTargetTableMaker {
               .addEmptyColumn()
               .addColumn("Name", Justification.LEFT)
               .addColumn("Time Until", Justification.RIGHT)
-              .addColumn("Opens (ET)", Justification.LEFT);
+              .addColumn("Opens (ET)", Justification.RIGHT);
           if (SHOW_DISCORD_TIMESTAMPS) {
             headerRow.addColumn("Opens (local)", Justification.LEFT);
           }
