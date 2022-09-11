@@ -28,6 +28,9 @@ public class RaidTargetTableMaker {
 
   private static final String HUMAN_READABLE_TIMESTAMP_PATTERN = "EEE HH:mm:ss";
 
+  private static final int MIN_PROGRESS_BAR_WIDTH = 2;
+  private static final int MAX_PROGRESS_BAR_WIDTH = 24;
+
   private final RaidTargets raidTargets;
   private final DateTimeFormatter humanReadableTimestampFormatter;
 
@@ -107,9 +110,14 @@ public class RaidTargetTableMaker {
       for (RaidTarget raidTarget : raidTargets) {
         Window window = Window.getActiveWindow(raidTarget.getWindows(), now);
         Instant relevantWindowTimestamp = null;
+        Double progressPercentage = null;
+        Integer progressWidth = null;
         switch (windowStatus) {
           case NOW:
             relevantWindowTimestamp = window.getEnd();
+            progressPercentage = window.getPercentPassed(now);
+            progressWidth = Math.min(MAX_PROGRESS_BAR_WIDTH,
+                Math.max(MIN_PROGRESS_BAR_WIDTH, (int) window.getDuration().toHours()));
             break;
           case SOON:
           case LATER:
@@ -131,6 +139,9 @@ public class RaidTargetTableMaker {
         if (SHOW_DISCORD_TIMESTAMPS) {
           dataRow.setCodeFontEndIndex(2);
           dataRow.addColumn(formatDiscordTimestamp(relevantWindowTimestamp));
+        }
+        if (progressPercentage != null) {
+          dataRow.setProgress(progressPercentage, progressWidth);
         }
         subTable.addDataRow(dataRow);
       }

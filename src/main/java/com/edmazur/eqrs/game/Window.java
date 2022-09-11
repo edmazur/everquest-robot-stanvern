@@ -40,6 +40,17 @@ public class Window {
     return end;
   }
 
+  public Duration getDuration() {
+    return Duration.between(start, end);
+  }
+
+  public double getPercentPassed(Instant now) {
+    Duration windowDuration = Duration.between(start, end);
+    Duration passedDuration = Duration.between(start, now);
+    return Math.min(1,
+        Math.max(0, (double) passedDuration.toSeconds() / windowDuration.toSeconds()));
+  }
+
   public Status getStatus(Instant now) {
     if (end.isBefore(now)) {
       return Status.PAST;

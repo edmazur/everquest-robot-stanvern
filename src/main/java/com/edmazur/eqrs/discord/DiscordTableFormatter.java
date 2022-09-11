@@ -16,6 +16,11 @@ public class DiscordTableFormatter {
   // Discord has a message size limit of 2000 characters. Limit messages to a bit less than this.
   private static final int MESSAGE_SIZE_CAP = 1900;
 
+  // These need to be referenced as their full names like this (as opposed to copy/pasted rendered
+  // output) to avoid truncation issues when sending large messages.
+  private static final String GREEN_SQUARE = ":green_square:";
+  private static final String WHITE_SQUARE = ":white_large_square:";
+
   /**
    * Formats the table for Discord in a series of messages.
    *
@@ -47,6 +52,12 @@ public class DiscordTableFormatter {
             maxColumnWidths,
             dataRow.getCodeFontEndIndex(),
             columnIndexToCustomRightSpacing) + "\n";
+        Optional<Double> maybeProgressPercentage = dataRow.getProgressPercentage();
+        if (maybeProgressPercentage.isPresent()) {
+          double progressPercentage = maybeProgressPercentage.get();
+          int progressWidth = dataRow.getProgressWidth().get();
+          rowText += getProgressBar(progressPercentage, progressWidth) + "\n";
+        }
 
         // If this row would put us over the message size limit, split it off into a new message.
         if (sb.length() + rowText.length() > MESSAGE_SIZE_CAP) {
@@ -107,6 +118,15 @@ public class DiscordTableFormatter {
         sb.append(String.join("", Collections.nCopies(rightSpacing, " ")));
       }
     }
+    return sb.toString();
+  }
+
+  private String getProgressBar(double percentage, int progressWidth) {
+    StringBuilder sb = new StringBuilder();
+    int greenSquares = (int) Math.round(progressWidth * percentage);
+    int whiteSquares = progressWidth - greenSquares;
+    sb.append(String.join("", Collections.nCopies(greenSquares, GREEN_SQUARE)));
+    sb.append(String.join("", Collections.nCopies(whiteSquares, WHITE_SQUARE)));
     return sb.toString();
   }
 
