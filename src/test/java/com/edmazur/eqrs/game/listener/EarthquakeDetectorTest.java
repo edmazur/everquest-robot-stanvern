@@ -17,7 +17,7 @@ class EarthquakeDetectorTest {
   }
 
   @Test
-  void standardMessage() {
+  void sinisterLaugh() {
     EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
         "[Fri Mar 26 12:21:43 2021] The Gods of Norrath emit a sinister laugh as they toy with "
             + "their creations. They are reanimating creatures to provide a greater challenge to "
@@ -26,11 +26,19 @@ class EarthquakeDetectorTest {
   }
 
   @Test
-  void standardMessageWithoutPeriod() {
+  void sinisterLaughWithoutPeriod() {
     EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
         "[Fri Mar 26 12:21:43 2021] The Gods of Norrath emit a sinister laugh as they toy with "
             + "their creations. They are reanimating creatures to provide a greater challenge to "
             + "the mortals").get();
+    assertTrue(earthquakeDetector.containsEarthquake(eqLogEvent));
+  }
+
+  @Test
+  void godsAwoken() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Thu Sep 29 13:17:32 2022] The gods have awoken to unleash their wrath across Norrath.")
+            .get();
     assertTrue(earthquakeDetector.containsEarthquake(eqLogEvent));
   }
 

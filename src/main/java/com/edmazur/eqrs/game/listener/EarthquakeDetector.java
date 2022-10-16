@@ -12,7 +12,8 @@ public class EarthquakeDetector {
       "The Gods of Norrath emit a sinister laugh as they toy with their creations. "
           + "They are reanimating creatures to provide a greater challenge to the mortals.",
       "The Gods of Norrath emit a sinister laugh as they toy with their creations. "
-          + "They are reanimating creatures to provide a greater challenge to the mortals");
+          + "They are reanimating creatures to provide a greater challenge to the mortals",
+      "The gods have awoken to unleash their wrath across Norrath.");
 
   private static final List<Pattern> KNOWN_EARTHQUAKE_PATTERNS = Arrays.asList(
       Pattern.compile("\\p{Alpha}+ BROADCASTS, "
