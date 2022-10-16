@@ -8,7 +8,7 @@ import com.edmazur.eqrs.discord.DiscordChannel;
 
 public class EarthquakeListener implements EqLogListener {
 
-  private static final DiscordChannel PROD_CHANNEL = DiscordChannel.GG_MEMBERS_CHAT;
+  private static final DiscordChannel PROD_CHANNEL = DiscordChannel.GG_RAID_DISCUSSION;
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_GENERAL;
 
   private final Config config;

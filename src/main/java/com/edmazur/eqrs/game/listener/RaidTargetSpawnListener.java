@@ -17,7 +17,7 @@ public class RaidTargetSpawnListener implements EqLogListener {
   private static final Boolean BATPHONE = false;
 
   private static final DiscordChannel PROD_BATPHONE_CHANNEL = DiscordChannel.GG_BATPHONE;
-  private static final DiscordChannel PROD_NONBATPHONE_CHANNEL = DiscordChannel.GG_MEMBERS_CHAT;
+  private static final DiscordChannel PROD_NONBATPHONE_CHANNEL = DiscordChannel.GG_RAID_DISCUSSION;
   private static final DiscordChannel TEST_BATPHONE_CHANNEL = DiscordChannel.TEST_BATPHONE;
   private static final DiscordChannel TEST_NONBATPHONE_CHANNEL = DiscordChannel.TEST_GENERAL;
 
