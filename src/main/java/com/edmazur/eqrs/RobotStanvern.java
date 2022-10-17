@@ -51,6 +51,11 @@ public class RobotStanvern {
 
   private static final Logger LOGGER = new Logger();
 
+  private enum Mode {
+    ACTIVE,
+    PASSIVE,
+  }
+
   public static void main(String[] args) {
     // Parse command line arguments.
     // TODO: Use a proper library for this if it grows more complex.
@@ -74,6 +79,19 @@ public class RobotStanvern {
           + "will be skipped (SQL will be logged)");
     }
 
+    String suppliedMode = config.getString(Config.Property.BASE_MODE);
+    Mode mode = null;
+    try {
+      if (suppliedMode.isBlank()) {
+        LOGGER.log(Config.Property.BASE_MODE.getName() + " is a required config field.");
+        System.exit(-1);
+      }
+      mode = Mode.valueOf(suppliedMode.toUpperCase());
+    } catch (IllegalArgumentException e) {
+      LOGGER.log("Unable to parse mode from: " + suppliedMode);
+      System.exit(-1);
+    }
+
     Discord discord = new Discord(config);
 
     // Uncomment to send one-off images/messages.
@@ -85,88 +103,94 @@ public class RobotStanvern {
     }
     */
 
-    Database database = new Database(config);
-    Json json = new Json();
-    RaidTargets raidTargets = new RaidTargets(config, json);
-    Pager pager = new Pager(config);
-    SoundPlayer soundPlayer = new SoundPlayer();
-    // TODO: Set this up more like how game log messages are received centrally and passed out to
-    // listeners?
-    new DiscordTodListener(config, discord, database, raidTargets);
-    new AuditListener(config, discord);
-    new BatphoneListener(config, discord, pager, soundPlayer);
-    Ocr ocr = new Ocr();
-    CharInfoOcrScrapeComparator charInfoOcrScrapeComparator = new CharInfoOcrScrapeComparator();
-    ExpPercentToNextLevelScraper expPercentToNextLevelScraper = new ExpPercentToNextLevelScraper();
-    CharInfoScraper charInfoScraper =
-        new CharInfoScraper(ocr, charInfoOcrScrapeComparator, expPercentToNextLevelScraper);
-    new CharInfoScreenshotListener(config, discord, charInfoScraper).init();
-    ItemDatabase itemDatabase = new ItemDatabase();
-    itemDatabase.initialize();
-    ItemScreenshotter itemScreenshotter = new ItemScreenshotter();
-    new ItemListener(config, discord, itemDatabase, itemScreenshotter);
-
     List<EqLogListener> eqLogListeners = new ArrayList<>();
 
-    // Add FTE listener.
-    eqLogListeners.add(new FteListener(config, discord));
+    if (mode == Mode.PASSIVE) {
+      Database database = new Database(config);
+      Json json = new Json();
+      RaidTargets raidTargets = new RaidTargets(config, json);
+      Pager pager = new Pager(config);
+      SoundPlayer soundPlayer = new SoundPlayer();
+      // TODO: Set this up more like how game log messages are received centrally and passed out to
+      // listeners?
+      new DiscordTodListener(config, discord, database, raidTargets);
+      new AuditListener(config, discord);
+      new BatphoneListener(config, discord, pager, soundPlayer);
+      Ocr ocr = new Ocr();
+      CharInfoOcrScrapeComparator charInfoOcrScrapeComparator = new CharInfoOcrScrapeComparator();
+      ExpPercentToNextLevelScraper expPercentToNextLevelScraper =
+          new ExpPercentToNextLevelScraper();
+      CharInfoScraper charInfoScraper =
+          new CharInfoScraper(ocr, charInfoOcrScrapeComparator, expPercentToNextLevelScraper);
+      new CharInfoScreenshotListener(config, discord, charInfoScraper).init();
+      ItemDatabase itemDatabase = new ItemDatabase();
+      itemDatabase.initialize();
+      ItemScreenshotter itemScreenshotter = new ItemScreenshotter();
+      new ItemListener(config, discord, itemDatabase, itemScreenshotter);
 
-    // Add heartbeat listener.
-    HeartbeatListener heartbeatListener = new HeartbeatListener(discord);
-    ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
-    scheduledExecutorService.scheduleAtFixedRate(heartbeatListener, 1, 1, TimeUnit.SECONDS);
-    eqLogListeners.add(heartbeatListener);
+      // Add heartbeat listener.
+      HeartbeatListener heartbeatListener = new HeartbeatListener(discord);
+      ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
+      scheduledExecutorService.scheduleAtFixedRate(heartbeatListener, 1, 1, TimeUnit.SECONDS);
+      eqLogListeners.add(heartbeatListener);
 
-    // Add raid target spawn listener.
-    GameScreenshotter gameScreenshotter = new GameScreenshotter();
-    RaidTargetSpawnListener raidTargetSpawnListener =
-        new RaidTargetSpawnListener(config, gameScreenshotter, discord);
-    eqLogListeners.add(raidTargetSpawnListener);
+      // Add MotD listener.
+      MotdListener motdListener = new MotdListener(config, discord);
+      eqLogListeners.add(motdListener);
 
-    // Add MotD listener.
-    MotdListener motdListener = new MotdListener(config, discord);
-    eqLogListeners.add(motdListener);
+      // Add ToD listener.
+      GameTodDetector gameTodDetector = new GameTodDetector(config);
+      GameTodParser gameTodParser = new GameTodParser(raidTargets);
+      GameTodListener gameTodListener =
+          new GameTodListener(config, discord, gameTodDetector, gameTodParser);
+      eqLogListeners.add(gameTodListener);
 
-    // Add ToD listener.
-    GameTodDetector gameTodDetector = new GameTodDetector(config);
-    GameTodParser gameTodParser = new GameTodParser(raidTargets);
-    GameTodListener gameTodListener =
-        new GameTodListener(config, discord, gameTodDetector, gameTodParser);
-    eqLogListeners.add(gameTodListener);
+      // Add tick listener.
+      TickDetector tickDetector = new TickDetector();
+      TickListener tickListener = new TickListener(config, discord, tickDetector);
+      eqLogListeners.add(tickListener);
 
-    // Add tick listener.
-    TickDetector tickDetector = new TickDetector();
-    TickListener tickListener = new TickListener(config, discord, tickDetector);
-    eqLogListeners.add(tickListener);
+      // Add grats listener.
+      GratsDetector gratsDetector = new GratsDetector(config);
+      GratsListener gratsListener =
+          new GratsListener(config, discord, gratsDetector, itemDatabase, itemScreenshotter);
+      eqLogListeners.add(gratsListener);
 
-    // Add grats listener.
-    GratsDetector gratsDetector = new GratsDetector(config);
-    GratsListener gratsListener =
-        new GratsListener(config, discord, gratsDetector, itemDatabase, itemScreenshotter);
-    eqLogListeners.add(gratsListener);
+      // Add earthquake listener.
+      EarthquakeDetector earthquakeDetector = new EarthquakeDetector();
+      EarthquakeListener earthquakeListener =
+          new EarthquakeListener(config, discord, earthquakeDetector);
+      eqLogListeners.add(earthquakeListener);
 
-    // Add dice listener.
-    DiceDetector diceDetector = new DiceDetector();
-    DiceListener diceListener = new DiceListener(diceDetector, soundPlayer);
-    eqLogListeners.add(diceListener);
+      // Add tracking listener.
+      TrackingDetector trackingDetector = new TrackingDetector(config);
+      TrackingListener trackingListener = new TrackingListener(config, discord, trackingDetector);
+      eqLogListeners.add(trackingListener);
 
-    // Add earthquake listener.
-    EarthquakeDetector earthquakeDetector = new EarthquakeDetector();
-    EarthquakeListener earthquakeListener =
-        new EarthquakeListener(config, discord, earthquakeDetector);
-    eqLogListeners.add(earthquakeListener);
+      // Add ToD window speaker.
+      RaidTargetTableMaker raidTargetTableMaker = new RaidTargetTableMaker(config, raidTargets);
+      DiscordTableFormatter discordTableFormatter = new DiscordTableFormatter();
+      TodWindowSpeaker todWindowSpeaker =
+          new TodWindowSpeaker(config, discord, raidTargetTableMaker, discordTableFormatter);
+      scheduledExecutorService.scheduleAtFixedRate(todWindowSpeaker, 0, 1, TimeUnit.MINUTES);
+    }
 
-    // Add tracking listener.
-    TrackingDetector trackingDetector = new TrackingDetector(config);
-    TrackingListener trackingListener = new TrackingListener(config, discord, trackingDetector);
-    eqLogListeners.add(trackingListener);
+    if (mode == Mode.ACTIVE) {
+      // Add FTE listener.
+      eqLogListeners.add(new FteListener(config, discord));
 
-    // Add ToD window speaker.
-    RaidTargetTableMaker raidTargetTableMaker = new RaidTargetTableMaker(config, raidTargets);
-    DiscordTableFormatter discordTableFormatter = new DiscordTableFormatter();
-    TodWindowSpeaker todWindowSpeaker =
-        new TodWindowSpeaker(config, discord, raidTargetTableMaker, discordTableFormatter);
-    scheduledExecutorService.scheduleAtFixedRate(todWindowSpeaker, 0, 1, TimeUnit.MINUTES);
+      // Add raid target spawn listener.
+      GameScreenshotter gameScreenshotter = new GameScreenshotter();
+      RaidTargetSpawnListener raidTargetSpawnListener =
+          new RaidTargetSpawnListener(config, gameScreenshotter, discord);
+      eqLogListeners.add(raidTargetSpawnListener);
+
+      // Add dice listener.
+      DiceDetector diceDetector = new DiceDetector();
+      SoundPlayer soundPlayer = new SoundPlayer();
+      DiceListener diceListener = new DiceListener(diceDetector, soundPlayer);
+      eqLogListeners.add(diceListener);
+    }
 
     // Parse the log.
     while (true) {

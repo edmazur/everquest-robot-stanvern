@@ -11,6 +11,14 @@ public class Config {
 
   public enum Property {
 
+    // Either:
+    // -  "active": For game client that's actively being played. This can be actually playing or
+    //              just AFK tracking (probably Yael).
+    // - "passive": For game client that's passively being played. This means the client is sitting
+    //              in one spot (probably EC tunnel) and never moving or taking any action at all.
+    //              It's there pretty much just for /gu and earthquake messages.
+    BASE_MODE("base.mode"),
+
     DISCORD_PRIVATE_KEY("discord.private_key"),
 
     // When enabled:
