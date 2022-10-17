@@ -56,6 +56,7 @@ public class RobotStanvern {
     // TODO: Use a proper library for this if it grows more complex.
     if (args.length == 0) {
       LOGGER.log("Usage: CharacterName [--debug]");
+      System.exit(-1);
     }
     // TODO: Automatically switch between logs as you change characters.
     // This is final to avoid a VariableDeclarationUsageDistance checkstyle warning.
