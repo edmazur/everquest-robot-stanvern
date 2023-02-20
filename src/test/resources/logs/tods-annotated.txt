@@ -75,7 +75,7 @@
 [Tue Feb 15 13:23:19 2022] Skyzzl tells the guild, 'VELK TOD' # Velketor the Sorcerer
 [Tue Feb 15 14:15:21 2022] Leafblade tells the guild, 'Fright TOD' # Fright
 [Tue Feb 15 17:39:20 2022] Leafblade tells the guild, 'Dread TOD' # Dread
-[Tue Feb 15 17:43:09 2022] Leafblade tells the guild, 'broken golem tod' # Error: Did not find a known target name
+[Tue Feb 15 17:43:09 2022] Leafblade tells the guild, 'broken golem tod' # a broken golem
 [Wed Feb 16 18:05:09 2022] Hernan tells the guild, 'KT ToD' # King Tormax
 [Wed Feb 16 18:05:10 2022] Pikeme tells the guild, 'King Tormax ToD' # King Tormax
 [Wed Feb 16 19:05:33 2022] Gnonsense tells the guild, 'TOD Lady Vox' # Lady Vox
