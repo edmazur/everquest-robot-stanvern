@@ -16,6 +16,8 @@ public class GameTodParser {
 
   private static final boolean DEBUG = false;
 
+  private static final String TRIGGER = "!tod ";
+
   // Heuristics based on offline historical data analysis.
   private static final Set<String> RELATIVE_TOD_INDICATORS =
       new HashSet<>(Arrays.asList("sec", "min", "hour"));
@@ -31,9 +33,13 @@ public class GameTodParser {
   }
 
   public GameTodParseResult parse(EqLogEvent eqLogEvent, String todMessage) {
-    // Remove stuff that can get in the way of target detection: uppercase, "tod", and extra
+    if (!todMessage.startsWith(TRIGGER)) {
+      return GameTodParseResult.fail("Message did not start with \"" + TRIGGER + "\"");
+    }
+
+    // Remove stuff that can get in the way of target detection: uppercase, trigger, and extra
     // whitespace.
-    todMessage = todMessage.toLowerCase().replace("tod", "").trim();
+    todMessage = todMessage.toLowerCase().replace(TRIGGER, "").trim();
 
     // Give up if there's any indication that this is a non-ToD.
     if (todMessage.contains("?")) {

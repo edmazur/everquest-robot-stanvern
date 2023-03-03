@@ -23,8 +23,9 @@ public class GameTodDetector {
     if (!matcher.matches()) {
       return Optional.empty();
     }
-    String chatText = matcher.group(1).toLowerCase();
-    if (chatText.contains("tod") && !chatText.contains("today")) {
+    String chatText = matcher.group(1);
+    String chatTextLower = chatText.toLowerCase();
+    if (chatTextLower.contains("tod") && !chatTextLower.contains("today")) {
       return Optional.of(chatText);
     } else {
       return Optional.empty();
