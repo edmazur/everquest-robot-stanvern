@@ -1,6 +1,6 @@
-# TODO: These annotations became less useful when checking for "!tod " at the start of messages, so
-# this is currently unused. However, they're still useful for validating fuzzy matching. If you ever
-# touch that logic, you should somehow incorporate these test cases again.
+# TODO: These annotations became less useful when checking for "!tod" in messages, so this is
+# currently unused. However, they're still useful for validating fuzzy matching. If you ever touch
+# that logic, you should somehow incorporate these test cases again.
 
 [Tue Feb 01 18:26:01 2022] Seancothery tells the guild, 'VIlefang FTE if anyone cares, possibly dead now if we want approx ToD logged' # Vilefang
 [Wed Feb 02 09:06:45 2022] Skyzzl tells the guild, 'TOD Terror so I can find in logs hehe' # Terror
