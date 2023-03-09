@@ -1,66 +1,66 @@
-[Wed Mar 01 10:21:22 2023] Buitre tells the guild, 'like, tod doesnt even matter' # Error: Message did not start with "!tod "
-[Wed Mar 01 10:58:07 2023] Robobard tells the guild, 'vindi !tod' # Error: Message did not start with "!tod "
-[Wed Mar 01 14:27:52 2023] Riendo tells the guild, 'shady tod' # Error: Message did not start with "!tod "
-[Wed Mar 01 18:40:21 2023] Robosnecro tells the guild, 'vindi !tod' # Error: Message did not start with "!tod "
-[Wed Mar 01 18:40:21 2023] Tegrity tells the guild, 'vindi tod' # Error: Message did not start with "!tod "
-[Wed Mar 01 18:40:21 2023] Attan tells the guild, 'vindi tod' # Error: Message did not start with "!tod "
+[Wed Mar 01 10:21:22 2023] Buitre tells the guild, 'like, tod doesnt even matter' # Error: Message did not contain "!tod"
+[Wed Mar 01 10:58:07 2023] Robobard tells the guild, 'vindi !tod' # Derakor the Vindicator
+[Wed Mar 01 14:27:52 2023] Riendo tells the guild, 'shady tod' # Error: Message did not contain "!tod"
+[Wed Mar 01 18:40:21 2023] Robosnecro tells the guild, 'vindi !tod' # Derakor the Vindicator
+[Wed Mar 01 18:40:21 2023] Tegrity tells the guild, 'vindi tod' # Error: Message did not contain "!tod"
+[Wed Mar 01 18:40:21 2023] Attan tells the guild, 'vindi tod' # Error: Message did not contain "!tod"
 [Wed Mar 01 20:39:21 2023] Ozzyboi tells the guild, '!tod KT tod KT' # King Tormax
-[Wed Mar 01 20:39:21 2023] Gingefish tells the guild, 'KT tod king tormax' # Error: Message did not start with "!tod "
+[Wed Mar 01 20:39:21 2023] Gingefish tells the guild, 'KT tod king tormax' # Error: Message did not contain "!tod"
 [Wed Mar 01 20:39:37 2023] Poppee tells the guild, '!tod king tormax' # King Tormax
-[Wed Mar 01 20:41:59 2023] Melisandre tells the guild, 'doze tod' # Error: Message did not start with "!tod "
+[Wed Mar 01 20:41:59 2023] Melisandre tells the guild, 'doze tod' # Error: Message did not contain "!tod"
 [Wed Mar 01 20:51:15 2023] Flub tells the guild, '!tod dain' # Dain Frostreaver IV
-[Wed Mar 01 21:01:23 2023] Shusaku tells the guild, 'its a quake.. everything is up.. tracking for ToDs?' # Error: Message did not start with "!tod "
-[Wed Mar 01 21:02:27 2023] Animis tells the guild, 'Ring 8 tod 20:30 ET Velium Coldain Insignia Ring Thank you Basen for your help!' # Error: Message did not start with "!tod "
+[Wed Mar 01 21:01:23 2023] Shusaku tells the guild, 'its a quake.. everything is up.. tracking for ToDs?' # Error: Message did not contain "!tod"
+[Wed Mar 01 21:02:27 2023] Animis tells the guild, 'Ring 8 tod 20:30 ET Velium Coldain Insignia Ring Thank you Basen for your help!' # Error: Message did not contain "!tod"
 [Wed Mar 01 21:05:00 2023] Twitchin tells the guild, '!tod yeli' # Lord Yelinak
-[Wed Mar 01 21:05:01 2023] Mikhal tells the guild, 'Yeli ToD' # Error: Message did not start with "!tod "
-[Wed Mar 01 21:06:05 2023] Doapizzaroll tells the guild, 'status ToD' # Error: Message did not start with "!tod "
-[Wed Mar 01 21:06:11 2023] Doapizzaroll tells the guild, 'statue tod' # Error: Message did not start with "!tod "
-[Wed Mar 01 21:06:12 2023] Xizis tells the guild, '!ToD Statue' # Error: Message did not start with "!tod "
+[Wed Mar 01 21:05:01 2023] Mikhal tells the guild, 'Yeli ToD' # Error: Message did not contain "!tod"
+[Wed Mar 01 21:06:05 2023] Doapizzaroll tells the guild, 'status ToD' # Error: Message did not contain "!tod"
+[Wed Mar 01 21:06:11 2023] Doapizzaroll tells the guild, 'statue tod' # Error: Message did not contain "!tod"
+[Wed Mar 01 21:06:12 2023] Xizis tells the guild, '!ToD Statue' # The Statue of Rallos Zek
 [Wed Mar 01 21:17:38 2023] Dewbes tells the guild, '!tod zlandi' # Zlandicar
-[Wed Mar 01 21:23:25 2023] Tabithaa tells the guild, 'iki tod' # Error: Message did not start with "!tod "
+[Wed Mar 01 21:23:25 2023] Tabithaa tells the guild, 'iki tod' # Error: Message did not contain "!tod"
 [Wed Mar 01 21:23:31 2023] Twitchin tells the guild, '!tod ikky' # Ikatiar the Venom
-[Wed Mar 01 21:28:50 2023] Leafblade tells the guild, '!ToD CT' # Error: Message did not start with "!tod "
-[Wed Mar 01 21:31:22 2023] Eldritch tells the guild, 'avatar of war tod' # Error: Message did not start with "!tod "
+[Wed Mar 01 21:28:50 2023] Leafblade tells the guild, '!ToD CT' # Cazic Thule
+[Wed Mar 01 21:31:22 2023] Eldritch tells the guild, 'avatar of war tod' # Error: Message did not contain "!tod"
 [Wed Mar 01 21:39:16 2023] Dewbes tells the guild, '!tod ltk' # Lendiniara the Keeper
-[Wed Mar 01 21:47:37 2023] Nottch tells the guild, 'MOTG ToD about 6 mins ago' # Error: Message did not start with "!tod "
-[Wed Mar 01 21:49:11 2023] Umbrielle tells the guild, 'MOTG TOD' # Error: Message did not start with "!tod "
-[Wed Mar 01 21:58:23 2023] Bigdumper tells the guild, 'vs tod' # Error: Message did not start with "!tod "
+[Wed Mar 01 21:47:37 2023] Nottch tells the guild, 'MOTG ToD about 6 mins ago' # Error: Message did not contain "!tod"
+[Wed Mar 01 21:49:11 2023] Umbrielle tells the guild, 'MOTG TOD' # Error: Message did not contain "!tod"
+[Wed Mar 01 21:58:23 2023] Bigdumper tells the guild, 'vs tod' # Error: Message did not contain "!tod"
 [Wed Mar 01 22:04:11 2023] Dewbes tells the guild, '!tod wurm 1' # Error: Saw a number, which means this might be a relative ToD, which I'm not smart enough to auto-parse
 [Wed Mar 01 22:06:23 2023] Dewbes tells the guild, '!tod wurm 2' # Error: Saw a number, which means this might be a relative ToD, which I'm not smart enough to auto-parse
-[Wed Mar 01 22:09:14 2023] Ripdip tells the guild, 'lepethida !tod' # Error: Message did not start with "!tod "
-[Wed Mar 01 22:13:37 2023] Twitchin tells the guild, 'zlexak tod' # Error: Message did not start with "!tod "
-[Wed Mar 01 22:18:24 2023] Twitchin tells the guild, 'sevelak tod' # Error: Message did not start with "!tod "
+[Wed Mar 01 22:09:14 2023] Ripdip tells the guild, 'lepethida !tod' # Lepethida
+[Wed Mar 01 22:13:37 2023] Twitchin tells the guild, 'zlexak tod' # Error: Message did not contain "!tod"
+[Wed Mar 01 22:18:24 2023] Twitchin tells the guild, 'sevelak tod' # Error: Message did not contain "!tod"
 [Wed Mar 01 22:18:30 2023] Robowiz tells the guild, '!tod sevalak' # Sevalak
 [Wed Mar 01 22:21:21 2023] Zainne tells the guild, '!tod essedera' # Essedera
 [Wed Mar 01 22:23:34 2023] Twitchin tells the guild, '!tod cekenar' # Cekenar
 [Wed Mar 01 22:24:12 2023] Hernan tells the guild, '!tod eashen' # Eashen of the Sky
 [Wed Mar 01 22:30:45 2023] Twitchin tells the guild, '!tod Jorll' # Jorlleag
-[Wed Mar 01 22:43:19 2023] Dewbes tells the guild, '[Wed Mar 01 22:04:11 2023] Dewbes tells the guild, '!tod wurm 1' # Error: Message did not start with "!tod "
+[Wed Mar 01 22:43:19 2023] Dewbes tells the guild, '[Wed Mar 01 22:04:11 2023] Dewbes tells the guild, '!tod wurm 1' # Error: Saw a number, which means this might be a relative ToD, which I'm not smart enough to auto-parse
 [Wed Mar 01 22:43:32 2023] Dewbes tells the guild, '!tod lady nev' # Lady Nevederia
-[Wed Mar 01 23:08:19 2023] Rathena tells the guild, 'Lady Mirenilla tod' # Error: Message did not start with "!tod "
-[Wed Mar 01 23:27:13 2023] Ikssy tells the guild, 'tod wurm 1' # Error: Message did not start with "!tod "
-[Wed Mar 01 23:50:00 2023] Mikhal tells the guild, 'Koi ToD' # Error: Message did not start with "!tod "
-[Wed Mar 01 23:50:11 2023] Christmastime tells the guild, '~tod dagarn' # Error: Message did not start with "!tod "
+[Wed Mar 01 23:08:19 2023] Rathena tells the guild, 'Lady Mirenilla tod' # Error: Message did not contain "!tod"
+[Wed Mar 01 23:27:13 2023] Ikssy tells the guild, 'tod wurm 1' # Error: Message did not contain "!tod"
+[Wed Mar 01 23:50:00 2023] Mikhal tells the guild, 'Koi ToD' # Error: Message did not contain "!tod"
+[Wed Mar 01 23:50:11 2023] Christmastime tells the guild, '~tod dagarn' # Error: Message did not contain "!tod"
 [Wed Mar 01 23:50:16 2023] Christmastime tells the guild, '!tod dagarn' # Dagarn the Destroyer
 [Wed Mar 01 23:50:16 2023] Christmastime tells the guild, '!tod dagarn' # Dagarn the Destroyer
-[Thu Mar 02 00:20:44 2023] Mikhal tells the guild, 'Fesh ToD' # Error: Message did not start with "!tod "
+[Thu Mar 02 00:20:44 2023] Mikhal tells the guild, 'Fesh ToD' # Error: Message did not contain "!tod"
 [Thu Mar 02 00:20:45 2023] Twitchin tells the guild, '!tod Fesh' # Lord Feshlak
-[Thu Mar 02 00:33:11 2023] Mediclaire tells the guild, 'vyemm tod' # Error: Message did not start with "!tod "
+[Thu Mar 02 00:33:11 2023] Mediclaire tells the guild, 'vyemm tod' # Error: Message did not contain "!tod"
 [Thu Mar 02 00:33:11 2023] Christmastime tells the guild, '!tod Lord Vyemm' # Lord Vyemm
 [Thu Mar 02 00:33:11 2023] Gnopoke tells the guild, '!tod vyemm' # Lord Vyemm
-[Thu Mar 02 00:44:41 2023] Dedguy tells the guild, 'Trips Wurm 1 ToD' # Error: Message did not start with "!tod "
-[Thu Mar 02 00:46:04 2023] Mikhal tells the guild, 'ToD Kreizenn' # Error: Message did not start with "!tod "
-[Thu Mar 02 00:46:04 2023] Brotheb tells the guild, 'vulak blocker tod' # Error: Message did not start with "!tod "
-[Thu Mar 02 01:18:15 2023] Mikhal tells the guild, 'vulak ToD' # Error: Message did not start with "!tod "
-[Thu Mar 02 01:49:48 2023] Robosnecro tells the guild, 'not sure about timer but Narandi tod' # Error: Message did not start with "!tod "
-[Thu Mar 02 01:50:05 2023] Keysales tells the guild, 'have to use a ! in front of the tod now.' # Error: Message did not start with "!tod "
-[Thu Mar 02 09:31:48 2023] Mocca tells the guild, 'scout tod -5' # Error: Message did not start with "!tod "
-[Thu Mar 02 09:32:27 2023] Mocca tells the guild, 'scout !tod -10' # Error: Message did not start with "!tod "
-[Thu Mar 02 11:13:21 2023] Robobard tells the guild, 'vindi !tod' # Error: Message did not start with "!tod "
-[Thu Mar 02 12:38:50 2023] Bobbydobby tells the guild, 'ToD Warrior quest mob' # Error: Message did not start with "!tod "
-[Thu Mar 02 14:33:06 2023] Teinr tells the guild, 'TOD Midayor' # Error: Message did not start with "!tod "
-[Thu Mar 02 15:16:38 2023] Gluwen tells the guild, 'and if you tell me other than ToDaSlizard' # Error: Message did not start with "!tod "
-[Thu Mar 02 15:26:57 2023] Teinr tells the guild, 'tod lodizal' # Error: Message did not start with "!tod "
-[Thu Mar 02 19:22:50 2023] Tokuo tells the guild, 'scout tod' # Error: Message did not start with "!tod "
-[Thu Mar 02 21:20:01 2023] Apollas tells the guild, 'Tunare tod' # Error: Message did not start with "!tod "
+[Thu Mar 02 00:44:41 2023] Dedguy tells the guild, 'Trips Wurm 1 ToD' # Error: Message did not contain "!tod"
+[Thu Mar 02 00:46:04 2023] Mikhal tells the guild, 'ToD Kreizenn' # Error: Message did not contain "!tod"
+[Thu Mar 02 00:46:04 2023] Brotheb tells the guild, 'vulak blocker tod' # Error: Message did not contain "!tod"
+[Thu Mar 02 01:18:15 2023] Mikhal tells the guild, 'vulak ToD' # Error: Message did not contain "!tod"
+[Thu Mar 02 01:49:48 2023] Robosnecro tells the guild, 'not sure about timer but Narandi tod' # Error: Message did not contain "!tod"
+[Thu Mar 02 01:50:05 2023] Keysales tells the guild, 'have to use a ! in front of the tod now.' # Error: Message did not contain "!tod"
+[Thu Mar 02 09:31:48 2023] Mocca tells the guild, 'scout tod -5' # Error: Message did not contain "!tod"
+[Thu Mar 02 09:32:27 2023] Mocca tells the guild, 'scout !tod -10' # Error: Saw a number, which means this might be a relative ToD, which I'm not smart enough to auto-parse
+[Thu Mar 02 11:13:21 2023] Robobard tells the guild, 'vindi !tod' # Derakor the Vindicator
+[Thu Mar 02 12:38:50 2023] Bobbydobby tells the guild, 'ToD Warrior quest mob' # Error: Message did not contain "!tod"
+[Thu Mar 02 14:33:06 2023] Teinr tells the guild, 'TOD Midayor' # Error: Message did not contain "!tod"
+[Thu Mar 02 15:16:38 2023] Gluwen tells the guild, 'and if you tell me other than ToDaSlizard' # Error: Message did not contain "!tod"
+[Thu Mar 02 15:26:57 2023] Teinr tells the guild, 'tod lodizal' # Error: Message did not contain "!tod"
+[Thu Mar 02 19:22:50 2023] Tokuo tells the guild, 'scout tod' # Error: Message did not contain "!tod"
+[Thu Mar 02 21:20:01 2023] Apollas tells the guild, 'Tunare tod' # Error: Message did not contain "!tod"
 [Thu Mar 02 21:20:01 2023] Dewbes tells the guild, '!tod tuna' # Error: Did not find a known target name
