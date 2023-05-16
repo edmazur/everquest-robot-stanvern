@@ -14,29 +14,17 @@ import java.util.Optional;
 
 public class RaidTargetSpawnListener implements EqLogListener {
 
-  private static final Boolean BATPHONE = false;
+  private static final DiscordChannel PROD_CHANNEL = DiscordChannel.GG_RAID_DISCUSSION;
+  private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_GENERAL;
 
-  private static final DiscordChannel PROD_BATPHONE_CHANNEL = DiscordChannel.GG_BATPHONE;
-  private static final DiscordChannel PROD_NONBATPHONE_CHANNEL = DiscordChannel.GG_RAID_DISCUSSION;
-  private static final DiscordChannel TEST_BATPHONE_CHANNEL = DiscordChannel.TEST_BATPHONE;
-  private static final DiscordChannel TEST_NONBATPHONE_CHANNEL = DiscordChannel.TEST_GENERAL;
-
-  private static final String REGULAR_MESSAGE =
-      "@everyone %s POP! Stanvern's stream might be up if you want to confirm. "
-      + "Stay tuned for a decision from an officer on whether we will contest it. Be ready in case "
-      + "we do!\n"
-      + "\n"
-      + "(Disclaimer: This is an automated message, brought to you by S.E.B.S. (Stanvern Emergency "
-      + "Broadcast System). I'm just a dumb robot and I'm really sorry if I made a mistake!)";
-
-  private static final String BATPHONE_MESSAGE =
-      "@everyone %s POP! Go go go! Stanvern's stream might be up if you want to confirm.\n"
-      + "\n"
-      + "(Disclaimer: This is an automated message, brought to you by S.E.B.S. (Stanvern Emergency "
-      + "Broadcast System). I'm just a dumb robot and I'm really sorry if I made a mistake!)";
+  private static final String MESSAGE = "@everyone %s POP! ET: `%s`";
 
   private static Map<String, String> TRIGGERS_AND_TARGETS = Map.ofEntries(
-      Map.entry("Master Yael begins to cast a spell.", "YAEL"));
+      Map.entry("Master Yael begins to cast a spell.", "YAEL"),
+      // The space before "Tunare" is *not* a typo:
+      // [Tue May 02 21:56:23 2023]  Tunare begins to cast a spell.
+      // Best guess is that this has to do with the "fake" tree Tunare vs. "real" field Tunare.
+      Map.entry(" Tunare begins to cast a spell.", "TUNARE"));
 
   private static final Duration RATE_LIMIT = Duration.ofHours(24);
 
@@ -65,13 +53,12 @@ public class RaidTargetSpawnListener implements EqLogListener {
       // (trailing whitespace, /r, etc.).
       if (eqLogEvent.getPayload().startsWith(trigger)) {
         if (rateLimiter.getPermission()) {
-          String message = String.format(BATPHONE ? BATPHONE_MESSAGE : REGULAR_MESSAGE, target);
-          Optional<File> maybeScreenshot = gameScreenshotter.get();
+          String message = String.format(MESSAGE, target, eqLogEvent.getFullLine());
+          discord.sendMessage(getChannel(), message);
 
+          Optional<File> maybeScreenshot = gameScreenshotter.get();
           if (maybeScreenshot.isPresent()) {
-            discord.sendMessage(getChannel(), message, maybeScreenshot.get());
-          } else {
-            discord.sendMessage(getChannel(), message);
+            discord.sendMessage(getChannel(), maybeScreenshot.get());
           }
         }
       }
@@ -80,9 +67,9 @@ public class RaidTargetSpawnListener implements EqLogListener {
 
   private DiscordChannel getChannel() {
     if (config.getBoolean(Config.Property.DEBUG)) {
-      return BATPHONE ? TEST_BATPHONE_CHANNEL : TEST_NONBATPHONE_CHANNEL;
+      return TEST_CHANNEL;
     } else {
-      return BATPHONE ? PROD_BATPHONE_CHANNEL : PROD_NONBATPHONE_CHANNEL;
+      return PROD_CHANNEL;
     }
   }
 
