@@ -7,7 +7,9 @@ import com.edmazur.eqrs.discord.DiscordServer;
 import com.edmazur.eqrs.game.Item;
 import com.edmazur.eqrs.game.ItemDatabase;
 import com.edmazur.eqrs.game.ItemScreenshotter;
+import java.io.File;
 import java.util.List;
+import java.util.Optional;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
@@ -71,7 +73,12 @@ public class ItemListener implements MessageCreateListener {
     // Probably a Javacord bug.
     for (int i = items.size() - 1; i >= 0; i--) {
       Item item = items.get(i);
-      messageBuilder.addAttachment(itemScreenshotter.get(item));
+      Optional<File> maybeItemScreenshot = itemScreenshotter.get(item);
+      if (maybeItemScreenshot.isPresent()) {
+        messageBuilder.addAttachment(maybeItemScreenshot.get());
+      } else {
+        messageBuilder.append("\n(Error fetching screenshot for item: " + item.getName() + ")");
+      }
     }
     messageBuilder.send(event.getChannel());
   }
