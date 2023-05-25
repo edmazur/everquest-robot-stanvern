@@ -23,7 +23,9 @@ public class GratsDetector {
       return false;
     }
     String chatText = matcher.group(1).toLowerCase();
-    return chatText.contains("gratss") || chatText.contains("!grats");
+    return chatText.contains("gratss")
+        || chatText.contains("!grats")
+        || chatText.contains("!gratz");
   }
 
   private Pattern getPattern() {
