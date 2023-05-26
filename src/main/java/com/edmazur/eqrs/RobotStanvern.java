@@ -153,7 +153,7 @@ public class RobotStanvern {
 
       // Add grats listener.
       GratsDetector gratsDetector = new GratsDetector(config);
-      GratsParser gratsParser = new GratsParser(itemDatabase, itemScreenshotter);
+      GratsParser gratsParser = new GratsParser(config, itemDatabase, itemScreenshotter);
       GratsListener gratsListener = new GratsListener(config, discord, gratsDetector, gratsParser);
       eqLogListeners.add(gratsListener);
 

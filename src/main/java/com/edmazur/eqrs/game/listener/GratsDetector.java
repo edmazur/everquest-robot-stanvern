@@ -2,10 +2,14 @@ package com.edmazur.eqrs.game.listener;
 
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.Config;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GratsDetector {
+
+  public static final List<String> TRIGGERS = Arrays.asList("gratss", "!grats", "!gratz");
 
   private static final Pattern GUILD_CHAT_PATTERN =
       Pattern.compile("(?:\\p{Alpha}+ tells the guild|You say to your guild), '(.+)'");
@@ -23,9 +27,7 @@ public class GratsDetector {
       return false;
     }
     String chatText = matcher.group(1).toLowerCase();
-    return chatText.contains("gratss")
-        || chatText.contains("!grats")
-        || chatText.contains("!gratz");
+    return Arrays.stream(TRIGGERS.toArray(new String[0])).anyMatch(chatText::contains);
   }
 
   private Pattern getPattern() {
