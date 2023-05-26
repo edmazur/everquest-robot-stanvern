@@ -44,7 +44,7 @@ public class GratsListener implements EqLogListener {
 
       // TODO: Factor out the code that's repeated here and in ItemListener.
       MessageBuilder messageBuilder = new MessageBuilder()
-          .append("💰 Possible gratss sighting, ET: `" + eqLogEvent.getFullLine() + "`");
+          .append("💰 Possible !grats sighting, ET: `" + eqLogEvent.getFullLine() + "`");
       for (Item item : items) {
         messageBuilder.append("\n" + item.getName() + " (" + item.getUrl() + ")");
       }
