@@ -5,13 +5,6 @@ import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
-import com.edmazur.eqrs.game.Item;
-import com.edmazur.eqrs.game.ItemDatabase;
-import com.edmazur.eqrs.game.ItemScreenshotter;
-import java.io.File;
-import java.util.List;
-import java.util.Optional;
-import org.javacord.api.entity.message.MessageBuilder;
 
 public class GratsListener implements EqLogListener {
 
@@ -21,45 +14,24 @@ public class GratsListener implements EqLogListener {
   private final Config config;
   private final Discord discord;
   private final GratsDetector gratsDetector;
-  private final ItemDatabase itemDatabase;
-  private final ItemScreenshotter itemScreenshotter;
+  private final GratsParser gratsParser;
 
   public GratsListener(
       Config config,
       Discord discord,
       GratsDetector gratsDetector,
-      ItemDatabase itemDatabase,
-      ItemScreenshotter itemScreenshotter) {
+      GratsParser gratsParser) {
     this.config = config;
     this.discord = discord;
     this.gratsDetector = gratsDetector;
-    this.itemDatabase = itemDatabase;
-    this.itemScreenshotter = itemScreenshotter;
+    this.gratsParser = gratsParser;
   }
 
   @Override
   public void onEvent(EqLogEvent eqLogEvent) {
     if (gratsDetector.containsGrats(eqLogEvent)) {
-      List<Item> items = itemDatabase.parse(eqLogEvent.getPayload());
-
-      // TODO: Factor out the code that's repeated here and in ItemListener.
-      MessageBuilder messageBuilder = new MessageBuilder()
-          .append("💰 Possible !grats sighting, ET: `" + eqLogEvent.getFullLine() + "`");
-      for (Item item : items) {
-        messageBuilder.append("\n" + item.getName() + " (" + item.getUrl() + ")");
-      }
-      // Add the attachments in reverse order so that they appear in the same order as the names.
-      // Probably a Javacord bug.
-      for (int i = items.size() - 1; i >= 0; i--) {
-        Item item = items.get(i);
-        Optional<File> maybeItemScreenshot = itemScreenshotter.get(item);
-        if (maybeItemScreenshot.isPresent()) {
-          messageBuilder.addAttachment(maybeItemScreenshot.get());
-        } else {
-          messageBuilder.append("\n(Error fetching screenshot for item: " + item.getName() + ")");
-        }
-      }
-      discord.sendMessage(getChannel(), messageBuilder);
+      GratsParseResult gratsParseResult = gratsParser.parse(eqLogEvent);
+      discord.sendMessage(getChannel(), gratsParseResult.getMessageBuilder());
     }
   }
 
