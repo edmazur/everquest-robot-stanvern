@@ -1,5 +1,6 @@
 package com.edmazur.eqrs.game.listener;
 
+import com.google.common.annotations.VisibleForTesting;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,16 @@ public class GratsParseResult {
   public GratsParseResult addFile(File file) {
     files.add(file);
     return this;
+  }
+
+  @VisibleForTesting
+  List<String> getLines() {
+    return lines;
+  }
+
+  @VisibleForTesting
+  List<File> getFiles() {
+    return files;
   }
 
   public MessageBuilder getMessageBuilder() {
