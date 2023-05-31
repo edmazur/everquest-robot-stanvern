@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 class GratsParserTest {
 
   @Mock private Config mockConfig;
+  @Mock private EventChannelMatcher mockEventChannelMatcher;
   @Mock private ItemScreenshotter mockItemScreenshotter;
 
   private GratsParser gratsParser;
@@ -23,7 +24,8 @@ class GratsParserTest {
     MockitoAnnotations.openMocks(this);
     ItemDatabase itemDatabase = new ItemDatabase();
     itemDatabase.initialize();
-    gratsParser = new GratsParser(mockConfig, itemDatabase, mockItemScreenshotter);
+    gratsParser = new GratsParser(
+        mockConfig, itemDatabase, mockEventChannelMatcher, mockItemScreenshotter);
   }
 
   @Test
@@ -42,11 +44,14 @@ class GratsParserTest {
         "Resplendent Robe (https://wiki.project1999.com/Resplendent_Robe)",
         gratsParseResult.getLines().get(1));
     assertEquals(
-        "✅ Auto-parse succeeded: `$loot Resplendent Robe Veriasse 69`",
+        "✅ $loot parse succeeded: `$loot Resplendent Robe Veriasse 69`",
         gratsParseResult.getLines().get(2));
     assertEquals(
-        "(Error fetching screenshot for item: Resplendent Robe)",
+        "❌ Channel match failed: Item not found in any event channel's loot table",
         gratsParseResult.getLines().get(3));
+    assertEquals(
+        "(Error fetching screenshot for item: Resplendent Robe)",
+        gratsParseResult.getLines().get(4));
 
     assertEquals(0, gratsParseResult.getFiles().size());
   }
@@ -59,7 +64,7 @@ class GratsParserTest {
     GratsParseResult gratsParseResult = gratsParser.parse(eqLogEvent);
 
     assertEquals(
-        "❌ Auto-parse failed: Unrecognized input found (0dkp)",
+        "❌ $loot parse failed: Unrecognized input found (0dkp)",
         gratsParseResult.getLines().get(2));
   }
 
@@ -71,7 +76,7 @@ class GratsParserTest {
     GratsParseResult gratsParseResult = gratsParser.parse(eqLogEvent);
 
     assertEquals(
-        "❌ Auto-parse failed: Multiple name candidates found (closed, bigdumper)",
+        "❌ $loot parse failed: Multiple name candidates found (closed, bigdumper)",
         gratsParseResult.getLines().get(2));
   }
 
@@ -83,7 +88,7 @@ class GratsParserTest {
     GratsParseResult gratsParseResult = gratsParser.parse(eqLogEvent);
 
     assertEquals(
-        "❌ Auto-parse failed: Unrecognized input found ((britters, alt))",
+        "❌ $loot parse failed: Unrecognized input found ((britters, alt))",
         gratsParseResult.getLines().get(2));
   }
 
@@ -95,7 +100,7 @@ class GratsParserTest {
     GratsParseResult gratsParseResult = gratsParser.parse(eqLogEvent);
 
     assertEquals(
-        "✅ Auto-parse succeeded: `$loot Wristband of the Bonecaster Sauromite 1`",
+        "✅ $loot parse succeeded: `$loot Wristband of the Bonecaster Sauromite 1`",
         gratsParseResult.getLines().get(2));
   }
 
@@ -107,7 +112,7 @@ class GratsParserTest {
     GratsParseResult gratsParseResult = gratsParser.parse(eqLogEvent);
 
     assertEquals(
-        "❌ Auto-parse failed: Unrecognized input found (/)",
+        "❌ $loot parse failed: Unrecognized input found (/)",
         gratsParseResult.getLines().get(2));
   }
 

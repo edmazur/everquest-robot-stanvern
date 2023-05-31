@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
+import org.javacord.api.entity.channel.Channel;
 
 public class GratsParser {
 
@@ -20,19 +21,24 @@ public class GratsParser {
       Pattern.compile("(?:\\p{Alpha}+ tells the guild|You say to your guild), '(.+)'");
   private static final Pattern SAY_CHAT_PATTERN = Pattern.compile("You say, '(.+)'");
 
-  private static final String LOOT_STRING_SUCCESS = "✅ Auto-parse succeeded: ";
-  private static final String LOOT_STRING_FAIL = "❌ Auto-parse failed: ";
+  private static final String SUCCESS_PATTERN = "✅ %s succeeded: ";
+  private static final String FAIL_PATTERN = "❌ %s failed: ";
+  private static final String LOOT_PARSE_MESSAGE = "$loot parse";
+  private static final String EVENT_CHANNEL_MATCH_MESSAGE = "Channel match";
 
   private final Config config;
   private final ItemDatabase itemDatabase;
+  private final EventChannelMatcher eventChannelMatcher;
   private final ItemScreenshotter itemScreenshotter;
 
   public GratsParser(
       Config config,
       ItemDatabase itemDatabase,
+      EventChannelMatcher eventChannelMatcher,
       ItemScreenshotter itemScreenshotter) {
     this.config = config;
     this.itemDatabase = itemDatabase;
+    this.eventChannelMatcher = eventChannelMatcher;
     this.itemScreenshotter = itemScreenshotter;
   }
 
@@ -45,7 +51,8 @@ public class GratsParser {
     for (Item item : items) {
       gratsParseResult.addLine(item.getName() + " (" + item.getUrl() + ")");
     }
-    gratsParseResult.addLine(getLootString(eqLogEvent, items));
+    gratsParseResult.addLine(getLootParseString(eqLogEvent, items));
+    gratsParseResult.addLine(getEventChannelMatchString(eqLogEvent, items));
     // Add the attachments in reverse order so that they appear in the same order as the names.
     // Probably a Javacord bug.
     for (int i = items.size() - 1; i >= 0; i--) {
@@ -70,17 +77,17 @@ public class GratsParser {
    * - (and various other orderings, extra whitespace, etc.)
    * Expected output: $loot Earthcaller Stanvern 1000
    */
-  private String getLootString(EqLogEvent eqLogEvent, List<Item> items) {
+  private String getLootParseString(EqLogEvent eqLogEvent, List<Item> items) {
     if (items.isEmpty()) {
-      return LOOT_STRING_FAIL + "No items found";
+      return String.format(FAIL_PATTERN, LOOT_PARSE_MESSAGE) + "No items found";
     } else if (items.size() > 1) {
-      return LOOT_STRING_FAIL + "Multiple items found";
+      return String.format(FAIL_PATTERN, LOOT_PARSE_MESSAGE) + "Multiple items found";
     }
     Item item = items.get(0);
 
     Matcher matcher = getPattern().matcher(eqLogEvent.getPayload());
     if (!matcher.matches()) {
-      return LOOT_STRING_FAIL + "Error reading guild chat";
+      return String.format(FAIL_PATTERN, LOOT_PARSE_MESSAGE) + "Error reading guild chat";
     }
     String gratsMessage = matcher.group(1).toLowerCase();
 
@@ -110,23 +117,24 @@ public class GratsParser {
     // Do this first to give more helpful error messages (e.g. otherwise "0dkp" would trigger "No
     // DKP amount found").
     if (!mixedParts.isEmpty()) {
-      return LOOT_STRING_FAIL + "Unrecognized input found "
+      return String.format(FAIL_PATTERN, LOOT_PARSE_MESSAGE) + "Unrecognized input found "
           + "(" + Joiner.on(", ").join(mixedParts) + ")";
     }
 
     // Validate alpha-only parts.
     if (alphaOnlyParts.isEmpty()) {
-      return LOOT_STRING_FAIL + "No name found";
+      return String.format(FAIL_PATTERN, LOOT_PARSE_MESSAGE) + "No name found";
     } else if (alphaOnlyParts.size() > 1) {
-      return LOOT_STRING_FAIL + "Multiple name candidates found "
+      return String.format(FAIL_PATTERN, LOOT_PARSE_MESSAGE) + "Multiple name candidates found "
           + "(" + Joiner.on(", ").join(alphaOnlyParts) + ")";
     }
 
     // Validate numeric-only parts.
     if (numericOnlyParts.isEmpty()) {
-      return LOOT_STRING_FAIL + "No DKP amount found";
+      return String.format(FAIL_PATTERN, LOOT_PARSE_MESSAGE) + "No DKP amount found";
     } else if (numericOnlyParts.size() > 1) {
-      return LOOT_STRING_FAIL + "Multiple DKP amount candidates found "
+      return String.format(FAIL_PATTERN, LOOT_PARSE_MESSAGE)
+          + "Multiple DKP amount candidates found "
           + "(" + Joiner.on(", ").join(numericOnlyParts) + ")";
     }
 
@@ -134,8 +142,26 @@ public class GratsParser {
     // name and DKP amount.
     String playerName = StringUtils.capitalize(alphaOnlyParts.get(0));
     int dkpAmount = numericOnlyParts.get(0);
-    return LOOT_STRING_SUCCESS
+    return String.format(SUCCESS_PATTERN, LOOT_PARSE_MESSAGE)
         + "`$loot " + item.getName() + " " + playerName + " " + dkpAmount + "`";
+  }
+
+  private String getEventChannelMatchString(EqLogEvent eqLogEvent, List<Item> items) {
+    if (items.isEmpty()) {
+      return String.format(FAIL_PATTERN, EVENT_CHANNEL_MATCH_MESSAGE) + "No items found";
+    } else if (items.size() > 1) {
+      return String.format(FAIL_PATTERN, EVENT_CHANNEL_MATCH_MESSAGE) + "Multiple items found";
+    }
+    Item item = items.get(0);
+
+    Optional<Channel> maybeChannel = eventChannelMatcher.getChannel(eqLogEvent, item);
+    if (maybeChannel.isEmpty()) {
+      return String.format(FAIL_PATTERN, EVENT_CHANNEL_MATCH_MESSAGE)
+          + "Item not found in any event channel's loot table";
+    }
+
+    return String.format(SUCCESS_PATTERN, EVENT_CHANNEL_MATCH_MESSAGE)
+        + " <#" + maybeChannel.get().getId() + ">";
   }
 
   private Pattern getPattern() {

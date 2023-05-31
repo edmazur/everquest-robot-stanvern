@@ -3,6 +3,7 @@ package com.edmazur.eqrs.discord;
 import com.edmazur.eqrs.Config;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,9 +16,11 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.activity.ActivityType;
 import org.javacord.api.entity.channel.Channel;
+import org.javacord.api.entity.channel.ChannelCategory;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageBuilder;
+import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.listener.message.MessageCreateListener;
 import org.javacord.api.util.logging.ExceptionLogger;
@@ -144,6 +147,16 @@ public class Discord {
     getTextChannel(discordChannel).getMessagesAsStream()
         .filter(predicate)
         .forEach(message -> message.delete());
+  }
+
+  public Collection<ChannelCategory> getChannelCategories(DiscordServer discordServer) {
+    Optional<Server> maybeServer = discordApi.getServerById(discordServer.getId());
+    if (maybeServer.isEmpty()) {
+      System.err.println(
+          "Returning empty channel category list, could not find server: " + discordServer);
+      return Collections.emptyList();
+    }
+    return maybeServer.get().getChannelCategories();
   }
 
   private TextChannel getTextChannel(DiscordChannel discordChannel) {

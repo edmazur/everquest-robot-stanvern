@@ -23,6 +23,7 @@ import com.edmazur.eqrs.game.listener.DiceDetector;
 import com.edmazur.eqrs.game.listener.DiceListener;
 import com.edmazur.eqrs.game.listener.EarthquakeDetector;
 import com.edmazur.eqrs.game.listener.EarthquakeListener;
+import com.edmazur.eqrs.game.listener.EventChannelMatcher;
 import com.edmazur.eqrs.game.listener.FteListener;
 import com.edmazur.eqrs.game.listener.GameTodDetector;
 import com.edmazur.eqrs.game.listener.GameTodListener;
@@ -153,7 +154,9 @@ public class RobotStanvern {
 
       // Add grats listener.
       GratsDetector gratsDetector = new GratsDetector(config);
-      GratsParser gratsParser = new GratsParser(config, itemDatabase, itemScreenshotter);
+      EventChannelMatcher eventChannelMatcher = new EventChannelMatcher(config, discord);
+      GratsParser gratsParser =
+          new GratsParser(config, itemDatabase, eventChannelMatcher, itemScreenshotter);
       GratsListener gratsListener = new GratsListener(config, discord, gratsDetector, gratsParser);
       eqLogListeners.add(gratsListener);
 

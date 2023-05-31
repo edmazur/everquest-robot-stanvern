@@ -14,6 +14,10 @@ public enum DiscordServer {
     this.id = id;
   }
 
+  public long getId() {
+    return id;
+  }
+
   public boolean isEventServer(MessageCreateEvent event) {
     return event.getServer().isPresent() && event.getServer().get().getId() == id;
   }
