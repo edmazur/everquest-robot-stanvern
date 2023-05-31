@@ -18,6 +18,7 @@ import org.javacord.api.entity.activity.ActivityType;
 import org.javacord.api.entity.channel.Channel;
 import org.javacord.api.entity.channel.ChannelCategory;
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.intent.Intent;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.server.Server;
@@ -32,6 +33,7 @@ public class Discord {
   public Discord(Config config) {
     discordApi = new DiscordApiBuilder()
         .setToken(config.getString(Config.Property.DISCORD_PRIVATE_KEY))
+        .addIntents(Intent.MESSAGE_CONTENT)
         .login()
         .join();
 

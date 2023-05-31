@@ -62,7 +62,7 @@ public class CharInfoScreenshotListener implements MessageCreateListener {
         List<MessageAttachment> messageAttachments = message.getAttachments();
         for (MessageAttachment messageAttachment : messageAttachments) {
           if (messageAttachment.isImage()) {
-            ImageIO.write(messageAttachment.downloadAsImage().join(), "png", image);
+            ImageIO.write(messageAttachment.asImage().join(), "png", image);
             break;
           }
         }

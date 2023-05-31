@@ -24,7 +24,7 @@ dependencies {
   implementation 'mysql:mysql-connector-java:8.0.25'
   implementation 'org.ahocorasick:ahocorasick:0.6.3'
   implementation 'org.apache.commons:commons-text:1.9'
-  implementation 'org.javacord:javacord:3.4.0'
+  implementation 'org.javacord:javacord:3.8.0'
   implementation 'org.seleniumhq.selenium:selenium-java:4.9.0'
   testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
   testImplementation("org.mockito:mockito-core:3.+")
