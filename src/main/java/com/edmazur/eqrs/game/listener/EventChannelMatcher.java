@@ -9,6 +9,7 @@ import com.google.common.collect.Maps;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -43,8 +44,9 @@ public class EventChannelMatcher {
       }
     }
 
-    // Collect all responses and put them in timestamp order.
-    SortedMap<Instant, Message> messagesInTimestampOrder = Maps.newTreeMap();
+    // Collect all responses and put them in reverse timestamp order.
+    SortedMap<Instant, Message> messagesInTimestampOrder =
+        Maps.newTreeMap(Collections.reverseOrder());
     for (CompletableFuture<MessageSet> completableFuture : completableFutures) {
       Message message = completableFuture.join().getNewestMessage().get();
       Instant eventChannelTimestamp = message.getCreationTimestamp();
