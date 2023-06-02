@@ -25,7 +25,7 @@ class TickListenerTest {
   private TickListener tickListener;
 
   @BeforeEach
-  void init() {
+  void beforeEach() {
     MockitoAnnotations.openMocks(this);
     tickListener = new TickListener(mockConfig, mockDiscord, new TickDetector());
   }

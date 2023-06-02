@@ -16,7 +16,7 @@ class DiscordTableFormatterTest {
   DiscordTableFormatter discordTableFormatter;
 
   @BeforeEach
-  void init() {
+  void beforeEach() {
     discordTableFormatter = new DiscordTableFormatter();
   }
 

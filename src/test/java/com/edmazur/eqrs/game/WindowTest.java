@@ -14,7 +14,7 @@ class WindowTest {
   private Instant now;
 
   @BeforeEach
-  void init() {
+  void beforeEach() {
     now = Instant.now();
   }
 

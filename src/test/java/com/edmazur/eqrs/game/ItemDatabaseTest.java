@@ -11,7 +11,7 @@ class ItemDatabaseTest {
   private static ItemDatabase itemDatabase;
 
   @BeforeAll
-  static void init() {
+  static void beforeAll() {
     itemDatabase = new ItemDatabase();
     itemDatabase.initialize();
   }

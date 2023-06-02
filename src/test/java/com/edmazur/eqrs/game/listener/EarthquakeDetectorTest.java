@@ -12,7 +12,7 @@ class EarthquakeDetectorTest {
   private EarthquakeDetector earthquakeDetector;
 
   @BeforeEach
-  void init() {
+  void beforeEach() {
     earthquakeDetector = new EarthquakeDetector();
   }
 

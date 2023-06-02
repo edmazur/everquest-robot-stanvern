@@ -16,7 +16,7 @@ class ExpPercentToNextLevelScraperTest {
   private ExpPercentToNextLevelScraper expPercentToNextLevelScraper;
 
   @BeforeEach
-  void init() {
+  void beforeEach() {
     expPercentToNextLevelScraper = new ExpPercentToNextLevelScraper();
   }
 

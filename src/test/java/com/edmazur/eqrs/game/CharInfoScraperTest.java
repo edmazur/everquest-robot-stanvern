@@ -17,7 +17,7 @@ class CharInfoScraperTest {
   private CharInfoScraper charInfoScraper;
 
   @BeforeEach
-  void init() {
+  void beforeEach() {
     Ocr ocr = new Ocr();
     CharInfoOcrScrapeComparator charInfoOcrScrapeComparator = new CharInfoOcrScrapeComparator();
     // TODO: Replace this with a mock object since it has its own unit tests.

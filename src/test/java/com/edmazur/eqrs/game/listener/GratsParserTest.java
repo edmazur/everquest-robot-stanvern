@@ -20,7 +20,7 @@ class GratsParserTest {
   private GratsParser gratsParser;
 
   @BeforeEach
-  void init() {
+  void beforeEach() {
     MockitoAnnotations.openMocks(this);
     ItemDatabase itemDatabase = new ItemDatabase();
     itemDatabase.initialize();

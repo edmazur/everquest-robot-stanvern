@@ -28,7 +28,7 @@ class GameTodParserTest {
   private static GameTodDetector gameTodDetector;
 
   @BeforeAll
-  static void init() {
+  static void beforeAll() {
     // TODO: Maybe stub out RaidTargets. The current setup has an external dependency, making these
     // unit tests (a) not hermetic and (b) more heavyweight than they ought to be.
     Config config = new Config();
