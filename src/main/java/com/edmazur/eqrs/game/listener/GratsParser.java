@@ -2,11 +2,11 @@ package com.edmazur.eqrs.game.listener;
 
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.Config;
+import com.edmazur.eqrs.ValueOrError;
+import com.edmazur.eqrs.discord.MessageBuilderFactory;
 import com.edmazur.eqrs.game.Item;
 import com.edmazur.eqrs.game.ItemDatabase;
-import com.edmazur.eqrs.game.ItemScreenshotter;
 import com.google.common.base.Joiner;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,51 +21,30 @@ public class GratsParser {
       Pattern.compile("(?:\\p{Alpha}+ tells the guild|You say to your guild), '(.+)'");
   private static final Pattern SAY_CHAT_PATTERN = Pattern.compile("You say, '(.+)'");
 
-  private static final String SUCCESS_PATTERN = "✅ %s succeeded: ";
-  private static final String FAIL_PATTERN = "❌ %s failed: ";
-  private static final String LOOT_PARSE_MESSAGE = "$loot parse";
-  private static final String EVENT_CHANNEL_MATCH_MESSAGE = "Channel match";
-
   private final Config config;
   private final ItemDatabase itemDatabase;
   private final EventChannelMatcher eventChannelMatcher;
-  private final ItemScreenshotter itemScreenshotter;
+  private final MessageBuilderFactory messageBuilderFactory;
 
   public GratsParser(
       Config config,
       ItemDatabase itemDatabase,
       EventChannelMatcher eventChannelMatcher,
-      ItemScreenshotter itemScreenshotter) {
+      MessageBuilderFactory messageBuilderFactory) {
     this.config = config;
     this.itemDatabase = itemDatabase;
     this.eventChannelMatcher = eventChannelMatcher;
-    this.itemScreenshotter = itemScreenshotter;
+    this.messageBuilderFactory = messageBuilderFactory;
   }
 
   public GratsParseResult parse(EqLogEvent eqLogEvent) {
     List<Item> items = itemDatabase.parse(eqLogEvent.getPayload());
-
-    // TODO: Factor out the code that's repeated here and in ItemListener.
-    GratsParseResult gratsParseResult = new GratsParseResult();
-    gratsParseResult.addLine("💰 Possible !grats sighting, ET: `" + eqLogEvent.getFullLine() + "`");
-    for (Item item : items) {
-      gratsParseResult.addLine(item.getName() + " (" + item.getUrl() + ")");
-    }
-    gratsParseResult.addLine(getLootParseString(eqLogEvent, items));
-    gratsParseResult.addLine(getEventChannelMatchString(eqLogEvent, items));
-    // Add the attachments in reverse order so that they appear in the same order as the names.
-    // Probably a Javacord bug.
-    for (int i = items.size() - 1; i >= 0; i--) {
-      Item item = items.get(i);
-      Optional<File> maybeItemScreenshot = itemScreenshotter.get(item);
-      if (maybeItemScreenshot.isPresent()) {
-        gratsParseResult.addFile(maybeItemScreenshot.get());
-      } else {
-        gratsParseResult.addLine("(Error fetching screenshot for item: " + item.getName() + ")");
-      }
-    }
-
-    return gratsParseResult;
+    return new GratsParseResult(
+        eqLogEvent,
+        items,
+        getLootCommandOrError(eqLogEvent, items),
+        getChannelMatchOrError(eqLogEvent, items),
+        messageBuilderFactory);
   }
 
   /**
@@ -77,17 +56,17 @@ public class GratsParser {
    * - (and various other orderings, extra whitespace, etc.)
    * Expected output: $loot Earthcaller Stanvern 1000
    */
-  private String getLootParseString(EqLogEvent eqLogEvent, List<Item> items) {
+  private ValueOrError<String> getLootCommandOrError(EqLogEvent eqLogEvent, List<Item> items) {
     if (items.isEmpty()) {
-      return String.format(FAIL_PATTERN, LOOT_PARSE_MESSAGE) + "No items found";
+      return ValueOrError.error("No items found");
     } else if (items.size() > 1) {
-      return String.format(FAIL_PATTERN, LOOT_PARSE_MESSAGE) + "Multiple items found";
+      return ValueOrError.error("Multiple items found");
     }
     Item item = items.get(0);
 
     Matcher matcher = getPattern().matcher(eqLogEvent.getPayload());
     if (!matcher.matches()) {
-      return String.format(FAIL_PATTERN, LOOT_PARSE_MESSAGE) + "Error reading guild chat";
+      return ValueOrError.error("Error reading guild chat");
     }
     String gratsMessage = matcher.group(1).toLowerCase();
 
@@ -117,51 +96,47 @@ public class GratsParser {
     // Do this first to give more helpful error messages (e.g. otherwise "0dkp" would trigger "No
     // DKP amount found").
     if (!mixedParts.isEmpty()) {
-      return String.format(FAIL_PATTERN, LOOT_PARSE_MESSAGE) + "Unrecognized input found "
-          + "(" + Joiner.on(", ").join(mixedParts) + ")";
+      return ValueOrError.error(
+          "Unrecognized input found " + "(" + Joiner.on(", ").join(mixedParts) + ")");
     }
 
     // Validate alpha-only parts.
     if (alphaOnlyParts.isEmpty()) {
-      return String.format(FAIL_PATTERN, LOOT_PARSE_MESSAGE) + "No name found";
+      return ValueOrError.error("No name found");
     } else if (alphaOnlyParts.size() > 1) {
-      return String.format(FAIL_PATTERN, LOOT_PARSE_MESSAGE) + "Multiple name candidates found "
-          + "(" + Joiner.on(", ").join(alphaOnlyParts) + ")";
+      return ValueOrError.error(
+          "Multiple name candidates found " + "(" + Joiner.on(", ").join(alphaOnlyParts) + ")");
     }
 
     // Validate numeric-only parts.
     if (numericOnlyParts.isEmpty()) {
-      return String.format(FAIL_PATTERN, LOOT_PARSE_MESSAGE) + "No DKP amount found";
+      return ValueOrError.error("No DKP amount found");
     } else if (numericOnlyParts.size() > 1) {
-      return String.format(FAIL_PATTERN, LOOT_PARSE_MESSAGE)
-          + "Multiple DKP amount candidates found "
-          + "(" + Joiner.on(", ").join(numericOnlyParts) + ")";
+      return ValueOrError.error("Multiple DKP amount candidates found "
+          + "(" + Joiner.on(", ").join(numericOnlyParts) + ")");
     }
 
     // If you've gotten this far, there is a single name and number, so you can assume it's a player
     // name and DKP amount.
     String playerName = StringUtils.capitalize(alphaOnlyParts.get(0));
     int dkpAmount = numericOnlyParts.get(0);
-    return String.format(SUCCESS_PATTERN, LOOT_PARSE_MESSAGE)
-        + "`$loot " + item.getName() + " " + playerName + " " + dkpAmount + "`";
+    return ValueOrError.value("$loot " + item.getName() + " " + playerName + " " + dkpAmount);
   }
 
-  private String getEventChannelMatchString(EqLogEvent eqLogEvent, List<Item> items) {
+  private ValueOrError<Channel> getChannelMatchOrError(EqLogEvent eqLogEvent, List<Item> items) {
     if (items.isEmpty()) {
-      return String.format(FAIL_PATTERN, EVENT_CHANNEL_MATCH_MESSAGE) + "No items found";
+      return ValueOrError.error("No items found");
     } else if (items.size() > 1) {
-      return String.format(FAIL_PATTERN, EVENT_CHANNEL_MATCH_MESSAGE) + "Multiple items found";
+      return ValueOrError.error("Multiple items found");
     }
     Item item = items.get(0);
 
     Optional<Channel> maybeChannel = eventChannelMatcher.getChannel(eqLogEvent, item);
     if (maybeChannel.isEmpty()) {
-      return String.format(FAIL_PATTERN, EVENT_CHANNEL_MATCH_MESSAGE)
-          + "Item not found in any event channel's loot table";
+      return ValueOrError.error("Item not found in any event channel's loot table");
     }
 
-    return String.format(SUCCESS_PATTERN, EVENT_CHANNEL_MATCH_MESSAGE)
-        + " <#" + maybeChannel.get().getId() + ">";
+    return ValueOrError.value(maybeChannel.get());
   }
 
   private Pattern getPattern() {

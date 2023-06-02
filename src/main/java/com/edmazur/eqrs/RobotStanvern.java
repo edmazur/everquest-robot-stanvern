@@ -5,6 +5,7 @@ import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordTableFormatter;
+import com.edmazur.eqrs.discord.MessageBuilderFactory;
 import com.edmazur.eqrs.discord.listener.AuditListener;
 import com.edmazur.eqrs.discord.listener.BatphoneListener;
 import com.edmazur.eqrs.discord.listener.CharInfoScreenshotListener;
@@ -155,9 +156,11 @@ public class RobotStanvern {
       // Add grats listener.
       GratsDetector gratsDetector = new GratsDetector(config);
       EventChannelMatcher eventChannelMatcher = new EventChannelMatcher(config, discord);
+      MessageBuilderFactory messageBuilderFactory = new MessageBuilderFactory();
       GratsParser gratsParser =
-          new GratsParser(config, itemDatabase, eventChannelMatcher, itemScreenshotter);
-      GratsListener gratsListener = new GratsListener(config, discord, gratsDetector, gratsParser);
+          new GratsParser(config, itemDatabase, eventChannelMatcher, messageBuilderFactory);
+      GratsListener gratsListener =
+          new GratsListener(config, discord, gratsDetector, gratsParser, itemScreenshotter);
       eqLogListeners.add(gratsListener);
 
       // Add earthquake listener.
