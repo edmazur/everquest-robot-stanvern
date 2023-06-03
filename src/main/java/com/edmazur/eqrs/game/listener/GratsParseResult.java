@@ -4,10 +4,9 @@ import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.ValueOrError;
 import com.edmazur.eqrs.discord.MessageBuilderFactory;
 import com.edmazur.eqrs.game.Item;
-import com.edmazur.eqrs.game.ItemScreenshotter;
+import com.google.common.collect.Lists;
 import java.io.File;
 import java.util.List;
-import java.util.Optional;
 import org.javacord.api.entity.channel.Channel;
 import org.javacord.api.entity.message.MessageBuilder;
 
@@ -22,6 +21,7 @@ public class GratsParseResult {
   private final List<Item> items;
   private final ValueOrError<String> lootCommandOrError;
   private final ValueOrError<Channel> channelMatchOrError;
+  private final List<ValueOrError<File>> itemScreenshotsOrErrors;
   private final MessageBuilderFactory messageBuilderFactory;
 
   public GratsParseResult(
@@ -29,15 +29,17 @@ public class GratsParseResult {
       List<Item> items,
       ValueOrError<String> lootCommandOrError,
       ValueOrError<Channel> channelMatchOrError,
+      List<ValueOrError<File>> itemScreenshotsOrErrors,
       MessageBuilderFactory messageBuilderFactory) {
     this.eqLogEvent = eqLogEvent;
     this.items = items;
     this.lootCommandOrError = lootCommandOrError;
     this.channelMatchOrError = channelMatchOrError;
+    this.itemScreenshotsOrErrors = itemScreenshotsOrErrors;
     this.messageBuilderFactory = messageBuilderFactory;
   }
 
-  public MessageBuilder getMessageBuilder(ItemScreenshotter itemScreenshotter) {
+  public MessageBuilder getMessageBuilder() {
     MessageBuilder messageBuilder = messageBuilderFactory.create();
 
     // Add raw !grats message.
@@ -81,15 +83,13 @@ public class GratsParseResult {
     // Add item screenshots.
     // Do this in reverse order so that they appear in the same order as the names.
     // Probably a Javacord bug.
-    for (int i = items.size() - 1; i >= 0; i--) {
-      Item item = items.get(i);
-      Optional<File> maybeItemScreenshot = itemScreenshotter.get(item);
-      if (maybeItemScreenshot.isPresent()) {
-        messageBuilder.addAttachment(maybeItemScreenshot.get());
-      } else {
+    for (ValueOrError<File> itemScreenshotOrError : Lists.reverse(itemScreenshotsOrErrors)) {
+      if (itemScreenshotOrError.hasError()) {
         messageBuilder
-            .append("(Error fetching screenshot for item: " + item.getName() + ")")
+            .append(itemScreenshotOrError.getError())
             .appendNewLine();
+      } else {
+        messageBuilder.addAttachment(itemScreenshotOrError.getValue());
       }
     }
 

@@ -157,10 +157,13 @@ public class RobotStanvern {
       GratsDetector gratsDetector = new GratsDetector(config);
       EventChannelMatcher eventChannelMatcher = new EventChannelMatcher(config, discord);
       MessageBuilderFactory messageBuilderFactory = new MessageBuilderFactory();
-      GratsParser gratsParser =
-          new GratsParser(config, itemDatabase, eventChannelMatcher, messageBuilderFactory);
-      GratsListener gratsListener =
-          new GratsListener(config, discord, gratsDetector, gratsParser, itemScreenshotter);
+      GratsParser gratsParser = new GratsParser(
+          config,
+          itemDatabase,
+          itemScreenshotter,
+          eventChannelMatcher,
+          messageBuilderFactory);
+      GratsListener gratsListener = new GratsListener(config, discord, gratsDetector, gratsParser);
       eqLogListeners.add(gratsListener);
 
       // Add earthquake listener.

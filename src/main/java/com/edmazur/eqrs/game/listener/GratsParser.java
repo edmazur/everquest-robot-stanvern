@@ -1,12 +1,15 @@
 package com.edmazur.eqrs.game.listener;
 
+import com.beust.jcommander.internal.Lists;
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.ValueOrError;
 import com.edmazur.eqrs.discord.MessageBuilderFactory;
 import com.edmazur.eqrs.game.Item;
 import com.edmazur.eqrs.game.ItemDatabase;
+import com.edmazur.eqrs.game.ItemScreenshotter;
 import com.google.common.base.Joiner;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,27 +26,41 @@ public class GratsParser {
 
   private final Config config;
   private final ItemDatabase itemDatabase;
+  private final ItemScreenshotter itemScreenshotter;
   private final EventChannelMatcher eventChannelMatcher;
   private final MessageBuilderFactory messageBuilderFactory;
 
   public GratsParser(
       Config config,
       ItemDatabase itemDatabase,
+      ItemScreenshotter itemScreenshotter,
       EventChannelMatcher eventChannelMatcher,
       MessageBuilderFactory messageBuilderFactory) {
     this.config = config;
     this.itemDatabase = itemDatabase;
+    this.itemScreenshotter = itemScreenshotter;
     this.eventChannelMatcher = eventChannelMatcher;
     this.messageBuilderFactory = messageBuilderFactory;
   }
 
   public GratsParseResult parse(EqLogEvent eqLogEvent) {
     List<Item> items = itemDatabase.parse(eqLogEvent.getPayload());
+    List<ValueOrError<File>> itemScreenshotsOrErrors = Lists.newArrayList();
+    for (Item item : items) {
+      Optional<File> maybeItemScreenshot = itemScreenshotter.get(item);
+      if (maybeItemScreenshot.isPresent()) {
+        itemScreenshotsOrErrors.add(ValueOrError.value(maybeItemScreenshot.get()));
+      } else {
+        itemScreenshotsOrErrors.add(
+            ValueOrError.error("(Error fetching screenshot for item: " + item.getName() + ")"));
+      }
+    }
     return new GratsParseResult(
         eqLogEvent,
         items,
         getLootCommandOrError(eqLogEvent, items),
         getChannelMatchOrError(eqLogEvent, items),
+        itemScreenshotsOrErrors,
         messageBuilderFactory);
   }
 
