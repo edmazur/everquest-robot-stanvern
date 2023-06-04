@@ -63,3 +63,5 @@ tasks.register("installGitHooks", Copy) {
   fileMode 0775
 }
 build.dependsOn installGitHooks
+installDist.dependsOn installGitHooks
+run.dependsOn installGitHooks
