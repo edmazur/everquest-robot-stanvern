@@ -1,5 +1,6 @@
 package com.edmazur.eqrs.game;
 
+import com.google.common.collect.Maps;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import org.ahocorasick.trie.PayloadEmit;
 import org.ahocorasick.trie.PayloadTrie;
@@ -21,6 +24,7 @@ public class ItemDatabase {
   private static final File SPAMMY_ITEM_FILE = new File("src/main/resources/spammy-items.txt");
 
   private PayloadTrie<Item> itemsByName;
+  private Map<String, Item> itemsByUrl;
   private Set<String> spammyItems;
 
   public void initialize() {
@@ -28,6 +32,7 @@ public class ItemDatabase {
     itemsByNameBuilder
         .ignoreCase()
         .ignoreOverlaps();
+    itemsByUrl = Maps.newHashMap();
     spammyItems = getSpammyItems();
     BufferedReader bufferedReader;
     try {
@@ -39,6 +44,7 @@ public class ItemDatabase {
         String url = parts[1];
         Item item = new Item(name, url);
         itemsByNameBuilder.addKeyword(normalize(name), item);
+        itemsByUrl.put(item.getUrl(), item);
       }
     } catch (FileNotFoundException e) {
       e.printStackTrace();
@@ -80,6 +86,10 @@ public class ItemDatabase {
     }
 
     return new ArrayList<Item>(items);
+  }
+
+  public Optional<Item> getItemByUrl(String url) {
+    return Optional.ofNullable(itemsByUrl.get(url));
   }
 
   // Make apostrophes and backticks interchangeable:

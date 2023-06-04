@@ -1,6 +1,7 @@
 package com.edmazur.eqrs.game;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
@@ -124,6 +125,17 @@ class ItemDatabaseTest {
         + "Closing now. Mask of Terror 225 main reptilus gratss");
     assertEquals(1, items.size());
     assertEquals("Mask of Terror", items.get(0).getName());
+  }
+  
+  @Test
+  void getItemByUrl() {
+    assertEquals("Swiftwind",
+        itemDatabase.getItemByUrl("https://wiki.project1999.com/Swiftwind").get().getName());
+  }
+  
+  @Test
+  void getItemByUrl_notFound() {
+    assertTrue(itemDatabase.getItemByUrl("https://wiki.project1999.com/Slowwind").isEmpty());
   }
 
 }

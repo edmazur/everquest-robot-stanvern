@@ -5,11 +5,11 @@ import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordTableFormatter;
-import com.edmazur.eqrs.discord.MessageBuilderFactory;
 import com.edmazur.eqrs.discord.listener.AuditListener;
 import com.edmazur.eqrs.discord.listener.BatphoneListener;
 import com.edmazur.eqrs.discord.listener.CharInfoScreenshotListener;
 import com.edmazur.eqrs.discord.listener.DiscordTodListener;
+import com.edmazur.eqrs.discord.listener.GratsChannelListener;
 import com.edmazur.eqrs.discord.listener.ItemListener;
 import com.edmazur.eqrs.discord.speaker.TodWindowSpeaker;
 import com.edmazur.eqrs.game.CharInfoOcrScrapeComparator;
@@ -130,6 +130,7 @@ public class RobotStanvern {
       itemDatabase.initialize();
       ItemScreenshotter itemScreenshotter = new ItemScreenshotter();
       new ItemListener(config, discord, itemDatabase, itemScreenshotter);
+      new GratsChannelListener(config, discord, itemDatabase);
 
       // Add heartbeat listener.
       HeartbeatListener heartbeatListener = new HeartbeatListener(discord);
@@ -156,13 +157,8 @@ public class RobotStanvern {
       // Add grats listener.
       GratsDetector gratsDetector = new GratsDetector(config);
       EventChannelMatcher eventChannelMatcher = new EventChannelMatcher(config, discord);
-      MessageBuilderFactory messageBuilderFactory = new MessageBuilderFactory();
-      GratsParser gratsParser = new GratsParser(
-          config,
-          itemDatabase,
-          itemScreenshotter,
-          eventChannelMatcher,
-          messageBuilderFactory);
+      GratsParser gratsParser =
+          new GratsParser(config, itemDatabase, itemScreenshotter, eventChannelMatcher);
       GratsListener gratsListener = new GratsListener(config, discord, gratsDetector, gratsParser);
       eqLogListeners.add(gratsListener);
 

@@ -5,6 +5,7 @@ import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
+import org.javacord.api.entity.message.MessageBuilder;
 
 public class GratsListener implements EqLogListener {
 
@@ -31,7 +32,7 @@ public class GratsListener implements EqLogListener {
   public void onEvent(EqLogEvent eqLogEvent) {
     if (gratsDetector.containsGrats(eqLogEvent)) {
       GratsParseResult gratsParseResult = gratsParser.parse(eqLogEvent);
-      discord.sendMessage(getChannel(), gratsParseResult.getMessageBuilder());
+      discord.sendMessage(getChannel(), gratsParseResult.prepareForCreate(new MessageBuilder()));
     }
   }
 

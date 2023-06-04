@@ -4,7 +4,6 @@ import com.beust.jcommander.internal.Lists;
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.ValueOrError;
-import com.edmazur.eqrs.discord.MessageBuilderFactory;
 import com.edmazur.eqrs.game.Item;
 import com.edmazur.eqrs.game.ItemDatabase;
 import com.edmazur.eqrs.game.ItemScreenshotter;
@@ -28,19 +27,16 @@ public class GratsParser {
   private final ItemDatabase itemDatabase;
   private final ItemScreenshotter itemScreenshotter;
   private final EventChannelMatcher eventChannelMatcher;
-  private final MessageBuilderFactory messageBuilderFactory;
 
   public GratsParser(
       Config config,
       ItemDatabase itemDatabase,
       ItemScreenshotter itemScreenshotter,
-      EventChannelMatcher eventChannelMatcher,
-      MessageBuilderFactory messageBuilderFactory) {
+      EventChannelMatcher eventChannelMatcher) {
     this.config = config;
     this.itemDatabase = itemDatabase;
     this.itemScreenshotter = itemScreenshotter;
     this.eventChannelMatcher = eventChannelMatcher;
-    this.messageBuilderFactory = messageBuilderFactory;
   }
 
   public GratsParseResult parse(EqLogEvent eqLogEvent) {
@@ -60,8 +56,7 @@ public class GratsParser {
         items,
         getLootCommandOrError(eqLogEvent, items),
         getChannelMatchOrError(eqLogEvent, items),
-        itemScreenshotsOrErrors,
-        messageBuilderFactory);
+        itemScreenshotsOrErrors);
   }
 
   /**
@@ -140,7 +135,7 @@ public class GratsParser {
     return ValueOrError.value("$loot " + item.getName() + " " + playerName + " " + dkpAmount);
   }
 
-  private ValueOrError<Channel> getChannelMatchOrError(EqLogEvent eqLogEvent, List<Item> items) {
+  private ValueOrError<Long> getChannelMatchOrError(EqLogEvent eqLogEvent, List<Item> items) {
     if (items.isEmpty()) {
       return ValueOrError.error("No items found");
     } else if (items.size() > 1) {
@@ -153,7 +148,7 @@ public class GratsParser {
       return ValueOrError.error("Item not found in any event channel's loot table");
     }
 
-    return ValueOrError.value(maybeChannel.get());
+    return ValueOrError.value(maybeChannel.get().getId());
   }
 
   private Pattern getPattern() {

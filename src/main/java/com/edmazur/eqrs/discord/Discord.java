@@ -21,9 +21,14 @@ import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.intent.Intent;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageBuilder;
+import org.javacord.api.entity.permission.Role;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
+import org.javacord.api.listener.interaction.ButtonClickListener;
 import org.javacord.api.listener.message.MessageCreateListener;
+import org.javacord.api.listener.message.reaction.ReactionAddListener;
+import org.javacord.api.listener.message.reaction.ReactionRemoveAllListener;
+import org.javacord.api.listener.message.reaction.ReactionRemoveListener;
 import org.javacord.api.util.logging.ExceptionLogger;
 
 public class Discord {
@@ -172,11 +177,51 @@ public class Discord {
     return channel;
   }
 
+  // TODO: This is kind of hacky. It's being used to expose Javacord internals outside of this class
+  // to be able to send messages to one-off channels (as opposed to ones defined in the
+  // DiscordChannel enum). To get around this, you should probably change DiscordChannel to be an
+  // extensible enum (https://stackoverflow.com/a/1414896/192236).
+  public TextChannel getTextChannel(long id) {
+    Optional<Channel> maybeChannel = discordApi.getChannelById(id);
+    if (maybeChannel.isEmpty()) {
+      throw new IllegalStateException("Could not find channel: " + id);
+    }
+    TextChannel channel = maybeChannel.get().asTextChannel().get();
+    return channel;
+  }
+
+  public boolean hasAnyRole(User user, List<DiscordRole> roles, Server server) {
+    for (Role userRole : user.getRoles(server)) {
+      for (DiscordRole roleLookingFor : roles) {
+        if (userRole.getId() == roleLookingFor.getId()) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   private User getUser(DiscordUser discordUser) {
     return discordApi.getUserById(discordUser.getId()).join();
   }
 
   public void addListener(MessageCreateListener listener) {
+    discordApi.addListener(listener);
+  }
+
+  public void addListener(ButtonClickListener listener) {
+    discordApi.addListener(listener);
+  }
+
+  public void addListener(ReactionAddListener listener) {
+    discordApi.addListener(listener);
+  }
+
+  public void addListener(ReactionRemoveAllListener listener) {
+    discordApi.addListener(listener);
+  }
+
+  public void addListener(ReactionRemoveListener listener) {
     discordApi.addListener(listener);
   }
 

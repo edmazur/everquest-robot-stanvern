@@ -6,7 +6,6 @@ import static org.mockito.Mockito.mockConstruction;
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.ValueOrError;
-import com.edmazur.eqrs.discord.MessageBuilderFactory;
 import com.edmazur.eqrs.game.ItemDatabase;
 import com.edmazur.eqrs.game.ItemScreenshotter;
 import org.junit.jupiter.api.AfterEach;
@@ -38,8 +37,7 @@ class GratsParserTest {
         mockConfig,
         itemDatabase,
         mockItemScreenshotter,
-        mockEventChannelMatcher,
-        new MessageBuilderFactory());
+        mockEventChannelMatcher);
 
     mockGratsParseResult = mockConstruction(GratsParseResult.class, (mock, context) -> {
       lootCommandOrError = (ValueOrError<String>) context.arguments().get(2);
