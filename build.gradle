@@ -53,7 +53,7 @@ task runTickContextAnalysis(type: JavaExec) {
 checkstyle {
   // This is set to the same version as the Eclipse plugin version so that
   // command-line behavior matches Eclipse behavior.
-  toolVersion '9.1'
+  toolVersion '10.6.0'
   maxWarnings 0
 }
 
