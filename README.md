@@ -39,7 +39,6 @@ $ ./gradlew run --args='YourCharacterName --debug'
 - Game: Listens for ToD reports in guild chat, sends to Discord, and tries to automatically record.
 - Game: Listens for grats in guild chat and sends to Discord.
 - Game: Listens for earthquakes and sends to Discord.
-- Game: Listens for tracking info and sends to Discord.
 
 # TODO
 - Eliminate Runtime.exec() usage.

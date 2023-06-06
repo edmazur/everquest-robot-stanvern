@@ -32,8 +32,6 @@ import com.edmazur.eqrs.game.listener.GratsParser;
 import com.edmazur.eqrs.game.listener.HeartbeatListener;
 import com.edmazur.eqrs.game.listener.MotdListener;
 import com.edmazur.eqrs.game.listener.RaidTargetSpawnListener;
-import com.edmazur.eqrs.game.listener.TrackingDetector;
-import com.edmazur.eqrs.game.listener.TrackingListener;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.file.Paths;
@@ -154,11 +152,6 @@ public class RobotStanvern {
       EarthquakeListener earthquakeListener =
           new EarthquakeListener(config, discord, earthquakeDetector);
       eqLogListeners.add(earthquakeListener);
-
-      // Add tracking listener.
-      TrackingDetector trackingDetector = new TrackingDetector(config);
-      TrackingListener trackingListener = new TrackingListener(config, discord, trackingDetector);
-      eqLogListeners.add(trackingListener);
 
       // Add ToD window speaker.
       RaidTargetTableMaker raidTargetTableMaker = new RaidTargetTableMaker(config, raidTargets);
