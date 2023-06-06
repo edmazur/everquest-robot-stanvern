@@ -80,7 +80,16 @@ class GratsParserTest {
         "[Thu May 25 22:37:35 2023] Darkace tells the guild, "
         + "'!grats Darkace Belt of Contention 0dkp'").get();
     gratsParser.parse(eqLogEvent);
-    assertEquals("Unrecognized input found: `0dkp`", lootCommandOrError.getError());
+    assertEquals("$loot Belt of Contention Darkace 0", lootCommandOrError.getValue());
+  }
+
+  @Test
+  void lootStringSpaceThenDkpStringAfterNumber() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Thu May 25 22:37:35 2023] Darkace tells the guild, "
+        + "'!grats Darkace Belt of Contention 0 dkp'").get();
+    gratsParser.parse(eqLogEvent);
+    assertEquals("$loot Belt of Contention Darkace 0", lootCommandOrError.getValue());
   }
 
   @Test

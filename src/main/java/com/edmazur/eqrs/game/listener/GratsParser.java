@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.javacord.api.entity.channel.Channel;
 
@@ -22,6 +24,11 @@ public class GratsParser {
   private static final Pattern GUILD_CHAT_PATTERN =
       Pattern.compile("(?:\\p{Alpha}+ tells the guild|You say to your guild), '(.+)'");
   private static final Pattern SAY_CHAT_PATTERN = Pattern.compile("You say, '(.+)'");
+  private static final List<String> IGNORED_TOKENS_CASE_INSENSITIVE =
+      Stream.concat(
+          List.of("dkp").stream(),
+          GratsDetector.TRIGGERS.stream())
+      .collect(Collectors.toList());
 
   private final Config config;
   private final ItemDatabase itemDatabase;
@@ -84,19 +91,22 @@ public class GratsParser {
     }
     String gratsMessage = matcher.group(1);
 
-    // Remove the trigger.
-    for (String trigger : GratsDetector.TRIGGERS) {
-      gratsMessage = gratsMessage.replaceAll("(?i)" + trigger, "");
-    }
-
     // Remove the item name.
     gratsMessage = gratsMessage.replaceAll("(?i)" + item.getName(), "");
 
-    // Group what's remaining into categories.
     List<String> alphaOnlyParts = new ArrayList<String>();
     List<Integer> numericOnlyParts = new ArrayList<Integer>();
     List<String> mixedParts = new ArrayList<String>();
     for (String part : gratsMessage.trim().split("\\s+")) {
+      // Remove ignored tokens.
+      for (String ignoredTokenCaseInsensitive : IGNORED_TOKENS_CASE_INSENSITIVE) {
+        part = part.replaceAll("(?i)" + ignoredTokenCaseInsensitive, "");
+      }
+      if (part.isBlank()) {
+        continue;
+      }
+
+      // Group what's remaining into categories.
       if (part.matches("[a-zA-Z]+")) {
         alphaOnlyParts.add(part);
       } else if (part.matches("[0-9]+")) {
