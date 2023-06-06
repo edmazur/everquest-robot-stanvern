@@ -1,10 +1,17 @@
 Ale
+Berries
+Bottle
 File
+Fruit
+Gift
 Horn
 Key
+Lute
 Note
 Pick
 Pot
+Ration
+Rice
 Rod
 Stein
 Wand
