@@ -18,13 +18,13 @@ test {
 
 dependencies {
   implementation 'com.edmazur.eqlp:everquest-log-parser:0.1.0'
-  implementation 'com.github.dikhan:pagerduty-client:3.1.2'
   implementation 'commons-io:commons-io:2.11.0'
   implementation 'io.github.bonigarcia:webdrivermanager:5.3.0'
   implementation 'mysql:mysql-connector-java:8.0.25'
   implementation 'org.ahocorasick:ahocorasick:0.6.3'
   implementation 'org.apache.commons:commons-text:1.9'
   implementation 'org.javacord:javacord:3.8.0'
+  implementation 'org.json:json:20230227'
   implementation 'org.seleniumhq.selenium:selenium-java:4.9.0'
   testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
   testImplementation("org.mockito:mockito-core:5.3.1")
