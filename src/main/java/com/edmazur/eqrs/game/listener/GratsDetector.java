@@ -9,7 +9,8 @@ import java.util.regex.Pattern;
 
 public class GratsDetector {
 
-  public static final List<String> TRIGGERS = Arrays.asList("gratss", "!grats", "!gratz");
+  public static final List<String> TRIGGERS =
+      Arrays.asList("!gratss", "gratss", "!grats", "!gratz");
 
   private static final Pattern GUILD_CHAT_PATTERN =
       Pattern.compile("(?:\\p{Alpha}+ tells the guild|You say to your guild), '(.+)'");

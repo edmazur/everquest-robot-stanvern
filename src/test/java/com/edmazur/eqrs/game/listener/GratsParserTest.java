@@ -57,12 +57,21 @@ class GratsParserTest {
   }
 
   @Test
-  void grats() {
+  void exclamationGrats() {
     EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
         "[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
             + "'!grats Resplendent Robe Veriasse 69'").get();
     gratsParser.parse(eqLogEvent);
     assertEquals("$loot Resplendent Robe Veriasse 69", lootCommandOrError.getValue());
+  }
+
+  @Test
+  void exclamationGratss() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Mon Jun 05 16:35:09 2023] Nightwyn tells the guild, "
+        + "'!gratss Daewin Resplendent Wristguard 20'").get();
+    gratsParser.parse(eqLogEvent);
+    assertEquals("$loot Resplendent Wristguard Daewin 20", lootCommandOrError.getValue());
   }
 
   @Test
