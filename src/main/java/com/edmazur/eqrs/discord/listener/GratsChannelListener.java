@@ -109,7 +109,7 @@ public class GratsChannelListener implements
         .append(isAlreadyPosted ? String.format(IGNORED_PATTERN, lootCommand) : lootCommand)
         .send(channelMatch)
         .join();
-    message.addReaction("👍");
+    message.addReaction("🤖");
 
     // Close out the button interaction.
     event.getInteraction().createImmediateResponder().respond();
