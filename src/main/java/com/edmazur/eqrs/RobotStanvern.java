@@ -21,6 +21,7 @@ import com.edmazur.eqrs.game.RaidTargetTableMaker;
 import com.edmazur.eqrs.game.RaidTargets;
 import com.edmazur.eqrs.game.listener.EarthquakeDetector;
 import com.edmazur.eqrs.game.listener.EarthquakeListener;
+import com.edmazur.eqrs.game.listener.EventChannelChecker;
 import com.edmazur.eqrs.game.listener.EventChannelMatcher;
 import com.edmazur.eqrs.game.listener.FteListener;
 import com.edmazur.eqrs.game.listener.GameTodDetector;
@@ -120,7 +121,8 @@ public class RobotStanvern {
       itemDatabase.initialize();
       ItemScreenshotter itemScreenshotter = new ItemScreenshotter();
       new ItemListener(config, discord, itemDatabase, itemScreenshotter);
-      new GratsChannelListener(config, discord);
+      EventChannelChecker eventChannelChecker = new EventChannelChecker();
+      new GratsChannelListener(config, discord, eventChannelChecker);
 
       // Add heartbeat listener.
       HeartbeatListener heartbeatListener = new HeartbeatListener(discord);

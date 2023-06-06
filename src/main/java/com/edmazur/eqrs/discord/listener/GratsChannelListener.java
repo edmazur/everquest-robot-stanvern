@@ -5,6 +5,7 @@ import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordButton;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.discord.DiscordRole;
+import com.edmazur.eqrs.game.listener.EventChannelChecker;
 import com.edmazur.eqrs.game.listener.GratsParseResult;
 import java.util.List;
 import java.util.Optional;
@@ -37,17 +38,21 @@ public class GratsChannelListener implements
   private static final List<DiscordRole> TEST_ROLES = List.of(DiscordRole.TEST_ADMIN);
 
   private static final String SEND_NOTICE_PATTERN = "<@%d> sent $loot command from %s";
+  private static final String IGNORED_PATTERN = "Not sending `%s` because it's already here";
 
   private final Config config;
   private final Discord discord;
+  private final EventChannelChecker eventChannelChecker;
 
-  public GratsChannelListener(Config config, Discord discord) {
+  public GratsChannelListener(
+      Config config, Discord discord, EventChannelChecker eventChannelChecker) {
     this.config = config;
     this.discord = discord;
     this.discord.addListener((ButtonClickListener) this);
     this.discord.addListener((ReactionAddListener) this);
     this.discord.addListener((ReactionRemoveAllListener) this);
     this.discord.addListener((ReactionRemoveListener) this);
+    this.eventChannelChecker = eventChannelChecker;
   }
 
   @Override
@@ -88,17 +93,20 @@ public class GratsChannelListener implements
       return;
     }
 
-    // Send to event channel.
+    // Check whether this has already been sent to event channel.
     String lootCommand = gratsParseResult.getLootCommandOrError().getValue();
     TextChannel channelMatch =
         discord.getTextChannel(gratsParseResult.getChannelMatchOrError().getValue());
+    boolean isAlreadyPosted = eventChannelChecker.isAlreadyPosted(lootCommand, channelMatch);
+
+    // Send to event channel.
     new MessageBuilder()
         .setAllowedMentions(new AllowedMentionsBuilder().build())
         .append(String.format(SEND_NOTICE_PATTERN, user.getId(), message.getLink().toString()))
         .send(channelMatch)
         .join();
     new MessageBuilder()
-        .append(lootCommand)
+        .append(isAlreadyPosted ? String.format(IGNORED_PATTERN, lootCommand) : lootCommand)
         .send(channelMatch)
         .join();
     message.addReaction("👍");
