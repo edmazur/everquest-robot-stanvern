@@ -71,7 +71,7 @@ class GratsParserTest {
         "[Thu May 25 22:37:35 2023] Darkace tells the guild, "
         + "'!grats Darkace Belt of Contention 0dkp'").get();
     gratsParser.parse(eqLogEvent);
-    assertEquals("Unrecognized input found (0dkp)", lootCommandOrError.getError());
+    assertEquals("Unrecognized input found: `0dkp`", lootCommandOrError.getError());
   }
 
   @Test
@@ -81,7 +81,7 @@ class GratsParserTest {
         + "'!Grats  Nature's Melody 650 Closed Bigdumper'").get();
     gratsParser.parse(eqLogEvent);
     assertEquals(
-        "Multiple name candidates found (Closed, Bigdumper)",
+        "Multiple name candidates found: `Closed`, `Bigdumper`",
         lootCommandOrError.getError());
   }
 
@@ -91,7 +91,7 @@ class GratsParserTest {
         "[Wed May 24 22:56:14 2023] Britters tells the guild, "
         + "'!Grats Braid of Golden Hair Bobbydobby 333 (britters alt)'").get();
     gratsParser.parse(eqLogEvent);
-    assertEquals("Unrecognized input found ((britters, alt))", lootCommandOrError.getError());
+    assertEquals("Unrecognized input found: `(britters`, `alt)`", lootCommandOrError.getError());
   }
 
   @Test
@@ -109,7 +109,7 @@ class GratsParserTest {
         "[Tue May 23 17:31:38 2023] Faldimir tells the guild, "
         + "'!grats Spear of Fate 400 Hamfork / Guzmak'").get();
     gratsParser.parse(eqLogEvent);
-    assertEquals("Unrecognized input found (/)", lootCommandOrError.getError());
+    assertEquals("Unrecognized input found: `/`", lootCommandOrError.getError());
   }
 
 }

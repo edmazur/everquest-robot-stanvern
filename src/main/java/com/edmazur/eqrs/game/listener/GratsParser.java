@@ -111,7 +111,7 @@ public class GratsParser {
     // DKP amount found").
     if (!mixedParts.isEmpty()) {
       return ValueOrError.error(
-          "Unrecognized input found " + "(" + Joiner.on(", ").join(mixedParts) + ")");
+          "Unrecognized input found: `" + Joiner.on("`, `").join(mixedParts) + "`");
     }
 
     // Validate alpha-only parts.
@@ -119,15 +119,15 @@ public class GratsParser {
       return ValueOrError.error("No name found");
     } else if (alphaOnlyParts.size() > 1) {
       return ValueOrError.error(
-          "Multiple name candidates found " + "(" + Joiner.on(", ").join(alphaOnlyParts) + ")");
+          "Multiple name candidates found: `" + Joiner.on("`, `").join(alphaOnlyParts) + "`");
     }
 
     // Validate numeric-only parts.
     if (numericOnlyParts.isEmpty()) {
       return ValueOrError.error("No DKP amount found");
     } else if (numericOnlyParts.size() > 1) {
-      return ValueOrError.error("Multiple DKP amount candidates found "
-          + "(" + Joiner.on(", ").join(numericOnlyParts) + ")");
+      return ValueOrError.error("Multiple DKP amount candidates found: `"
+          + Joiner.on("`, `").join(numericOnlyParts) + "`");
     }
 
     // If you've gotten this far, there is a single name and number, so you can assume it's a player
