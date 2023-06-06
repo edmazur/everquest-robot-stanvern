@@ -42,24 +42,24 @@ public class TodWindowSpeaker implements Runnable {
       }
       discord.sendMessage(getChannel(),
           "**What does `[N]` mean?**\n"
-          + "- If a number appears before a name, it means the window is extrapolated.\n"
-          + "- `[1]` indicates that the previous ToD was missed, `[2]` indicates that the 2 "
+          + "\\- If a number appears before a name, it means the window is extrapolated.\n"
+          + "\\- `[1]` indicates that the previous ToD was missed, `[2]` indicates that the 2 "
           + "previous ToDs were missed, and so on.\n"
-          + "- As more extrapolations are done, windows become larger and reliability thus "
+          + "\\- As more extrapolations are done, windows become larger and reliability thus "
           + "decreases.\n"
           + "\n"
           + "**Is there another way to view this data?**\n"
-          + "- Yes! See http://edmazur.com/eq (username/password is pinned in #tod).\n"
-          + "- Extrapolated windows are also easier to visualize/understand in that UI.\n"
+          + "\\- Yes! See http://edmazur.com/eq (username/password is pinned in #tod).\n"
+          + "\\- Extrapolated windows are also easier to visualize/understand in that UI.\n"
           + "\n"
           + "**How do I avoid being continuously pinged by this channel?**\n"
-          + "- Permanently mute it. The bot continously deletes and reposts every minute.\n"
+          + "\\- Permanently mute it. The bot continously deletes and reposts every minute.\n"
           + "\n"
           + "**What about features XYZ - where can I send feedback?**\n"
-          + "- I (Stanvern) am **very** open to feedback! My goal is to streamline ToD/windows as "
-          + "much as possible, so if you have any feedback at all, positive or negative, I really "
-          + "want to hear it. Feel free to reach out to me (GG Discord, DM, in-game, etc.) as much "
-          + "as you want.");
+          + "\\- I (Stanvern) am **very** open to feedback! My goal is to streamline ToD/windows "
+          + "as much as possible, so if you have any feedback at all, positive or negative, I "
+          + "really want to hear it. Feel free to reach out to me (GG Discord, DM, in-game, etc.) "
+          + "as much as you want.");
     } catch (Throwable t) {
       t.printStackTrace();
     }
