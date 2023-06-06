@@ -130,7 +130,7 @@ public class RobotStanvern {
       itemDatabase.initialize();
       ItemScreenshotter itemScreenshotter = new ItemScreenshotter();
       new ItemListener(config, discord, itemDatabase, itemScreenshotter);
-      new GratsChannelListener(config, discord, itemDatabase);
+      new GratsChannelListener(config, discord);
 
       // Add heartbeat listener.
       HeartbeatListener heartbeatListener = new HeartbeatListener(discord);

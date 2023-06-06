@@ -41,8 +41,10 @@ public class GratsParser {
 
   public GratsParseResult parse(EqLogEvent eqLogEvent) {
     List<Item> items = itemDatabase.parse(eqLogEvent.getPayload());
+    List<String> itemUrls = Lists.newArrayList();
     List<ValueOrError<File>> itemScreenshotsOrErrors = Lists.newArrayList();
     for (Item item : items) {
+      itemUrls.add(item.getUrl());
       Optional<File> maybeItemScreenshot = itemScreenshotter.get(item);
       if (maybeItemScreenshot.isPresent()) {
         itemScreenshotsOrErrors.add(ValueOrError.value(maybeItemScreenshot.get()));
@@ -53,7 +55,7 @@ public class GratsParser {
     }
     return new GratsParseResult(
         eqLogEvent,
-        items,
+        itemUrls,
         getLootCommandOrError(eqLogEvent, items),
         getChannelMatchOrError(eqLogEvent, items),
         itemScreenshotsOrErrors);

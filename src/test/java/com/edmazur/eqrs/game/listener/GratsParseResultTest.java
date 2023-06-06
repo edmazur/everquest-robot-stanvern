@@ -8,42 +8,27 @@ import static org.mockito.Mockito.when;
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.FakeMessageBuilder;
 import com.edmazur.eqrs.ValueOrError;
-import com.edmazur.eqrs.game.Item;
-import com.edmazur.eqrs.game.ItemDatabase;
 import java.io.File;
 import java.util.List;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageAttachment;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
 
 class GratsParseResultTest {
 
   private static final EqLogEvent EQ_LOG_EVENT = EqLogEvent.parseFromLine(
       "[Wed May 24 23:00:41 2023] Veriasse tells the guild, '!grats Resplendent Robe Veriasse 69'")
       .get();
-  private static final String ITEM_NAME = "Resplendent Robe";
+  private static final List<String> ITEM_URLS =
+      List.of("https://wiki.project1999.com/Resplendent_Robe");
   private static final long CHANNEL_ID = 123;
   private static final File FILE = new File("somefile");
-
-  private ItemDatabase itemDatabase;
-  private List<Item> items;
-
-  @BeforeEach
-  void beforeEach() {
-    MockitoAnnotations.openMocks(this);
-
-    itemDatabase = new ItemDatabase();
-    itemDatabase.initialize();
-    items = itemDatabase.parse(ITEM_NAME);
-  }
 
   @Test
   void prepareForCreate() {
     GratsParseResult gratsParseResult = new GratsParseResult(
         EQ_LOG_EVENT,
-        items,
+        ITEM_URLS,
         ValueOrError.value("(loot command)"),
         ValueOrError.value(CHANNEL_ID),
         List.of(ValueOrError.value(FILE)));
@@ -62,7 +47,7 @@ class GratsParseResultTest {
   void prepareForCreate_lootCommandError() {
     GratsParseResult gratsParseResult = new GratsParseResult(
         EQ_LOG_EVENT,
-        items,
+        ITEM_URLS,
         ValueOrError.error("(loot command error)"),
         ValueOrError.value(CHANNEL_ID),
         List.of(ValueOrError.value(FILE)));
@@ -81,7 +66,7 @@ class GratsParseResultTest {
   void prepareForCreate_channelMatchError() {
     GratsParseResult gratsParseResult = new GratsParseResult(
         EQ_LOG_EVENT,
-        items,
+        ITEM_URLS,
         ValueOrError.value("(loot command)"),
         ValueOrError.error("(channel match error)"),
         List.of(ValueOrError.value(FILE)));
@@ -100,7 +85,7 @@ class GratsParseResultTest {
   void prepareForCreate_missingScreenshot() {
     GratsParseResult gratsParseResult = new GratsParseResult(
         EQ_LOG_EVENT,
-        items,
+        ITEM_URLS,
         ValueOrError.value("(loot command)"),
         ValueOrError.value(CHANNEL_ID),
         List.of(ValueOrError.error("(item screenshot error)")));
@@ -162,8 +147,7 @@ class GratsParseResultTest {
     when(mockMessage.getContent()).thenReturn(message);
     when(mockMessage.getAttachments())
         .thenReturn(hasAttachment ? List.of(mock(MessageAttachment.class)) : List.of());
-    GratsParseResult gratsParseResult =
-        GratsParseResult.fromMessage(mockMessage, itemDatabase).get();
+    GratsParseResult gratsParseResult = GratsParseResult.fromMessage(mockMessage).get();
     FakeMessageBuilder fakeMessageBuilder = new FakeMessageBuilder();
     assertEquals(
         message + "\n",

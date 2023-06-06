@@ -3,8 +3,6 @@ package com.edmazur.eqrs.game.listener;
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.ValueOrError;
 import com.edmazur.eqrs.discord.DiscordButton;
-import com.edmazur.eqrs.game.Item;
-import com.edmazur.eqrs.game.ItemDatabase;
 import com.google.common.collect.Lists;
 import java.io.File;
 import java.util.List;
@@ -49,19 +47,19 @@ public class GratsParseResult {
       Pattern.compile("^" + ERROR_ICON + " \\*\\*" + CHANNEL_MATCH_LABEL + "\\*\\*: (.+)$");
 
   private final EqLogEvent eqLogEvent;
-  private final List<Item> items;
+  private final List<String> itemUrls;
   private final ValueOrError<String> lootCommandOrError;
   private final ValueOrError<Long> channelMatchOrError;
   private final List<ValueOrError<File>> itemScreenshotsOrErrors;
 
   public GratsParseResult(
       EqLogEvent eqLogEvent,
-      List<Item> items,
+      List<String> itemUrls,
       ValueOrError<String> lootCommandOrError,
       ValueOrError<Long> channelMatchOrError,
       List<ValueOrError<File>> itemScreenshotsOrErrors) {
     this.eqLogEvent = eqLogEvent;
-    this.items = items;
+    this.itemUrls = itemUrls;
     this.lootCommandOrError = lootCommandOrError;
     this.channelMatchOrError = channelMatchOrError;
     this.itemScreenshotsOrErrors = itemScreenshotsOrErrors;
@@ -74,7 +72,7 @@ public class GratsParseResult {
    * existing messages, and because we never expect to replace attachments of existing messages,
    * this method adds only errors to itemScreenshotsOrErrors (i.e. screenshots are omitted).
    */
-  public static Optional<GratsParseResult> fromMessage(Message message, ItemDatabase itemDatabase) {
+  public static Optional<GratsParseResult> fromMessage(Message message) {
     // Do first round of parsing.
     String[] lines = message.getContent().split("\n");
     if (lines.length < 3) {
@@ -130,17 +128,13 @@ public class GratsParseResult {
     }
 
     // Read item links and screenshot errors.
-    List<Item> items = Lists.newArrayList();
+    List<String> itemUrls = Lists.newArrayList();
     List<ValueOrError<File>> itemScreenshotsOrErrors = Lists.newArrayList();
     for (int i = 0; i < itemLinkOrScreenshotErrorLines.size(); i++) {
       String itemLinkOrScreenshotErrorLine = itemLinkOrScreenshotErrorLines.get(i);
       if (i < message.getAttachments().size()) {
         // It's an item link.
-        Optional<Item> maybeItem = itemDatabase.getItemByUrl(itemLinkOrScreenshotErrorLine);
-        if (maybeItem.isEmpty()) {
-          return Optional.empty();
-        }
-        items.add(maybeItem.get());
+        itemUrls.add(itemLinkOrScreenshotErrorLine);
       } else {
         // It's a screenshot error.
         itemScreenshotsOrErrors.add(ValueOrError.error(itemLinkOrScreenshotErrorLine));
@@ -148,7 +142,7 @@ public class GratsParseResult {
     }
 
     return Optional.of(new GratsParseResult(
-        eqLogEvent, items, lootCommandOrError, channelMatchOrError, itemScreenshotsOrErrors));
+        eqLogEvent, itemUrls, lootCommandOrError, channelMatchOrError, itemScreenshotsOrErrors));
   }
 
   public ValueOrError<String> getLootCommandOrError() {
@@ -208,9 +202,9 @@ public class GratsParseResult {
     }
 
     // Add item links.
-    for (Item item : items) {
+    for (String itemUrl : itemUrls) {
       sb
-          .append(item.getUrl())
+          .append(itemUrl)
           .append("\n");
     }
 

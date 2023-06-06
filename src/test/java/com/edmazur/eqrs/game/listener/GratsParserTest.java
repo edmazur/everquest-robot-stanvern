@@ -9,6 +9,7 @@ import com.edmazur.eqrs.ValueOrError;
 import com.edmazur.eqrs.game.ItemDatabase;
 import com.edmazur.eqrs.game.ItemScreenshotter;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,6 +17,8 @@ import org.mockito.MockedConstruction;
 import org.mockito.MockitoAnnotations;
 
 class GratsParserTest {
+
+  private static ItemDatabase itemDatabase;
 
   @Mock private Config mockConfig;
   @Mock private ItemScreenshotter mockItemScreenshotter;
@@ -26,13 +29,17 @@ class GratsParserTest {
   private MockedConstruction<GratsParseResult> mockGratsParseResult;
   private ValueOrError<String> lootCommandOrError;
 
+  @BeforeAll
+  static void beforeAll() {
+    itemDatabase = new ItemDatabase();
+    itemDatabase.initialize();
+  }
+
   @SuppressWarnings("unchecked")
   @BeforeEach
   void beforeEach() {
     MockitoAnnotations.openMocks(this);
 
-    ItemDatabase itemDatabase = new ItemDatabase();
-    itemDatabase.initialize();
     gratsParser = new GratsParser(
         mockConfig,
         itemDatabase,

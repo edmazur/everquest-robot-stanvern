@@ -5,7 +5,6 @@ import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordButton;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.discord.DiscordRole;
-import com.edmazur.eqrs.game.ItemDatabase;
 import com.edmazur.eqrs.game.listener.GratsParseResult;
 import java.util.List;
 import java.util.Optional;
@@ -41,16 +40,14 @@ public class GratsChannelListener implements
 
   private final Config config;
   private final Discord discord;
-  private final ItemDatabase itemDatabase;
 
-  public GratsChannelListener(Config config, Discord discord, ItemDatabase itemDatabase) {
+  public GratsChannelListener(Config config, Discord discord) {
     this.config = config;
     this.discord = discord;
     this.discord.addListener((ButtonClickListener) this);
     this.discord.addListener((ReactionAddListener) this);
     this.discord.addListener((ReactionRemoveAllListener) this);
     this.discord.addListener((ReactionRemoveListener) this);
-    this.itemDatabase = itemDatabase;
   }
 
   @Override
@@ -73,8 +70,7 @@ public class GratsChannelListener implements
 
     // Reconstruct the GratsParseResult object.
     Message message = event.getInteraction().asMessageComponentInteraction().get().getMessage();
-    Optional<GratsParseResult> maybeGratsParseResult =
-        GratsParseResult.fromMessage(message, itemDatabase);
+    Optional<GratsParseResult> maybeGratsParseResult = GratsParseResult.fromMessage(message);
     if (maybeGratsParseResult.isEmpty()) {
       System.err.println(
           "Could not reconstruct GratsParseResult from message: " + message.getContent());
@@ -157,8 +153,7 @@ public class GratsChannelListener implements
   }
 
   private void handleHasAnyReactionChange(Message message, boolean hasAnyReaction) {
-    Optional<GratsParseResult> maybeGratsParseResult =
-        GratsParseResult.fromMessage(message, itemDatabase);
+    Optional<GratsParseResult> maybeGratsParseResult = GratsParseResult.fromMessage(message);
     if (maybeGratsParseResult.isEmpty()) {
       System.err.println(
           "Could not reconstruct GratsParseResult from message: " + message.getContent());
