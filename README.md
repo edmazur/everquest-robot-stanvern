@@ -37,7 +37,6 @@ $ ./gradlew run --args='YourCharacterName --debug'
 - Game: Detects inactivity and sends a Discord message to a user.
 - Game: Listens for MotD messages and sends to Discord.
 - Game: Listens for ToD reports in guild chat, sends to Discord, and tries to automatically record.
-- Game: Listens for ticks and their context in guild chat and sends to Discord.
 - Game: Listens for grats in guild chat and sends to Discord.
 - Game: Listens for earthquakes and sends to Discord.
 - Game: Listens for tracking info and sends to Discord.

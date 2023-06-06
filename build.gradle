@@ -43,11 +43,6 @@ task runP99WikiItemReader(type: JavaExec) {
    classpath = sourceSets.main.runtimeClasspath
 }
 
-task runTickContextAnalysis(type: JavaExec) {
-   main = 'com.edmazur.eqrs.game.listener.TickContextAnalysis'
-   classpath = sourceSets.main.runtimeClasspath
-}
-
 // TODO: Instead of copy/pasting/modifying google_checks.xml into this project,
 // see if there's a way to dynamically pull it in (with local config on top of
 // it if possible).
