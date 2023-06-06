@@ -11,7 +11,5 @@ mysql.host=
 mysql.password=
 mysql.username=
 
-pagerduty.integration_key=
-
 timezone.game=
 timezone.guild=

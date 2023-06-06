@@ -6,7 +6,6 @@ import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordTableFormatter;
 import com.edmazur.eqrs.discord.listener.AuditListener;
-import com.edmazur.eqrs.discord.listener.BatphoneListener;
 import com.edmazur.eqrs.discord.listener.CharInfoScreenshotListener;
 import com.edmazur.eqrs.discord.listener.DiscordTodListener;
 import com.edmazur.eqrs.discord.listener.GratsChannelListener;
@@ -110,12 +109,10 @@ public class RobotStanvern {
       Database database = new Database(config);
       Json json = new Json();
       RaidTargets raidTargets = new RaidTargets(config, json);
-      Pager pager = new Pager(config);
       // TODO: Set this up more like how game log messages are received centrally and passed out to
       // listeners?
       new DiscordTodListener(config, discord, database, raidTargets);
       new AuditListener(config, discord);
-      new BatphoneListener(config, discord, pager);
       Ocr ocr = new Ocr();
       CharInfoOcrScrapeComparator charInfoOcrScrapeComparator = new CharInfoOcrScrapeComparator();
       ExpPercentToNextLevelScraper expPercentToNextLevelScraper =

@@ -36,8 +36,6 @@ public class Config {
     MYSQL_PASSWORD("mysql.password"),
     MYSQL_USERNAME("mysql.username"),
 
-    PAGERDUTY_INTEGRATION_KEY("pagerduty.integration_key"),
-
     // TODO: Use these everywhere instead of ever relying on machine timezone.
     // The timezone that game logs are in.
     TIMEZONE_GAME("timezone.game"),
