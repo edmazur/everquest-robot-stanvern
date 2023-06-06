@@ -21,7 +21,8 @@ import org.javacord.api.listener.message.MessageCreateListener;
 
 public class CharInfoScreenshotListener implements MessageCreateListener {
 
-  private static final DiscordChannel CHANNEL = DiscordChannel.GG_BOT_CAMP;
+  private static final DiscordChannel PROD_CHANNEL = DiscordChannel.GG_BOT_CAMP;
+  private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_BOT_SCRAPE;
   private static final Predicate<Message> PREDICATE = DiscordPredicate.hasImage();
 
   private static final File SUCCESS_IMAGE = new File("src/main/resources/str.png");
@@ -95,9 +96,9 @@ public class CharInfoScreenshotListener implements MessageCreateListener {
 
   private DiscordChannel getChannel() {
     if (config.getBoolean(Property.DEBUG)) {
-      return DiscordChannel.TEST_GENERAL;
+      return TEST_CHANNEL;
     } else {
-      return CHANNEL;
+      return PROD_CHANNEL;
     }
   }
 
