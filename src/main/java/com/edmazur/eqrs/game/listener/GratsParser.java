@@ -94,6 +94,7 @@ public class GratsParser {
 
     // Remove the item name.
     gratsMessage = gratsMessage.replaceAll("(?i)" + item.getName(), "");
+    gratsMessage = gratsMessage.replaceAll("(?i)" + item.getNameEscaped(), "");
 
     List<String> alphaOnlyParts = new ArrayList<String>();
     List<Integer> numericOnlyParts = new ArrayList<Integer>();
@@ -137,7 +138,7 @@ public class GratsParser {
     // Validate alpha-only parts.
     if (alphaOnlyParts.isEmpty()) {
       return ValueOrError.error(
-          "`" + String.format(LOOT_COMMAND_FORMAT, item.getName(), "???", dkpAmount) + "` "
+          "`" + String.format(LOOT_COMMAND_FORMAT, item.getNameEscaped(), "???", dkpAmount) + "` "
               + "(No name found)");
     } else if (alphaOnlyParts.size() > 1) {
       return ValueOrError.error(
@@ -148,7 +149,7 @@ public class GratsParser {
     // If you've gotten this far, there is a single name and number, so you can assume it's a player
     // name and DKP amount.
     return ValueOrError.value(
-        String.format(LOOT_COMMAND_FORMAT, item.getName(), playerName, dkpAmount));
+        String.format(LOOT_COMMAND_FORMAT, item.getNameEscaped(), playerName, dkpAmount));
   }
 
   private ValueOrError<Long> getChannelMatchOrError(EqLogEvent eqLogEvent, List<Item> items) {

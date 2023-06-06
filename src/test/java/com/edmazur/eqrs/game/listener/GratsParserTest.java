@@ -141,4 +141,15 @@ class GratsParserTest {
     assertEquals("Unrecognized input found: `/`", lootCommandOrError.getError());
   }
 
+  @Test
+  void lootStringBacktickItem() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Sun Jun 04 23:32:34 2023] Mccreary tells the guild, "
+        + "'!grats Abashi's Rod of Disempowerment mccreary 3333'").get();
+    gratsParser.parse(eqLogEvent);
+    assertEquals(
+        "$loot Abashi's Rod of Disempowerment Mccreary 3333",
+        lootCommandOrError.getValue());
+  }
+
 }
