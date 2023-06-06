@@ -34,7 +34,11 @@ public class GratsChannelListener implements
   private static final List<DiscordRole> PROD_ROLES = List.of(
       DiscordRole.GG_ADMIN,
       DiscordRole.GG_LEADER,
-      DiscordRole.GG_OFFICER);
+      DiscordRole.GG_OFFICER,
+      DiscordRole.GG_COUNSEL,
+      DiscordRole.GG_QUARTERMASTER,
+      DiscordRole.GG_RAID_DIRECTOR,
+      DiscordRole.GG_HR_AGENT);
   private static final List<DiscordRole> TEST_ROLES = List.of(DiscordRole.TEST_ADMIN);
 
   private static final String SEND_NOTICE_PATTERN = "ET: `%s` - <@%d> sent $loot command from %s";
