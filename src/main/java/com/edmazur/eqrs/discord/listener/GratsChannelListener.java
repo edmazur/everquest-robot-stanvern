@@ -37,7 +37,7 @@ public class GratsChannelListener implements
       DiscordRole.GG_OFFICER);
   private static final List<DiscordRole> TEST_ROLES = List.of(DiscordRole.TEST_ADMIN);
 
-  private static final String SEND_NOTICE_PATTERN = "<@%d> sent $loot command from %s";
+  private static final String SEND_NOTICE_PATTERN = "ET: `%s` - <@%d> sent $loot command from %s";
   private static final String IGNORED_PATTERN = "Not sending `%s` because it's already here";
 
   private final Config config;
@@ -102,7 +102,10 @@ public class GratsChannelListener implements
     // Send to event channel.
     new MessageBuilder()
         .setAllowedMentions(new AllowedMentionsBuilder().build())
-        .append(String.format(SEND_NOTICE_PATTERN, user.getId(), message.getLink().toString()))
+        .append(String.format(SEND_NOTICE_PATTERN,
+            gratsParseResult.getLogEvent().getFullLine(),
+            user.getId(),
+            message.getLink().toString()))
         .send(channelMatch)
         .join();
     new MessageBuilder()

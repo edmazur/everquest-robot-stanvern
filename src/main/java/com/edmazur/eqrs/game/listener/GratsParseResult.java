@@ -145,6 +145,10 @@ public class GratsParseResult {
         eqLogEvent, itemUrls, lootCommandOrError, channelMatchOrError, itemScreenshotsOrErrors));
   }
 
+  public EqLogEvent getLogEvent() {
+    return eqLogEvent;
+  }
+
   public ValueOrError<String> getLootCommandOrError() {
     return lootCommandOrError;
   }
