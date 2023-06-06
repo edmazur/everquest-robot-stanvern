@@ -386,6 +386,11 @@
     <!-- TODO: These checks don't exist in google_checks.xml, so separate them out somewhere else
     if/when google_checks.xml is dynamically pulled in. -->
     <module name="UnusedImports"/>
+    <module name="Regexp">
+      <property name="format" value="[ \t]+$"/>
+      <property name="illegalPattern" value="true"/>
+      <property name="message" value="Trailing whitespace"/>
+    </module>
   </module>
   <module name="NewlineAtEndOfFile">
     <property name="lineSeparator" value="lf"/>
