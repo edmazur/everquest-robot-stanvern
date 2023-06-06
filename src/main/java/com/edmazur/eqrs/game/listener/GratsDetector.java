@@ -27,6 +27,12 @@ public class GratsDetector {
       return false;
     }
     String chatText = matcher.group(1).toLowerCase();
+
+    // Ignore single-word input to avoid matching input that has only the trigger and nothing else.
+    if (chatText.trim().split("\\s+").length == 1) {
+      return false;
+    }
+
     return Arrays.stream(TRIGGERS.toArray(new String[0])).anyMatch(chatText::contains);
   }
 
