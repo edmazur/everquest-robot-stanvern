@@ -122,6 +122,17 @@ class GratsParserTest {
   }
 
   @Test
+  void lootStringNoNames() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Mon May 29 00:08:38 2023] Shlimm tells the guild, "
+        + "'Orb of the Infinite Void 105 !grats'").get();
+    gratsParser.parse(eqLogEvent);
+    assertEquals(
+        "`$loot Orb of the Infinite Void ??? 105` (No name found)",
+        lootCommandOrError.getError());
+  }
+
+  @Test
   void lootStringTwoNames() {
     EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
         "[Tue May 23 17:31:38 2023] Faldimir tells the guild, "

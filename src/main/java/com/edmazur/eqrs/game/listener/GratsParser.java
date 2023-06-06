@@ -29,6 +29,7 @@ public class GratsParser {
           List.of("dkp").stream(),
           GratsDetector.TRIGGERS.stream())
       .collect(Collectors.toList());
+  private static final String LOOT_COMMAND_FORMAT = "$loot %s %s %d";
 
   private final Config config;
   private final ItemDatabase itemDatabase;
@@ -124,14 +125,6 @@ public class GratsParser {
           "Unrecognized input found: `" + Joiner.on("`, `").join(mixedParts) + "`");
     }
 
-    // Validate alpha-only parts.
-    if (alphaOnlyParts.isEmpty()) {
-      return ValueOrError.error("No name found");
-    } else if (alphaOnlyParts.size() > 1) {
-      return ValueOrError.error(
-          "Multiple name candidates found: `" + Joiner.on("`, `").join(alphaOnlyParts) + "`");
-    }
-
     // Validate numeric-only parts.
     if (numericOnlyParts.isEmpty()) {
       return ValueOrError.error("No DKP amount found");
@@ -139,12 +132,23 @@ public class GratsParser {
       return ValueOrError.error("Multiple DKP amount candidates found: `"
           + Joiner.on("`, `").join(numericOnlyParts) + "`");
     }
+    int dkpAmount = numericOnlyParts.get(0);
+
+    // Validate alpha-only parts.
+    if (alphaOnlyParts.isEmpty()) {
+      return ValueOrError.error(
+          "`" + String.format(LOOT_COMMAND_FORMAT, item.getName(), "???", dkpAmount) + "` "
+              + "(No name found)");
+    } else if (alphaOnlyParts.size() > 1) {
+      return ValueOrError.error(
+          "Multiple name candidates found: `" + Joiner.on("`, `").join(alphaOnlyParts) + "`");
+    }
+    String playerName = StringUtils.capitalize(alphaOnlyParts.get(0));
 
     // If you've gotten this far, there is a single name and number, so you can assume it's a player
     // name and DKP amount.
-    String playerName = StringUtils.capitalize(alphaOnlyParts.get(0));
-    int dkpAmount = numericOnlyParts.get(0);
-    return ValueOrError.value("$loot " + item.getName() + " " + playerName + " " + dkpAmount);
+    return ValueOrError.value(
+        String.format(LOOT_COMMAND_FORMAT, item.getName(), playerName, dkpAmount));
   }
 
   private ValueOrError<Long> getChannelMatchOrError(EqLogEvent eqLogEvent, List<Item> items) {
