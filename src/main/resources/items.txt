@@ -87,6 +87,7 @@ A Chant Rock	https://wiki.project1999.com/A_Chant_Rock
 A Copper Key	https://wiki.project1999.com/A_Copper_Key
 A Cracked Femur	https://wiki.project1999.com/A_Cracked_Femur
 A Cracked Stein	https://wiki.project1999.com/A_Cracked_Stein
+A Crazy Cleric Doll	https://wiki.project1999.com/A_Crazy_Cleric_Doll
 A Crude Stein	https://wiki.project1999.com/A_Crude_Stein
 A Dark Cauldron	https://wiki.project1999.com/A_Dark_Cauldron
 A Dark Reaver	https://wiki.project1999.com/A_Dark_Reaver
@@ -110,6 +111,7 @@ A Koada'Dal Blood Doll	https://wiki.project1999.com/A_Koada%27Dal_Blood_Doll
 A Library Card	https://wiki.project1999.com/A_Library_Card
 A Locked Chest	https://wiki.project1999.com/A_Locked_Chest
 A Locket	https://wiki.project1999.com/A_Locket
+A Maleficent Necromancer Doll	https://wiki.project1999.com/A_Maleficent_Necromancer_Doll
 A Mandible	https://wiki.project1999.com/A_Mandible
 A Metal Pipe	https://wiki.project1999.com/A_Metal_Pipe
 A Mischievous Dazzler Doll	https://wiki.project1999.com/A_Mischievous_Dazzler_Doll
@@ -167,11 +169,13 @@ A White Crown	https://wiki.project1999.com/A_White_Crown
 A White Knight	https://wiki.project1999.com/A_White_Knight
 A White Squire	https://wiki.project1999.com/A_White_Squire
 A White Throne	https://wiki.project1999.com/A_White_Throne
+A Wily Warlock Doll	https://wiki.project1999.com/A_Wily_Warlock_Doll
 A Wolf Scale	https://wiki.project1999.com/A_Wolf_Scale
 A Wooden Heart	https://wiki.project1999.com/A_Wooden_Heart
 A Worn Candle	https://wiki.project1999.com/A_Worn_Candle
 A Worn Rune	https://wiki.project1999.com/A_Worn_Rune
 A Yellow Whip	https://wiki.project1999.com/A_Yellow_Whip
+A bloody protector of Zek's Head	https://wiki.project1999.com/A_bloody_protector_of_Zek%27s_Head
 A captured message	https://wiki.project1999.com/A_captured_message
 A chipped fang	https://wiki.project1999.com/A_chipped_fang
 A fungus eye	https://wiki.project1999.com/A_fungus_eye
@@ -179,12 +183,12 @@ A note	https://wiki.project1999.com/A_note
 A shadowed knife	https://wiki.project1999.com/A_shadowed_knife
 A skeletal finger	https://wiki.project1999.com/A_skeletal_finger
 A skeletal toe	https://wiki.project1999.com/A_skeletal_toe
+A smashed protector of Zek's Head	https://wiki.project1999.com/A_smashed_protector_of_Zek%27s_Head
 A strategic map of Kithicor	https://wiki.project1999.com/A_strategic_map_of_Kithicor
 A tattered note	https://wiki.project1999.com/A_tattered_note
 Abalone Gorget	https://wiki.project1999.com/Abalone_Gorget
 Abandoned Orc Shovel	https://wiki.project1999.com/Abandoned_Orc_Shovel
 Abashi`s Rod of Disempowerment	https://wiki.project1999.com/Abashi%60s_Rod_of_Disempowerment
-Abhorrent Powder	https://wiki.project1999.com/Abhorrent_Powder
 Abjurer's Earring	https://wiki.project1999.com/Abjurer%27s_Earring
 About Ogre Splintmail	https://wiki.project1999.com/About_Ogre_Splintmail
 About Seafarer Ringmail	https://wiki.project1999.com/About_Seafarer_Ringmail
@@ -1015,7 +1019,6 @@ Bloody Cougar Bone	https://wiki.project1999.com/Bloody_Cougar_Bone
 Bloody Dirk	https://wiki.project1999.com/Bloody_Dirk
 Bloody Griffon-Hide Wrist Guard	https://wiki.project1999.com/Bloody_Griffon-Hide_Wrist_Guard
 Bloody Mantle	https://wiki.project1999.com/Bloody_Mantle
-Bloody Protector of Zek's Head	https://wiki.project1999.com/Bloody_Protector_of_Zek%27s_Head
 Bloody Shank	https://wiki.project1999.com/Bloody_Shank
 Blue Cod Card	https://wiki.project1999.com/Blue_Cod_Card
 Blue Crystal Staff	https://wiki.project1999.com/Blue_Crystal_Staff
@@ -1155,6 +1158,7 @@ Box of Abu-Kar	https://wiki.project1999.com/Box_of_Abu-Kar
 Box of Beetle Eyes	https://wiki.project1999.com/Box_of_Beetle_Eyes
 Box of Lute Strings	https://wiki.project1999.com/Box_of_Lute_Strings
 Box of Nil Space	https://wiki.project1999.com/Box_of_Nil_Space
+Box of Remains	https://wiki.project1999.com/Box_of_Remains
 Box of Winds	https://wiki.project1999.com/Box_of_Winds
 Box of the Guilty	https://wiki.project1999.com/Box_of_the_Guilty
 Box of the Void	https://wiki.project1999.com/Box_of_the_Void
@@ -1336,6 +1340,7 @@ Bronze Warclub	https://wiki.project1999.com/Bronze_Warclub
 Bronze Warhammer	https://wiki.project1999.com/Bronze_Warhammer
 Bronze Yari	https://wiki.project1999.com/Bronze_Yari
 Bronzewood Staff	https://wiki.project1999.com/Bronzewood_Staff
+Brood Sack	https://wiki.project1999.com/Brood_Sack
 Broom of Trilon	https://wiki.project1999.com/Broom_of_Trilon
 Brother Xave's Headband	https://wiki.project1999.com/Brother_Xave%27s_Headband
 Brother's Fallen	https://wiki.project1999.com/Brother%27s_Fallen
@@ -2017,7 +2022,6 @@ Crate of Tonic	https://wiki.project1999.com/Crate_of_Tonic
 Crazy Cleric Arm Plate	https://wiki.project1999.com/Crazy_Cleric_Arm_Plate
 Crazy Cleric Boots	https://wiki.project1999.com/Crazy_Cleric_Boots
 Crazy Cleric Breastplate	https://wiki.project1999.com/Crazy_Cleric_Breastplate
-Crazy Cleric Doll	https://wiki.project1999.com/Crazy_Cleric_Doll
 Crazy Cleric Gauntlets	https://wiki.project1999.com/Crazy_Cleric_Gauntlets
 Crazy Cleric Greaves	https://wiki.project1999.com/Crazy_Cleric_Greaves
 Crazy Cleric Helm	https://wiki.project1999.com/Crazy_Cleric_Helm
@@ -2907,6 +2911,7 @@ Emerald Tear	https://wiki.project1999.com/Emerald_Tear
 Emerald palm root	https://wiki.project1999.com/Emerald_palm_root
 Emeraldberry Cyanide	https://wiki.project1999.com/Emeraldberry_Cyanide
 Emissary Head	https://wiki.project1999.com/Emissary_Head
+Empty Artifact Container	https://wiki.project1999.com/Empty_Artifact_Container
 Empty Bag	https://wiki.project1999.com/Empty_Bag
 Empty Crest Case	https://wiki.project1999.com/Empty_Crest_Case
 Empty Crystal Sphere	https://wiki.project1999.com/Empty_Crystal_Sphere
@@ -3665,6 +3670,8 @@ Full Fern Flower Pouch	https://wiki.project1999.com/Full_Fern_Flower_Pouch
 Full First Rite Pack	https://wiki.project1999.com/Full_First_Rite_Pack
 Full Gathering Satchel	https://wiki.project1999.com/Full_Gathering_Satchel
 Full Muffin Crate	https://wiki.project1999.com/Full_Muffin_Crate
+Full Pack of Sarnak Heads	https://wiki.project1999.com/Full_Pack_of_Sarnak_Heads
+Full Partisan Pack	https://wiki.project1999.com/Full_Partisan_Pack
 Full Pincer Satchel	https://wiki.project1999.com/Full_Pincer_Satchel
 Full Plate Belt Mold	https://wiki.project1999.com/Full_Plate_Belt_Mold
 Full Plate Boot Mold	https://wiki.project1999.com/Full_Plate_Boot_Mold
@@ -4110,6 +4117,7 @@ Golden Star Slippers	https://wiki.project1999.com/Golden_Star_Slippers
 Golden Star Wrist Wraps	https://wiki.project1999.com/Golden_Star_Wrist_Wraps
 Golden Tablet of Draconic Strategy	https://wiki.project1999.com/Golden_Tablet_of_Draconic_Strategy
 Golden Topaz Earring	https://wiki.project1999.com/Golden_Topaz_Earring
+Golden dragon claw	https://wiki.project1999.com/Golden_dragon_claw
 Golem Metal Rod	https://wiki.project1999.com/Golem_Metal_Rod
 Golem Metal Wand	https://wiki.project1999.com/Golem_Metal_Wand
 Golem Sprocket	https://wiki.project1999.com/Golem_Sprocket
@@ -4577,6 +4585,7 @@ Hurrieta's Tunic	https://wiki.project1999.com/Hurrieta%27s_Tunic
 Hyaline Globe	https://wiki.project1999.com/Hyaline_Globe
 Hydrangea	https://wiki.project1999.com/Hydrangea
 Hyssop	https://wiki.project1999.com/Hyssop
+Ice Berry Muffin	https://wiki.project1999.com/Ice_Berry_Muffin
 Ice Burrower Meat	https://wiki.project1999.com/Ice_Burrower_Meat
 Ice Burrower Silk	https://wiki.project1999.com/Ice_Burrower_Silk
 Ice Burrower Skin	https://wiki.project1999.com/Ice_Burrower_Skin
@@ -5609,9 +5618,6 @@ Large Fine Plate Vambraces	https://wiki.project1999.com/Large_Fine_Plate_Vambrac
 Large Fine Plate Visor	https://wiki.project1999.com/Large_Fine_Plate_Visor
 Large Fine Splinted Cloak	https://wiki.project1999.com/Large_Fine_Splinted_Cloak
 Large Fine Steel Breastplate	https://wiki.project1999.com/Large_Fine_Steel_Breastplate
-Large Fire Beetle Patella	https://wiki.project1999.com/Large_Fire_Beetle_Patella
-Large Fire Beetle Sternite	https://wiki.project1999.com/Large_Fire_Beetle_Sternite
-Large Fire Beetle Tarsus	https://wiki.project1999.com/Large_Fire_Beetle_Tarsus
 Large Gauntlet Mold	https://wiki.project1999.com/Large_Gauntlet_Mold
 Large Gorget Mold	https://wiki.project1999.com/Large_Gorget_Mold
 Large Groove Nocks	https://wiki.project1999.com/Large_Groove_Nocks
@@ -5801,9 +5807,9 @@ Leather Tunic	https://wiki.project1999.com/Leather_Tunic
 Leather Whip	https://wiki.project1999.com/Leather_Whip
 Leather Wristbands	https://wiki.project1999.com/Leather_Wristbands
 Leathered Zombie Flesh	https://wiki.project1999.com/Leathered_Zombie_Flesh
-Leatherfoot Haversack	https://wiki.project1999.com/Leatherfoot_Haversack
 Leatherfoot Raider Orders	https://wiki.project1999.com/Leatherfoot_Raider_Orders
 Leatherfoot Raider Skullcap	https://wiki.project1999.com/Leatherfoot_Raider_Skullcap
+Leatherfoot Raider Skullcap (drop)	https://wiki.project1999.com/Leatherfoot_Raider_Skullcap_(drop)
 Leatherfoot Sandals	https://wiki.project1999.com/Leatherfoot_Sandals
 Leatherfoot Short Bow	https://wiki.project1999.com/Leatherfoot_Short_Bow
 Leatherfoot Skullcap	https://wiki.project1999.com/Leatherfoot_Skullcap
@@ -6030,7 +6036,6 @@ Maleficent Bracer	https://wiki.project1999.com/Maleficent_Bracer
 Maleficent Crown	https://wiki.project1999.com/Maleficent_Crown
 Maleficent Gloves	https://wiki.project1999.com/Maleficent_Gloves
 Maleficent Leggings	https://wiki.project1999.com/Maleficent_Leggings
-Maleficent Necromancer Doll	https://wiki.project1999.com/Maleficent_Necromancer_Doll
 Maleficent Robe	https://wiki.project1999.com/Maleficent_Robe
 Maleficent Sleeves	https://wiki.project1999.com/Maleficent_Sleeves
 Malevolence	https://wiki.project1999.com/Malevolence
@@ -6103,6 +6108,7 @@ Martune Rapier	https://wiki.project1999.com/Martune_Rapier
 Mask Mold	https://wiki.project1999.com/Mask_Mold
 Mask Pattern	https://wiki.project1999.com/Mask_Pattern
 Mask of Deception	https://wiki.project1999.com/Mask_of_Deception
+Mask of Draconic Enhancement	https://wiki.project1999.com/Mask_of_Draconic_Enhancement
 Mask of Empowerment	https://wiki.project1999.com/Mask_of_Empowerment
 Mask of Fall	https://wiki.project1999.com/Mask_of_Fall
 Mask of Malediction	https://wiki.project1999.com/Mask_of_Malediction
@@ -6556,6 +6562,7 @@ Nodding Blue Lily	https://wiki.project1999.com/Nodding_Blue_Lily
 Nohope Moss	https://wiki.project1999.com/Nohope_Moss
 Noise Maker	https://wiki.project1999.com/Noise_Maker
 Nok Shaman Powder	https://wiki.project1999.com/Nok_Shaman_Powder
+Normon's axe	https://wiki.project1999.com/Normon%27s_axe
 Northman Battle Axe	https://wiki.project1999.com/Northman_Battle_Axe
 Northman Claymore	https://wiki.project1999.com/Northman_Claymore
 Northman Kite Shield	https://wiki.project1999.com/Northman_Kite_Shield
@@ -6700,6 +6707,7 @@ Ogrish Smithy Hammer	https://wiki.project1999.com/Ogrish_Smithy_Hammer
 Oil of Fennin Ro	https://wiki.project1999.com/Oil_of_Fennin_Ro
 Oiled Greaves	https://wiki.project1999.com/Oiled_Greaves
 Oily Goo Secretion	https://wiki.project1999.com/Oily_Goo_Secretion
+Oily goo secretions	https://wiki.project1999.com/Oily_goo_secretions
 Ol'Tujim's Fierce Brew	https://wiki.project1999.com/Ol%27Tujim%27s_Fierce_Brew
 Old Delivered Book	https://wiki.project1999.com/Old_Delivered_Book
 Old Dragon Horn	https://wiki.project1999.com/Old_Dragon_Horn
@@ -6753,6 +6761,7 @@ Orc Scalp	https://wiki.project1999.com/Orc_Scalp
 Orc Scoutsman Wrist Pouch	https://wiki.project1999.com/Orc_Scoutsman_Wrist_Pouch
 Orcish Arsons Torch	https://wiki.project1999.com/Orcish_Arsons_Torch
 Orcish Mace	https://wiki.project1999.com/Orcish_Mace
+Orcish Morning Star	https://wiki.project1999.com/Orcish_Morning_Star
 Order of Thunder	https://wiki.project1999.com/Order_of_Thunder
 Order of Thunder (Drosco)	https://wiki.project1999.com/Order_of_Thunder_(Drosco)
 Orders for Bryn	https://wiki.project1999.com/Orders_for_Bryn
@@ -6804,6 +6813,7 @@ Packmasters Lash	https://wiki.project1999.com/Packmasters_Lash
 Paebala Fetish	https://wiki.project1999.com/Paebala_Fetish
 Paebala Warbone	https://wiki.project1999.com/Paebala_Warbone
 Page 30 of a Book	https://wiki.project1999.com/Page_30_of_a_Book
+Page 34 of a Book	https://wiki.project1999.com/Page_34_of_a_Book
 Pages from Brodders Diary I	https://wiki.project1999.com/Pages_from_Brodders_Diary_I
 Pages from Brodders Diary III	https://wiki.project1999.com/Pages_from_Brodders_Diary_III
 Pages from Brodders Diary IV	https://wiki.project1999.com/Pages_from_Brodders_Diary_IV
@@ -6856,6 +6866,7 @@ Part of Tasarin's Grimoire Pg. 375 (Right)	https://wiki.project1999.com/Part_of_
 Part of Tasarin's Grimoire Pg. 390 (Left)	https://wiki.project1999.com/Part_of_Tasarin%27s_Grimoire_Pg._390_(Left)
 Part of Tasarin's Grimoire Pg. 390 (Right)	https://wiki.project1999.com/Part_of_Tasarin%27s_Grimoire_Pg._390_(Right)
 Part of a Large Key	https://wiki.project1999.com/Part_of_a_Large_Key
+Partisan Pack	https://wiki.project1999.com/Partisan_Pack
 Partisan's Pike	https://wiki.project1999.com/Partisan%27s_Pike
 Patch Hide Ab Guard	https://wiki.project1999.com/Patch_Hide_Ab_Guard
 Patch Hide Arm Guards	https://wiki.project1999.com/Patch_Hide_Arm_Guards
@@ -7057,6 +7068,7 @@ Platinum Thread	https://wiki.project1999.com/Platinum_Thread
 Platinum Tiara	https://wiki.project1999.com/Platinum_Tiara
 Platinum Topaz Necklace	https://wiki.project1999.com/Platinum_Topaz_Necklace
 Platinum Turquoise Bracelet	https://wiki.project1999.com/Platinum_Turquoise_Bracelet
+Platinum dragon scale	https://wiki.project1999.com/Platinum_dragon_scale
 Platinum speckled powder	https://wiki.project1999.com/Platinum_speckled_powder
 Pliable Goo	https://wiki.project1999.com/Pliable_Goo
 Poacher's Head	https://wiki.project1999.com/Poacher%27s_Head
@@ -8051,6 +8063,7 @@ Sarnak Enforcer	https://wiki.project1999.com/Sarnak_Enforcer
 Sarnak Flesh Harvester	https://wiki.project1999.com/Sarnak_Flesh_Harvester
 Sarnak Great Cleaver	https://wiki.project1999.com/Sarnak_Great_Cleaver
 Sarnak Hatchling Brain	https://wiki.project1999.com/Sarnak_Hatchling_Brain
+Sarnak Head Pack	https://wiki.project1999.com/Sarnak_Head_Pack
 Sarnak Headguard	https://wiki.project1999.com/Sarnak_Headguard
 Sarnak Hide Boots	https://wiki.project1999.com/Sarnak_Hide_Boots
 Sarnak Hide Girdle	https://wiki.project1999.com/Sarnak_Hide_Girdle
@@ -8112,6 +8125,7 @@ Scaled Mystic Vambraces	https://wiki.project1999.com/Scaled_Mystic_Vambraces
 Scaled Prowler Belt	https://wiki.project1999.com/Scaled_Prowler_Belt
 Scaled Prowler Cloak	https://wiki.project1999.com/Scaled_Prowler_Cloak
 Scaled Robe of the Elder Serpent	https://wiki.project1999.com/Scaled_Robe_of_the_Elder_Serpent
+Scaled Symbol of the Serpent	https://wiki.project1999.com/Scaled_Symbol_of_the_Serpent
 Scaled Wolf Hide	https://wiki.project1999.com/Scaled_Wolf_Hide
 Scaled Wolf Hide Belt	https://wiki.project1999.com/Scaled_Wolf_Hide_Belt
 Scaled Wolf Hide Cap	https://wiki.project1999.com/Scaled_Wolf_Hide_Cap
@@ -8762,6 +8776,7 @@ Skyiron Shan`Tok	https://wiki.project1999.com/Skyiron_Shan%60Tok
 Skyiron Sheer Blade	https://wiki.project1999.com/Skyiron_Sheer_Blade
 Skyiron Sheet	https://wiki.project1999.com/Skyiron_Sheet
 Slashed Militia Tunic	https://wiki.project1999.com/Slashed_Militia_Tunic
+Slave Shackle Bag	https://wiki.project1999.com/Slave_Shackle_Bag
 Sledge of Smashing	https://wiki.project1999.com/Sledge_of_Smashing
 Sleek Black Cape	https://wiki.project1999.com/Sleek_Black_Cape
 Sleeper's Key	https://wiki.project1999.com/Sleeper%27s_Key
@@ -9070,7 +9085,6 @@ Small bit of Mithril Ore	https://wiki.project1999.com/Small_bit_of_Mithril_Ore
 Small crafted pauldron	https://wiki.project1999.com/Small_crafted_pauldron
 Small rusty key	https://wiki.project1999.com/Small_rusty_key
 Small, Folded Note	https://wiki.project1999.com/Small,_Folded_Note
-Smashed Protector of Zek's Head	https://wiki.project1999.com/Smashed_Protector_of_Zek%27s_Head
 Smithing Chisel	https://wiki.project1999.com/Smithing_Chisel
 Smithy Hammer	https://wiki.project1999.com/Smithy_Hammer
 Smoke Base Mold	https://wiki.project1999.com/Smoke_Base_Mold
@@ -9659,6 +9673,7 @@ Tarnished Two Handed Battle Axe	https://wiki.project1999.com/Tarnished_Two_Hande
 Tarnished Two Handed Sword	https://wiki.project1999.com/Tarnished_Two_Handed_Sword
 Tarnished Warhammer	https://wiki.project1999.com/Tarnished_Warhammer
 Tassen's Tax Payment	https://wiki.project1999.com/Tassen%27s_Tax_Payment
+Tasty Candy	https://wiki.project1999.com/Tasty_Candy
 Tattered Arm Wrappings	https://wiki.project1999.com/Tattered_Arm_Wrappings
 Tattered Belt	https://wiki.project1999.com/Tattered_Belt
 Tattered Cloth Note	https://wiki.project1999.com/Tattered_Cloth_Note
@@ -10460,6 +10475,7 @@ Vial of Swirling Smoke	https://wiki.project1999.com/Vial_of_Swirling_Smoke
 Vial of Tamed Mercury	https://wiki.project1999.com/Vial_of_Tamed_Mercury
 Vial of Tunare's Breath	https://wiki.project1999.com/Vial_of_Tunare%27s_Breath
 Vial of Vampire Blood	https://wiki.project1999.com/Vial_of_Vampire_Blood
+Vial of Velium Vapors	https://wiki.project1999.com/Vial_of_Velium_Vapors
 Vial of Viscous Mana	https://wiki.project1999.com/Vial_of_Viscous_Mana
 Vibrating Gauntlets of Infuse	https://wiki.project1999.com/Vibrating_Gauntlets_of_Infuse
 Vibrating Hammer of Infuse	https://wiki.project1999.com/Vibrating_Hammer_of_Infuse
@@ -10660,7 +10676,6 @@ Willie's Confession	https://wiki.project1999.com/Willie%27s_Confession
 Willsapper	https://wiki.project1999.com/Willsapper
 Wily Warlock Bracer	https://wiki.project1999.com/Wily_Warlock_Bracer
 Wily Warlock Crown	https://wiki.project1999.com/Wily_Warlock_Crown
-Wily Warlock Doll	https://wiki.project1999.com/Wily_Warlock_Doll
 Wily Warlock Gloves	https://wiki.project1999.com/Wily_Warlock_Gloves
 Wily Warlock Pants	https://wiki.project1999.com/Wily_Warlock_Pants
 Wily Warlock Robe	https://wiki.project1999.com/Wily_Warlock_Robe
