@@ -81,7 +81,7 @@ class GratsParserTest {
         + "'!Grats  Nature's Melody 650 Closed Bigdumper'").get();
     gratsParser.parse(eqLogEvent);
     assertEquals(
-        "Multiple name candidates found (closed, bigdumper)",
+        "Multiple name candidates found (Closed, Bigdumper)",
         lootCommandOrError.getError());
   }
 

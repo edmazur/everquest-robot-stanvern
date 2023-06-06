@@ -82,22 +82,22 @@ public class GratsParser {
     if (!matcher.matches()) {
       return ValueOrError.error("Error reading guild chat");
     }
-    String gratsMessage = matcher.group(1).toLowerCase();
+    String gratsMessage = matcher.group(1);
 
     // Remove the trigger.
     for (String trigger : GratsDetector.TRIGGERS) {
-      gratsMessage = gratsMessage.replace(trigger, "");
+      gratsMessage = gratsMessage.replaceAll("(?i)" + trigger, "");
     }
 
     // Remove the item name.
-    gratsMessage = gratsMessage.replace(item.getName().toLowerCase(), "");
+    gratsMessage = gratsMessage.replaceAll("(?i)" + item.getName(), "");
 
     // Group what's remaining into categories.
     List<String> alphaOnlyParts = new ArrayList<String>();
     List<Integer> numericOnlyParts = new ArrayList<Integer>();
     List<String> mixedParts = new ArrayList<String>();
     for (String part : gratsMessage.trim().split("\\s+")) {
-      if (part.matches("[a-z]+")) {
+      if (part.matches("[a-zA-Z]+")) {
         alphaOnlyParts.add(part);
       } else if (part.matches("[0-9]+")) {
         numericOnlyParts.add(Integer.parseInt(part));
