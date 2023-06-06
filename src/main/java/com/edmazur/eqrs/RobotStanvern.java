@@ -20,8 +20,6 @@ import com.edmazur.eqrs.game.ItemDatabase;
 import com.edmazur.eqrs.game.ItemScreenshotter;
 import com.edmazur.eqrs.game.RaidTargetTableMaker;
 import com.edmazur.eqrs.game.RaidTargets;
-import com.edmazur.eqrs.game.listener.DiceDetector;
-import com.edmazur.eqrs.game.listener.DiceListener;
 import com.edmazur.eqrs.game.listener.EarthquakeDetector;
 import com.edmazur.eqrs.game.listener.EarthquakeListener;
 import com.edmazur.eqrs.game.listener.EventChannelMatcher;
@@ -113,12 +111,11 @@ public class RobotStanvern {
       Json json = new Json();
       RaidTargets raidTargets = new RaidTargets(config, json);
       Pager pager = new Pager(config);
-      SoundPlayer soundPlayer = new SoundPlayer();
       // TODO: Set this up more like how game log messages are received centrally and passed out to
       // listeners?
       new DiscordTodListener(config, discord, database, raidTargets);
       new AuditListener(config, discord);
-      new BatphoneListener(config, discord, pager, soundPlayer);
+      new BatphoneListener(config, discord, pager);
       Ocr ocr = new Ocr();
       CharInfoOcrScrapeComparator charInfoOcrScrapeComparator = new CharInfoOcrScrapeComparator();
       ExpPercentToNextLevelScraper expPercentToNextLevelScraper =
@@ -190,12 +187,6 @@ public class RobotStanvern {
       RaidTargetSpawnListener raidTargetSpawnListener =
           new RaidTargetSpawnListener(config, gameScreenshotter, discord);
       eqLogListeners.add(raidTargetSpawnListener);
-
-      // Add dice listener.
-      DiceDetector diceDetector = new DiceDetector();
-      SoundPlayer soundPlayer = new SoundPlayer();
-      DiceListener diceListener = new DiceListener(diceDetector, soundPlayer);
-      eqLogListeners.add(diceListener);
     }
 
     // Parse the log.

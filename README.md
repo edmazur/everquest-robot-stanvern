@@ -29,7 +29,7 @@ $ ./gradlew run --args='YourCharacterName --debug'
 # Capabilities
 - Discord: Listens for reported ToDs and saves them to a database.
 - Discord: Listens for messages in announcement/batphone channels and records them in a separate audit channel.
-- Discord: Listens for messages in batphone channels, then plays a sound on the local machine and sends an alert through PagerDuty.
+- Discord: Listens for messages in batphone channels, then sends an alert through PagerDuty.
 - Discord: Listens for screenshots of the char info part of the UI, then replies with a scrape summary of the name/class/level/exp.
 - Discord: Listens for requests to show item info, then posts screenshots from the P99 wiki.
 - Discord: Writes current/upcoming/later raid target windows to a channel.
@@ -40,7 +40,6 @@ $ ./gradlew run --args='YourCharacterName --debug'
 - Game: Listens for ToD reports in guild chat, sends to Discord, and tries to automatically record.
 - Game: Listens for ticks and their context in guild chat and sends to Discord.
 - Game: Listens for grats in guild chat and sends to Discord.
-- Game: Listens for dice rolls, then plays a sound on the local machine.
 - Game: Listens for earthquakes and sends to Discord.
 - Game: Listens for tracking info and sends to Discord.
 
