@@ -46,4 +46,3 @@ $ ./gradlew run --args='YourCharacterName --debug'
 # TODO
 - Eliminate Runtime.exec() usage.
 - Eliminate System.err/System.out logging.
-- Add unit tests.
