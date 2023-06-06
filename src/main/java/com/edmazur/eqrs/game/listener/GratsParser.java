@@ -144,7 +144,7 @@ public class GratsParser {
       return ValueOrError.error(
           "Multiple name candidates found: `" + Joiner.on("`, `").join(alphaOnlyParts) + "`");
     }
-    String playerName = StringUtils.capitalize(alphaOnlyParts.get(0));
+    String playerName = StringUtils.capitalize(alphaOnlyParts.get(0).toLowerCase());
 
     // If you've gotten this far, there is a single name and number, so you can assume it's a player
     // name and DKP amount.

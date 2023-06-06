@@ -142,6 +142,15 @@ class GratsParserTest {
   }
 
   @Test
+  void lootStringUppercaseName() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Tue May 23 17:31:38 2023] Faldimir tells the guild, "
+        + "'!grats Spear of Fate 400 HAMFORK'").get();
+    gratsParser.parse(eqLogEvent);
+    assertEquals("$loot Spear of Fate Hamfork 400", lootCommandOrError.getValue());
+  }
+
+  @Test
   void lootStringBacktickItem() {
     EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
         "[Sun Jun 04 23:32:34 2023] Mccreary tells the guild, "
