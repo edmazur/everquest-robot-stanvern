@@ -55,6 +55,7 @@ public class EventChannelMatcher {
 
     // Process the responses in timestamp order to select the first matching candidate.
     String itemNameLower = item.getName().toLowerCase();
+    String itemNameEscapedLower = item.getNameEscaped().toLowerCase();
     Instant gratsTimestamp = eqLogEvent.getTimestamp()
         .atZone(ZoneId.of(config.getString(Config.Property.TIMEZONE_GAME))).toInstant();
     for (Map.Entry<Instant, Message> mapEntry : messagesInTimestampOrder.entrySet()) {
@@ -62,7 +63,7 @@ public class EventChannelMatcher {
       Message message = mapEntry.getValue();
       String contentLower = message.getContent().toLowerCase();
       if (contentLower.contains(ITEM_NAME_SENTINEL_CASE_INSENSITIVE)
-          && contentLower.contains(itemNameLower)
+          && (contentLower.contains(itemNameLower) || contentLower.contains(itemNameEscapedLower))
           && gratsTimestamp.isAfter(eventChannelTimestamp)) {
         return Optional.of(message.getChannel());
       }
