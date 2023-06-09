@@ -13,9 +13,10 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import org.javacord.api.entity.channel.ServerChannel;
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.MessageAuthor;
+import org.javacord.api.entity.message.MessageBuilder;
+import org.javacord.api.entity.message.mention.AllowedMentionsBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.event.message.MessageEditEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
@@ -74,7 +75,7 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
     onMessage(
         event.getChannel(),
         event.getMessage().getCreationTimestamp(),
-        event.getMessageAuthor().getDisplayName(),
+        event.getMessageAuthor(),
         event.getMessageContent(),
         MessageType.CREATE);
   }
@@ -84,7 +85,7 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
     onMessage(
         event.getChannel(),
         event.getMessage().getLastEditTimestamp().get(),
-        event.getMessageAuthor().getDisplayName(),
+        event.getMessageAuthor(),
         event.getMessageContent(),
         MessageType.EDIT);
   }
@@ -92,7 +93,7 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
   private void onMessage(
       TextChannel eventChannel,
       Instant instant,
-      String author,
+      MessageAuthor author,
       String content,
       MessageType messageType) {
     for (Map.Entry<DiscordCategory, DiscordChannel> mapEntry : getCategoryChannelMap().entrySet()) {
@@ -101,21 +102,19 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
       if (discordCategoryToAudit.isEventChannel(eventChannel)
           && !discordChannelToWriteAuditLogTo.isEventChannel(eventChannel)
           && !DiscordChannel.containsEventChannel(eventChannel, getUnauditedChannels())) {
-        Optional<ServerChannel> maybeServerChannel = eventChannel.asServerChannel();
-        if (maybeServerChannel.isEmpty()) {
-          return;
-        }
-        // TODO: Make the #channel linked.
-        // TODO: Maybe make the user linked.
         // TODO: Use an "embed" with nice colors/images for different channels.
-        String auditMessage = String.format("**%s** message from **%s** in **#%s** at **%s**:\n%s",
+        String auditMessage = String.format("**%s** message from <@%d> in <#%s> at **%s**:\n%s",
             messageType.getDescription(),
-            author,
-            maybeServerChannel.get().getName(),
+            author.getId(),
+            eventChannel.getId(),
             instant.atZone(ZoneId.of(config.getString(Property.TIMEZONE_GUILD)))
                 .format(DateTimeFormatter.RFC_1123_DATE_TIME),
-            stripMentions(content));
-        discord.sendMessage(discordChannelToWriteAuditLogTo, auditMessage);
+            content);
+        discord.sendMessage(
+            discordChannelToWriteAuditLogTo,
+            new MessageBuilder()
+                .setAllowedMentions(new AllowedMentionsBuilder().build())
+                .setContent(auditMessage));
         break;
       }
     }
@@ -135,17 +134,6 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
     } else {
       return PROD_UNAUDITED_CHANNELS;
     }
-  }
-
-  /*
-   * Strips all mentions (@here, @everyone, custom roles, etc.) from the content.
-   */
-  private String stripMentions(String content) {
-    // TODO: Make this more robust by avoiding stripping from non-role usage of @. I assume there's
-    // some way to inspect the message to differentiate something like "@everyone hi" vs. something
-    // like "blah blah random @ blah blah" (couldn't think of a good example for the non-role usage,
-    // hence this being a TODO for an edge case that'll probably be very rare).
-    return content.replace("@", "@ ");
   }
 
 }
