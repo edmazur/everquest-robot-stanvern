@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageAuthor;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.mention.AllowedMentionsBuilder;
@@ -82,11 +83,15 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
 
   @Override
   public void onMessageEdit(MessageEditEvent event) {
+    // This step feels a little hacky, but for some reason the last edit timestamp isn't populated
+    // on the MessageEditEvent, so forcible re-request the full message so you have it.
+    Message message = discord.getMessage(event.getMessageId(), event.getChannel()).join();
+
     onMessage(
-        event.getChannel(),
-        event.getMessage().getLastEditTimestamp().get(),
-        event.getMessageAuthor(),
-        event.getMessageContent(),
+        message.getChannel(),
+        message.getLastEditTimestamp().get(),
+        message.getAuthor(),
+        message.getContent(),
         MessageType.EDIT);
   }
 

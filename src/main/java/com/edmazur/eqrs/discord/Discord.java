@@ -201,6 +201,10 @@ public class Discord {
     return false;
   }
 
+  public CompletableFuture<Message> getMessage(long id, TextChannel textChannel) {
+    return discordApi.getMessageById(id, textChannel);
+  }
+
   private User getUser(DiscordUser discordUser) {
     return discordApi.getUserById(discordUser.getId()).join();
   }
