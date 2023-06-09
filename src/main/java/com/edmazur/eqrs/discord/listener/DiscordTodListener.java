@@ -24,17 +24,17 @@ import org.javacord.api.listener.message.MessageCreateListener;
 public class DiscordTodListener implements MessageCreateListener {
 
   private static final String HELP_TOD_USAGE =
-      "- !tod usage: `!tod <target>, <timestamp>` Example: `!tod naggy, 5/14 17:55:36`";
+      "\\- !tod usage: `!tod <target>, <timestamp>` Example: `!tod naggy, 5/14 17:55:36`";
   private static final String HELP_QUAKE_USAGE =
-      "- !quake usage: `!quake <timestamp>` Example: `!quake 5/14 17:55:36`";
+      "\\- !quake usage: `!quake <timestamp>` Example: `!quake 5/14 17:55:36`";
   private static final String HELP_TARGET =
-      "- `<target>` is case-insensitive and supports common abbrevations, "
+      "\\- `<target>` is case-insensitive and supports common abbrevations, "
       + "e.g. `Lord Nagafen`, `lord nagafen`, and `naggy` are all valid.";
   private static final String HELP_TIMESTAMP =
-      "- `<timestamp>` format is `{month}/{day} {hour}:{minute}:{seconds}`. "
+      "\\- `<timestamp>` format is `{month}/{day} {hour}:{minute}:{seconds}`. "
       + "Times are 24h format (e.g. 7pm = 19:00:00) and are always interpreted as Eastern time.";
   private static final String HELP_GUILD =
-      "- `<guild>` is case-insensitive and supports common abbrevations, "
+      "\\- `<guild>` is case-insensitive and supports common abbrevations, "
       + "e.g. `Force of Will` and `fow` are both valid.";
 
   private static final Pattern HELP_PATTERN = Pattern.compile("!help.*");
