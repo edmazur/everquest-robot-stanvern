@@ -2,6 +2,7 @@ package com.edmazur.eqrs.game;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import java.io.File;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 import org.openqa.selenium.By;
@@ -14,13 +15,23 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 public class ItemScreenshotter {
 
+  private static final int LOG_SPAM_DELINEATOR_SIDE_SIZE = 40;
+  private static final String LOG_SPAM_DELINEATOR_SIDE =
+      String.join("", Collections.nCopies(LOG_SPAM_DELINEATOR_SIDE_SIZE, "#"));
+  private static final String LOG_SPAM_DELINEATOR_FORMAT =
+      LOG_SPAM_DELINEATOR_SIDE + " (ItemScreenshotter log spam - %s) " + LOG_SPAM_DELINEATOR_SIDE;
+
   public Optional<File> get(Item item) {
     try {
+      // TODO: Eliminate all of the log spam from here and then remove the delineators.
+      System.out.println(String.format(LOG_SPAM_DELINEATOR_FORMAT, "START"));
       WebDriverManager.chromedriver().setup();
       ChromeOptions options = new ChromeOptions();
       options.addArguments("--headless");
       options.addArguments("--window-size=1980,960");
+      System.setProperty("webdriver.chrome.silentOutput", "true");
       ChromeDriver driver = new ChromeDriver(options);
+      System.out.println(String.format(LOG_SPAM_DELINEATOR_FORMAT, "END"));
 
       driver.get(item.getUrl());
 
