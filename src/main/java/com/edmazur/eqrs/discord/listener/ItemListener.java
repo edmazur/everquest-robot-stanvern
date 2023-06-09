@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import org.javacord.api.entity.message.MessageBuilder;
+import org.javacord.api.entity.message.mention.AllowedMentionsBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
@@ -63,7 +64,9 @@ public class ItemListener implements MessageCreateListener {
       return;
     }
 
-    MessageBuilder messageBuilder = new MessageBuilder().replyTo(event.getMessage());
+    MessageBuilder messageBuilder = new MessageBuilder()
+        .replyTo(event.getMessage())
+        .setAllowedMentions(new AllowedMentionsBuilder().build());
     for (int i = 0; i < items.size(); i++) {
       Item item = items.get(i);
       messageBuilder.append((i > 0 ? "\n" : "") + item.getName() + " (" + item.getUrl() + ")");

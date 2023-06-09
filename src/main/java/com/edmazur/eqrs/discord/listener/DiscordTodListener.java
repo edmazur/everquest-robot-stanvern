@@ -15,7 +15,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
+import org.javacord.api.entity.message.mention.AllowedMentionsBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
@@ -75,7 +77,7 @@ public class DiscordTodListener implements MessageCreateListener {
     if (getChannel().isEventChannel(event)) {
       Matcher helpMatcher = HELP_PATTERN.matcher(event.getMessageContent());
       if (helpMatcher.matches()) {
-        event.getMessage().reply(
+        sendReply(event,
             HELP_TOD_USAGE
             + "\n" + HELP_QUAKE_USAGE
             + "\n" + HELP_TARGET
@@ -94,7 +96,7 @@ public class DiscordTodListener implements MessageCreateListener {
         }
         if (commaCount != 1) {
           event.addReactionsToMessage("❌");
-          event.getMessage().reply(
+          sendReply(event,
               "Sorry, unrecognized !tod command, there should be exactly 1 comma"
               + "\n" + HELP_TOD_USAGE
               + "\n" + HELP_TARGET
@@ -107,7 +109,8 @@ public class DiscordTodListener implements MessageCreateListener {
         // !tod was used, but arguments could not be parsed.
         if (!todParseMatcher.matches() || todParseMatcher.groupCount() != 2) {
           event.addReactionsToMessage("❌");
-          event.getMessage().reply("Sorry, unrecognized !tod command"
+          sendReply(event,
+              "Sorry, unrecognized !tod command"
               + "\n" + HELP_TOD_USAGE
               + "\n" + HELP_TARGET
               + "\n" + HELP_TIMESTAMP);
@@ -119,7 +122,8 @@ public class DiscordTodListener implements MessageCreateListener {
         Optional<RaidTarget> maybeRaidTarget = raidTargets.getRaidTarget(raidTargetToParse);
         if (maybeRaidTarget.isEmpty()) {
           event.addReactionsToMessage("❌");
-          event.getMessage().reply("Sorry, I don't know this target: `" + raidTargetToParse + "`"
+          sendReply(event,
+              "Sorry, I don't know this target: `" + raidTargetToParse + "`"
               + "\n" + HELP_TARGET);
           return;
         }
@@ -132,21 +136,22 @@ public class DiscordTodListener implements MessageCreateListener {
         Optional<LocalDateTime> maybeTimestamp = getTimestamp(timestampToParse);
         if (maybeTimestamp.isEmpty()) {
           event.addReactionsToMessage("❌");
-          event.getMessage().reply("Sorry, I can't read this timestamp: `" + timestampToParse + "`"
+          sendReply(event,
+              "Sorry, I can't read this timestamp: `" + timestampToParse + "`"
               + "\n" + HELP_TIMESTAMP);
           return;
         }
         LocalDateTime timestamp = maybeTimestamp.get();
         if (timestamp.isAfter(LocalDateTime.now())) {
           event.addReactionsToMessage("❌");
-          event.getMessage().reply(
+          sendReply(event,
               "Sorry, ToD cannot be in the future: `" + timestampToParse + "`");
           return;
         }
         LocalDateTime quakeTime = database.getQuakeTime();
         if (timestamp.isBefore(quakeTime)) {
           event.addReactionsToMessage("❌");
-          event.getMessage().reply(
+          sendReply(event,
               "Sorry, ToD cannot be before quake time (" + DATE_TIME_FORMATTER.format(quakeTime)
                   + " ET)");
           return;
@@ -166,7 +171,7 @@ public class DiscordTodListener implements MessageCreateListener {
 
         database.updateTimeOfDeath(raidTarget, timestamp);
         event.addReactionsToMessage("👍");
-        event.getMessage().reply(embed);
+        sendReply(event, embed);
       }
 
       Matcher quakeMatcher = QUAKE_PATTERN.matcher(event.getMessageContent());
@@ -215,6 +220,22 @@ public class DiscordTodListener implements MessageCreateListener {
         event.getMessage().reply(embed);
       }
     }
+  }
+
+  private void sendReply(MessageCreateEvent event, String content) {
+    new MessageBuilder()
+        .replyTo(event.getMessage())
+        .setAllowedMentions(new AllowedMentionsBuilder().build())
+        .setContent(content)
+        .send(event.getChannel());
+  }
+
+  private void sendReply(MessageCreateEvent event, EmbedBuilder embed) {
+    new MessageBuilder()
+        .replyTo(event.getMessage())
+        .setAllowedMentions(new AllowedMentionsBuilder().build())
+        .setEmbed(embed)
+        .send(event.getChannel());
   }
 
   private Optional<LocalDateTime> getTimestamp(String timestampToParse) {

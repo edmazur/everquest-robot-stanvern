@@ -15,7 +15,9 @@ import java.util.function.Predicate;
 import javax.imageio.ImageIO;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageAttachment;
+import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
+import org.javacord.api.entity.message.mention.AllowedMentionsBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
@@ -89,7 +91,11 @@ public class CharInfoScreenshotListener implements MessageCreateListener {
                 + "`Level:` " + (charInfo.hasLevel() ? charInfo.getLevel() : "?") + "\n"
                 + "`  Exp:` " + (charInfo.hasExpPercentToNextLevel()
                     ? charInfo.getExpPercentToNextLevel() + "%" : "?") + "\n");
-        message.reply(embed);
+        new MessageBuilder()
+            .replyTo(message)
+            .setAllowedMentions(new AllowedMentionsBuilder().build())
+            .setEmbed(embed)
+            .send(message.getChannel());
       }
     }).start();
   }
