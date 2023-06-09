@@ -99,7 +99,8 @@ class GratsParserTest {
         + "'!Grats  Nature's Melody 650 Closed Bigdumper'").get();
     gratsParser.parse(eqLogEvent);
     assertEquals(
-        "Multiple name candidates found: ``Closed``, ``Bigdumper``",
+        "``$loot Nature's Melody ??? 650`` "
+            + "(Multiple name candidates found: ``Closed``, ``Bigdumper``)",
         lootCommandOrError.getError());
   }
 

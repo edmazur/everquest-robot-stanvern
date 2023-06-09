@@ -139,16 +139,16 @@ public class GratsParser {
     int dkpAmount = numericOnlyParts.get(0);
 
     // Validate alpha-only parts.
-    if (alphaOnlyParts.isEmpty()) {
+    if (alphaOnlyParts.size() != 1) {
       return ValueOrError.error(
           "``"
           + String.format(LOOT_COMMAND_FORMAT,
               item.getNameWithBackticksReplaced(), "???", dkpAmount)
           + "`` "
-              + "(No name found)");
-    } else if (alphaOnlyParts.size() > 1) {
-      return ValueOrError.error(
-          "Multiple name candidates found: ``" + Joiner.on("``, ``").join(alphaOnlyParts) + "``");
+          + (alphaOnlyParts.isEmpty()
+              ? "(No name found)"
+              : "(Multiple name candidates found: ``"
+                  + Joiner.on("``, ``").join(alphaOnlyParts) + "``)"));
     }
     String playerName = StringUtils.capitalize(alphaOnlyParts.get(0).toLowerCase());
 
