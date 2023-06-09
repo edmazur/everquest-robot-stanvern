@@ -39,7 +39,7 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
 
   private static final Map<DiscordCategory, DiscordChannel> TEST_CATEGORY_CHANNEL_MAP =
       Map.ofEntries(
-          entry(DiscordCategory.TEST_IMPORATNT, DiscordChannel.TEST_IMPORTANT_AUDIT)
+          entry(DiscordCategory.TEST_IMPORTANT, DiscordChannel.TEST_IMPORTANT_AUDIT)
       );
   private static final List<DiscordChannel> TEST_UNAUDITED_CHANNELS = List.of(
       DiscordChannel.TEST_UNAUDITED);
