@@ -35,12 +35,12 @@ dependencies {
 mainClassName = 'com.edmazur.eqrs.RobotStanvern'
 
 task runGameTodDetectorBenchmark(type: JavaExec) {
-   main = 'com.edmazur.eqrs.game.listener.GameTodDetectorBenchmark'
+   mainClass = 'com.edmazur.eqrs.game.listener.GameTodDetectorBenchmark'
    classpath = sourceSets.main.runtimeClasspath
 }
 
 task runP99WikiItemReader(type: JavaExec) {
-   main = 'com.edmazur.eqrs.game.P99WikiItemReader'
+   mainClass = 'com.edmazur.eqrs.game.P99WikiItemReader'
    classpath = sourceSets.main.runtimeClasspath
 }
 
