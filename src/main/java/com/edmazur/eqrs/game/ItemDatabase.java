@@ -43,7 +43,7 @@ public class ItemDatabase {
         String name = parts[0];
         String url = parts[1];
         Item item = new Item(name, url);
-        itemsByNameBuilder.addKeyword(item.getNameEscaped(), item);
+        itemsByNameBuilder.addKeyword(normalize(item.getName()), item);
         itemsByUrl.put(item.getUrl(), item);
       }
     } catch (FileNotFoundException e) {
@@ -71,7 +71,7 @@ public class ItemDatabase {
   public List<Item> parse(String text) {
     Set<Item> items = new LinkedHashSet<>();
     Set<Item> seenSpammyItems = new HashSet<>();
-    for (PayloadEmit<Item> payload : itemsByName.parseText(Item.escape(text))) {
+    for (PayloadEmit<Item> payload : itemsByName.parseText(normalize(text))) {
       Item item = payload.getPayload();
       items.add(item);
       if (spammyItems.contains(item.getName())) {
@@ -90,6 +90,14 @@ public class ItemDatabase {
 
   public Optional<Item> getItemByUrl(String url) {
     return Optional.ofNullable(itemsByUrl.get(url));
+  }
+
+  /**
+   * Returns a normalized string for matching.
+   * Keep this logic in sync with the logic in Item class.
+   */
+  private String normalize(String s) {
+    return s.replace('`', '\'');
   }
 
 }

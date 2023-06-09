@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.concurrent.CompletableFuture;
+import java.util.regex.Pattern;
 import org.javacord.api.entity.channel.Channel;
 import org.javacord.api.entity.channel.ChannelCategory;
 import org.javacord.api.entity.message.Message;
@@ -54,8 +55,7 @@ public class EventChannelMatcher {
     }
 
     // Process the responses in timestamp order to select the first matching candidate.
-    String itemNameLower = item.getName().toLowerCase();
-    String itemNameEscapedLower = item.getNameEscaped().toLowerCase();
+    Pattern itemNamePattern = item.getNamePattern();
     Instant gratsTimestamp = eqLogEvent.getTimestamp()
         .atZone(ZoneId.of(config.getString(Config.Property.TIMEZONE_GAME))).toInstant();
     for (Map.Entry<Instant, Message> mapEntry : messagesInTimestampOrder.entrySet()) {
@@ -63,7 +63,7 @@ public class EventChannelMatcher {
       Message message = mapEntry.getValue();
       String contentLower = message.getContent().toLowerCase();
       if (contentLower.contains(ITEM_NAME_SENTINEL_CASE_INSENSITIVE)
-          && (contentLower.contains(itemNameLower) || contentLower.contains(itemNameEscapedLower))
+          && itemNamePattern.matcher(contentLower).matches()
           && gratsTimestamp.isAfter(eventChannelTimestamp)) {
         return Optional.of(message.getChannel());
       }

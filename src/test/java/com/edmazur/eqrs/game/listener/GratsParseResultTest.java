@@ -34,11 +34,32 @@ class GratsParseResultTest {
         List.of(ValueOrError.value(FILE)));
     FakeMessageBuilder fakeMessageBuilder = new FakeMessageBuilder();
     assertEquals(
-        "💰 ET: `[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
-            + "'!grats Resplendent Robe Veriasse 69'`\n"
-        + "✅ **$loot command**: `(loot command)`\n"
+        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+            + "'!grats Resplendent Robe Veriasse 69'``\n"
+        + "✅ **$loot command**: ``(loot command)``\n"
         + "✅ **Channel match**: <#123>\n"
         + "https://wiki.project1999.com/Resplendent_Robe\n",
+        gratsParseResult.prepareForCreate(fakeMessageBuilder).getStringBuilder().toString());
+    assertEquals(FILE, fakeMessageBuilder.getAttachment());
+  }
+
+  @Test
+  void prepareForCreate_apostropheBacktick() {
+    GratsParseResult gratsParseResult = new GratsParseResult(
+        EqLogEvent.parseFromLine(
+            "[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+                + "'!grats Chief Ry`Gorr's Head Veriasse 69'").get(),
+        List.of("https://wiki.project1999.com/Chief_Ry%60Gorr%27s_Head"),
+        ValueOrError.value("(loot command)"),
+        ValueOrError.value(CHANNEL_ID),
+        List.of(ValueOrError.value(FILE)));
+    FakeMessageBuilder fakeMessageBuilder = new FakeMessageBuilder();
+    assertEquals(
+        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+            + "'!grats Chief Ry`Gorr's Head Veriasse 69'``\n"
+        + "✅ **$loot command**: ``(loot command)``\n"
+        + "✅ **Channel match**: <#123>\n"
+        + "https://wiki.project1999.com/Chief_Ry%60Gorr%27s_Head\n",
         gratsParseResult.prepareForCreate(fakeMessageBuilder).getStringBuilder().toString());
     assertEquals(FILE, fakeMessageBuilder.getAttachment());
   }
@@ -53,8 +74,8 @@ class GratsParseResultTest {
         List.of(ValueOrError.value(FILE)));
     FakeMessageBuilder fakeMessageBuilder = new FakeMessageBuilder();
     assertEquals(
-        "💰 ET: `[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
-            + "'!grats Resplendent Robe Veriasse 69'`\n"
+        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+            + "'!grats Resplendent Robe Veriasse 69'``\n"
         + "❌ **$loot command**: (loot command error)\n"
         + "✅ **Channel match**: <#123>\n"
         + "https://wiki.project1999.com/Resplendent_Robe\n",
@@ -72,9 +93,9 @@ class GratsParseResultTest {
         List.of(ValueOrError.value(FILE)));
     FakeMessageBuilder fakeMessageBuilder = new FakeMessageBuilder();
     assertEquals(
-        "💰 ET: `[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
-            + "'!grats Resplendent Robe Veriasse 69'`\n"
-        + "✅ **$loot command**: `(loot command)`\n"
+        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+            + "'!grats Resplendent Robe Veriasse 69'``\n"
+        + "✅ **$loot command**: ``(loot command)``\n"
         + "❌ **Channel match**: (channel match error)\n"
         + "https://wiki.project1999.com/Resplendent_Robe\n",
         gratsParseResult.prepareForCreate(fakeMessageBuilder).getStringBuilder().toString());
@@ -91,9 +112,9 @@ class GratsParseResultTest {
         List.of(ValueOrError.error("(item screenshot error)")));
     FakeMessageBuilder fakeMessageBuilder = new FakeMessageBuilder();
     assertEquals(
-        "💰 ET: `[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
-            + "'!grats Resplendent Robe Veriasse 69'`\n"
-        + "✅ **$loot command**: `(loot command)`\n"
+        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+            + "'!grats Resplendent Robe Veriasse 69'``\n"
+        + "✅ **$loot command**: ``(loot command)``\n"
         + "✅ **Channel match**: <#123>\n"
         + "https://wiki.project1999.com/Resplendent_Robe\n"
         + "(item screenshot error)\n",
@@ -104,18 +125,28 @@ class GratsParseResultTest {
   @Test
   void fromMessage() {
     runFromMessageTest(
-        "💰 ET: `[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
-            + "'!grats Resplendent Robe Veriasse 69'`\n"
-        + "✅ **$loot command**: `(loot command)`\n"
+        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+            + "'!grats Resplendent Robe Veriasse 69'``\n"
+        + "✅ **$loot command**: ``(loot command)``\n"
         + "✅ **Channel match**: <#123>\n"
         + "https://wiki.project1999.com/Resplendent_Robe", true);
   }
 
   @Test
+  void fromMessage_apostropheBacktick() {
+    runFromMessageTest(
+        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+            + "'!grats Chief Ry`Gorr's Head Veriasse 69'``\n"
+        + "✅ **$loot command**: ``(loot command)``\n"
+        + "✅ **Channel match**: <#123>\n"
+        + "https://wiki.project1999.com/Chief_Ry%60Gorr%27s_Head", true);
+  }
+
+  @Test
   void fromMessage_lootCommandError() {
     runFromMessageTest(
-        "💰 ET: `[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
-            + "'!grats Resplendent Robe Veriasse 69'`\n"
+        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+            + "'!grats Resplendent Robe Veriasse 69'``\n"
         + "❌ **$loot command**: (loot command error)\n"
         + "✅ **Channel match**: <#123>\n"
         + "https://wiki.project1999.com/Resplendent_Robe", true);
@@ -124,9 +155,9 @@ class GratsParseResultTest {
   @Test
   void fromMessage_channelMatchError() {
     runFromMessageTest(
-        "💰 ET: `[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
-            + "'!grats Resplendent Robe Veriasse 69'`\n"
-        + "✅ **$loot command**: `(loot command)`\n"
+        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+            + "'!grats Resplendent Robe Veriasse 69'``\n"
+        + "✅ **$loot command**: ``(loot command)``\n"
         + "❌ **Channel match**: (channel match error)\n"
         + "https://wiki.project1999.com/Resplendent_Robe", true);
   }
@@ -134,9 +165,9 @@ class GratsParseResultTest {
   @Test
   void fromMessage_missingScreenshot() {
     runFromMessageTest(
-        "💰 ET: `[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
-            + "'!grats Resplendent Robe Veriasse 69'`\n"
-        + "✅ **$loot command**: `(loot command)`\n"
+        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+            + "'!grats Resplendent Robe Veriasse 69'``\n"
+        + "✅ **$loot command**: ``(loot command)``\n"
         + "✅ **Channel match**: <#123>\n"
         + "https://wiki.project1999.com/Resplendent_Robe\n"
         + "(item screenshot error)", false);

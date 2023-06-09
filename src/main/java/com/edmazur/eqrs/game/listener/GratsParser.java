@@ -58,7 +58,7 @@ public class GratsParser {
         itemScreenshotsOrErrors.add(ValueOrError.value(maybeItemScreenshot.get()));
       } else {
         itemScreenshotsOrErrors.add(
-            ValueOrError.error("(Error fetching screenshot for item: " + item.getName() + ")"));
+            ValueOrError.error("(Error fetching screenshot for item: ``" + item.getName() + "``)"));
       }
     }
     return new GratsParseResult(
@@ -93,8 +93,11 @@ public class GratsParser {
     String gratsMessage = matcher.group(1);
 
     // Remove the item name.
-    gratsMessage = gratsMessage.replaceAll("(?i)" + item.getName(), "");
-    gratsMessage = gratsMessage.replaceAll("(?i)" + item.getNameEscaped(), "");
+    matcher = item.getNamePattern().matcher(gratsMessage);
+    if (!matcher.matches()) {
+      return ValueOrError.error("Error getting item name");
+    }
+    gratsMessage = gratsMessage.replaceAll(matcher.group(1), "");
 
     List<String> alphaOnlyParts = new ArrayList<String>();
     List<Integer> numericOnlyParts = new ArrayList<Integer>();
@@ -123,33 +126,36 @@ public class GratsParser {
     // DKP amount found").
     if (!mixedParts.isEmpty()) {
       return ValueOrError.error(
-          "Unrecognized input found: `" + Joiner.on("`, `").join(mixedParts) + "`");
+          "Unrecognized input found: ``" + Joiner.on("``, ``").join(mixedParts) + "``");
     }
 
     // Validate numeric-only parts.
     if (numericOnlyParts.isEmpty()) {
       return ValueOrError.error("No DKP amount found");
     } else if (numericOnlyParts.size() > 1) {
-      return ValueOrError.error("Multiple DKP amount candidates found: `"
-          + Joiner.on("`, `").join(numericOnlyParts) + "`");
+      return ValueOrError.error("Multiple DKP amount candidates found: ``"
+          + Joiner.on("``, ``").join(numericOnlyParts) + "``");
     }
     int dkpAmount = numericOnlyParts.get(0);
 
     // Validate alpha-only parts.
     if (alphaOnlyParts.isEmpty()) {
       return ValueOrError.error(
-          "`" + String.format(LOOT_COMMAND_FORMAT, item.getNameEscaped(), "???", dkpAmount) + "` "
+          "``"
+          + String.format(LOOT_COMMAND_FORMAT,
+              item.getNameWithBackticksReplaced(), "???", dkpAmount)
+          + "`` "
               + "(No name found)");
     } else if (alphaOnlyParts.size() > 1) {
       return ValueOrError.error(
-          "Multiple name candidates found: `" + Joiner.on("`, `").join(alphaOnlyParts) + "`");
+          "Multiple name candidates found: ``" + Joiner.on("``, ``").join(alphaOnlyParts) + "``");
     }
     String playerName = StringUtils.capitalize(alphaOnlyParts.get(0).toLowerCase());
 
     // If you've gotten this far, there is a single name and number, so you can assume it's a player
     // name and DKP amount.
-    return ValueOrError.value(
-        String.format(LOOT_COMMAND_FORMAT, item.getNameEscaped(), playerName, dkpAmount));
+    return ValueOrError.value(String.format(LOOT_COMMAND_FORMAT,
+        item.getNameWithBackticksReplaced(), playerName, dkpAmount));
   }
 
   private ValueOrError<Long> getChannelMatchOrError(EqLogEvent eqLogEvent, List<Item> items) {
