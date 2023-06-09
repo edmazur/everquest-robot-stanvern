@@ -33,9 +33,6 @@ public class DiscordTodListener implements MessageCreateListener {
   private static final String HELP_TIMESTAMP =
       "\\- `<timestamp>` format is `{month}/{day} {hour}:{minute}:{seconds}`. "
       + "Times are 24h format (e.g. 7pm = 19:00:00) and are always interpreted as Eastern time.";
-  private static final String HELP_GUILD =
-      "\\- `<guild>` is case-insensitive and supports common abbrevations, "
-      + "e.g. `Force of Will` and `fow` are both valid.";
 
   private static final Pattern HELP_PATTERN = Pattern.compile("!help.*");
   private static final Pattern TIMESTAMP_PATTERN =
@@ -81,8 +78,7 @@ public class DiscordTodListener implements MessageCreateListener {
             HELP_TOD_USAGE
             + "\n" + HELP_QUAKE_USAGE
             + "\n" + HELP_TARGET
-            + "\n" + HELP_TIMESTAMP
-            + "\n" + HELP_GUILD);
+            + "\n" + HELP_TIMESTAMP);
         return;
       }
 
