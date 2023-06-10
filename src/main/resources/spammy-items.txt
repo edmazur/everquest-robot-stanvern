@@ -9,6 +9,7 @@ Horn
 Key
 Lute
 Note
+Opal
 Pick
 Pot
 Ration
