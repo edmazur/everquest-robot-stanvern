@@ -26,7 +26,10 @@ public class GratsParser {
   private static final Pattern SAY_CHAT_PATTERN = Pattern.compile("You say, '(.+)'");
   private static final List<String> IGNORED_TOKENS_CASE_INSENSITIVE =
       Stream.concat(
-          List.of("dkp").stream(),
+          List.of(
+              "closed",
+              "dkp",
+              "swapping").stream(),
           GratsDetector.TRIGGERS.stream())
       .collect(Collectors.toList());
   private static final String LOOT_COMMAND_FORMAT = "$loot %s %s %d";

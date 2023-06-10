@@ -93,14 +93,32 @@ class GratsParserTest {
   }
 
   @Test
-  void lootStringExtraWord() {
+  void lootStringClosed() {
     EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
         "[Wed May 24 22:56:36 2023] Bigdumper tells the guild, "
         + "'!Grats  Nature's Melody 650 Closed Bigdumper'").get();
     gratsParser.parse(eqLogEvent);
+    assertEquals("$loot Nature's Melody Bigdumper 650", lootCommandOrError.getValue());
+  }
+
+  @Test
+  void lootStringSwapping() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Thu Jun 08 01:52:21 2023] Screeching tells the guild, "
+        + "'!grats Klandicar's Talisman Raging 1000 swapping'").get();
+    gratsParser.parse(eqLogEvent);
+    assertEquals("$loot Klandicar's Talisman Raging 1000", lootCommandOrError.getValue());
+  }
+
+  @Test
+  void lootStringExtraWord() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Wed May 24 22:56:36 2023] Bigdumper tells the guild, "
+        + "'!Grats  Nature's Melody 650 blah Bigdumper'").get();
+    gratsParser.parse(eqLogEvent);
     assertEquals(
         "``$loot Nature's Melody ??? 650`` "
-            + "(Multiple name candidates found: ``Closed``, ``Bigdumper``)",
+            + "(Multiple name candidates found: ``blah``, ``Bigdumper``)",
         lootCommandOrError.getError());
   }
 
