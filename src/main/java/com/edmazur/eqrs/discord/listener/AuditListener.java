@@ -13,8 +13,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageAuthor;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.mention.AllowedMentionsBuilder;
@@ -83,15 +83,20 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
 
   @Override
   public void onMessageEdit(MessageEditEvent event) {
-    // This step feels a little hacky, but for some reason the last edit timestamp isn't populated
-    // on the MessageEditEvent, so forcible re-request the full message so you have it.
-    Message message = discord.getMessage(event.getMessageId(), event.getChannel()).join();
+    // Per https://discord.com/channels/151037561152733184/151326093482262528/1116845429682864199,
+    // more than "true" edit events can trigger MessageEditEvent, e.g. embed generation. As a
+    // workaround for this, inspect whether the last edit timestamp is present to determine whether
+    // or not this is a "true" edit event.
+    Optional<Instant> maybeLastEditTimestamp = event.getMessage().getLastEditTimestamp();
+    if (maybeLastEditTimestamp.isEmpty()) {
+      return;
+    }
 
     onMessage(
-        message.getChannel(),
-        message.getLastEditTimestamp().get(),
-        message.getAuthor(),
-        message.getContent(),
+        event.getChannel(),
+        maybeLastEditTimestamp.get(),
+        event.getMessageAuthor(),
+        event.getMessageContent(),
         MessageType.EDIT);
   }
 
