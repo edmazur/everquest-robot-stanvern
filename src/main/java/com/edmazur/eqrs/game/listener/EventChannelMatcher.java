@@ -28,10 +28,12 @@ public class EventChannelMatcher {
 
   private Config config;
   private Discord discord;
+  private LootGroupExpander lootGroupExpander;
 
-  public EventChannelMatcher(Config config, Discord discord) {
+  public EventChannelMatcher(Config config, Discord discord, LootGroupExpander lootGroupExpander) {
     this.config = config;
     this.discord = discord;
+    this.lootGroupExpander = lootGroupExpander;
   }
 
   public Optional<Channel> getChannel(EqLogEvent eqLogEvent, Item item) {
@@ -58,10 +60,16 @@ public class EventChannelMatcher {
     Pattern itemNamePattern = item.getNamePattern();
     Instant gratsTimestamp = eqLogEvent.getTimestamp()
         .atZone(ZoneId.of(config.getString(Config.Property.TIMEZONE_GAME))).toInstant();
+    Map<String, String> lootGroupExpansions = lootGroupExpander.getExpansions();
     for (Map.Entry<Instant, Message> mapEntry : messagesInTimestampOrder.entrySet()) {
-      Instant eventChannelTimestamp = mapEntry.getKey();
-      Message message = mapEntry.getValue();
+      final Instant eventChannelTimestamp = mapEntry.getKey();
+      final Message message = mapEntry.getValue();
       String contentLower = message.getContent().toLowerCase();
+      for (Map.Entry<String, String> mapEntry2 : lootGroupExpansions.entrySet()) {
+        final String lootGroupLower = mapEntry2.getKey().toLowerCase();
+        final String expansion = mapEntry2.getValue();
+        contentLower = contentLower.replace(lootGroupLower, expansion);
+      }
       if (contentLower.contains(ITEM_NAME_SENTINEL_CASE_INSENSITIVE)
           && itemNamePattern.matcher(contentLower).matches()
           && gratsTimestamp.isAfter(eventChannelTimestamp)) {

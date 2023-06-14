@@ -31,6 +31,7 @@ import com.edmazur.eqrs.game.listener.GratsDetector;
 import com.edmazur.eqrs.game.listener.GratsListener;
 import com.edmazur.eqrs.game.listener.GratsParser;
 import com.edmazur.eqrs.game.listener.HeartbeatListener;
+import com.edmazur.eqrs.game.listener.LootGroupExpander;
 import com.edmazur.eqrs.game.listener.MotdListener;
 import com.edmazur.eqrs.game.listener.RaidTargetSpawnListener;
 import java.io.PrintWriter;
@@ -143,7 +144,9 @@ public class RobotStanvern {
 
       // Add grats listener.
       GratsDetector gratsDetector = new GratsDetector(config);
-      EventChannelMatcher eventChannelMatcher = new EventChannelMatcher(config, discord);
+      LootGroupExpander lootGroupExpander = new LootGroupExpander(discord);
+      EventChannelMatcher eventChannelMatcher =
+          new EventChannelMatcher(config, discord, lootGroupExpander);
       GratsParser gratsParser =
           new GratsParser(config, itemDatabase, itemScreenshotter, eventChannelMatcher);
       GratsListener gratsListener = new GratsListener(config, discord, gratsDetector, gratsParser);

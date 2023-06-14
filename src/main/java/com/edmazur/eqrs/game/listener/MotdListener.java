@@ -10,6 +10,7 @@ import com.edmazur.eqrs.discord.DiscordPredicate;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.javacord.api.entity.message.Message;
 
 public class MotdListener implements EqLogListener {
 
@@ -52,14 +53,14 @@ public class MotdListener implements EqLogListener {
    * Gets the current MotD as reported in the Discord channel.
    */
   public Optional<String> getCurrentMotd(DiscordChannel discordChannel) {
-    Optional<String> maybeMotd = discord.getLastMessageMatchingPredicate(
+    Optional<Message> maybeMotd = discord.getLastMessageMatchingPredicate(
         discordChannel,
         DiscordPredicate.isFromYourself().and(
             DiscordPredicate.textMatchesPattern(DISCORD_MOTD_PATTERN)));
     if (maybeMotd.isEmpty()) {
-      return maybeMotd;
+      return Optional.empty();
     } else {
-      String motd = maybeMotd.get();
+      String motd = maybeMotd.get().getContent();
       return Optional.of(motd.substring(1, motd.length() - 1));
     }
   }

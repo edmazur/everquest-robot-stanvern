@@ -4,6 +4,7 @@ import org.javacord.api.event.message.MessageCreateEvent;
 
 public enum DiscordUser {
 
+  ALFRED(1000371221755605022L),
   EDMAZUR(616823653463621654L),
   ;
 

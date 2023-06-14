@@ -32,6 +32,24 @@ public class DiscordPredicate {
     };
   }
 
+  public static Predicate<Message> isFromUser(DiscordUser discordUser) {
+    return new Predicate<Message>() {
+      @Override
+      public boolean test(Message message) {
+        return message.getAuthor().getId() == discordUser.getId();
+      }
+    };
+  }
+
+  public static Predicate<Message> hasAttachment() {
+    return new Predicate<Message>() {
+      @Override
+      public boolean test(Message message) {
+        return !message.getAttachments().isEmpty();
+      }
+    };
+  }
+
   public static Predicate<Message> isReply() {
     return new Predicate<Message>() {
       @Override

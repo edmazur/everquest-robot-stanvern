@@ -93,17 +93,15 @@ public class Discord {
     return messageBuilder.send(getTextChannel(discordChannel));
   }
 
-  public Optional<String> getLastMessageMatchingPredicate(
+  public Optional<Message> getLastMessageMatchingPredicate(
       DiscordChannel discordChannel,
       Predicate<Message> predicate) {
-    Optional<Message> maybeMessage = getTextChannel(discordChannel)
-        .getMessagesUntil(predicate).join()
-        .getOldestMessage();
-    if (maybeMessage.isEmpty()) {
-      return Optional.empty();
-    }
-    Message message = maybeMessage.get();
-    return Optional.of(message.getContent());
+    return Optional.ofNullable(
+        getTextChannel(discordChannel)
+            .getMessagesUntil(predicate)
+            .join()
+            .getOldestMessage()
+            .get());
   }
 
   /**
