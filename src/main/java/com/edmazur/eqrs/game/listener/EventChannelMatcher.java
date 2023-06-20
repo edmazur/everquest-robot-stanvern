@@ -2,17 +2,18 @@ package com.edmazur.eqrs.game.listener;
 
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.Config;
+import com.edmazur.eqrs.ValueOrError;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordServer;
 import com.edmazur.eqrs.game.Item;
 import com.google.common.collect.Maps;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.SortedMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
@@ -26,6 +27,10 @@ public class EventChannelMatcher {
   private static final String CATEGORY_PREFIX_CASE_INSENSITIVE = "events";
   private static final String ITEM_NAME_SENTINEL_CASE_INSENSITIVE = "loot table";
 
+  // Keep these in sync.
+  private static final Duration EVENT_CHANNEL_MAX_AGE = Duration.ofHours(5);
+  private static final String EVENT_CHANNEL_MAX_AGE_STRING = "5 hours";
+
   private Config config;
   private Discord discord;
   private LootGroupExpander lootGroupExpander;
@@ -36,7 +41,14 @@ public class EventChannelMatcher {
     this.lootGroupExpander = lootGroupExpander;
   }
 
-  public Optional<Channel> getChannel(EqLogEvent eqLogEvent, Item item) {
+  public ValueOrError<Long> getChannel(EqLogEvent eqLogEvent, List<Item> items) {
+    if (items.isEmpty()) {
+      return ValueOrError.error("No items found");
+    } else if (items.size() > 1) {
+      return ValueOrError.error("Multiple items found");
+    }
+    Item item = items.get(0);
+
     // Send requests in parallel to get the first message of each relevant event channel.
     List<CompletableFuture<MessageSet>> completableFutures = new ArrayList<>();
     for (ChannelCategory category : discord.getChannelCategories(getServer())) {
@@ -73,11 +85,18 @@ public class EventChannelMatcher {
       if (contentLower.contains(ITEM_NAME_SENTINEL_CASE_INSENSITIVE)
           && itemNamePattern.matcher(contentLower).matches()
           && gratsTimestamp.isAfter(eventChannelTimestamp)) {
-        return Optional.of(message.getChannel());
+        long channelId = message.getChannel().getId();
+        if (eventChannelTimestamp.plus(EVENT_CHANNEL_MAX_AGE).isBefore(gratsTimestamp)) {
+          return ValueOrError.error(String.format(
+              "Matched <#%d>, but ignoring because it's more than %s old",
+              channelId, EVENT_CHANNEL_MAX_AGE_STRING));
+        } else {
+          return ValueOrError.value(channelId);
+        }
       }
     }
 
-    return Optional.empty();
+    return ValueOrError.error("Item not found in any event channel's loot table");
   }
 
   private DiscordServer getServer() {

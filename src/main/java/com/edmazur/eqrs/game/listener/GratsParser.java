@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
-import org.javacord.api.entity.channel.Channel;
 
 public class GratsParser {
 
@@ -68,7 +67,7 @@ public class GratsParser {
         eqLogEvent,
         itemUrls,
         getLootCommandOrError(eqLogEvent, items),
-        getChannelMatchOrError(eqLogEvent, items),
+        eventChannelMatcher.getChannel(eqLogEvent, items),
         itemScreenshotsOrErrors);
   }
 
@@ -151,22 +150,6 @@ public class GratsParser {
     // name and DKP amount.
     return ValueOrError.value(String.format(LOOT_COMMAND_FORMAT,
         item.getNameWithBackticksReplaced(), playerName, dkpAmount));
-  }
-
-  private ValueOrError<Long> getChannelMatchOrError(EqLogEvent eqLogEvent, List<Item> items) {
-    if (items.isEmpty()) {
-      return ValueOrError.error("No items found");
-    } else if (items.size() > 1) {
-      return ValueOrError.error("Multiple items found");
-    }
-    Item item = items.get(0);
-
-    Optional<Channel> maybeChannel = eventChannelMatcher.getChannel(eqLogEvent, item);
-    if (maybeChannel.isEmpty()) {
-      return ValueOrError.error("Item not found in any event channel's loot table");
-    }
-
-    return ValueOrError.value(maybeChannel.get().getId());
   }
 
   private Pattern getPattern() {
