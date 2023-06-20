@@ -102,9 +102,8 @@ public class GratsParser {
     }
     gratsMessage = gratsMessage.replaceAll(matcher.group(1), "");
 
-    List<String> alphaOnlyParts = new ArrayList<String>();
     List<Integer> numericOnlyParts = new ArrayList<Integer>();
-    List<String> mixedParts = new ArrayList<String>();
+    List<String> otherParts = new ArrayList<String>();
     for (String part : gratsMessage.trim().split("\\s+")) {
       // Remove ignored tokens.
       for (String ignoredTokenCaseInsensitive : IGNORED_TOKENS_CASE_INSENSITIVE) {
@@ -115,22 +114,15 @@ public class GratsParser {
       }
 
       // Group what's remaining into categories.
-      if (part.matches("[a-zA-Z]+")) {
-        alphaOnlyParts.add(part);
-      } else if (part.matches("[0-9]+")) {
+      if (part.matches("[0-9]+")) {
         numericOnlyParts.add(Integer.parseInt(part));
       } else {
-        mixedParts.add(part);
+        otherParts.add(part);
       }
     }
 
-    // Validate mixed parts.
-    // Do this first to give more helpful error messages (e.g. otherwise "0dkp" would trigger "No
-    // DKP amount found").
-    if (!mixedParts.isEmpty()) {
-      return ValueOrError.error(
-          "Unrecognized input found: ``" + Joiner.on("``, ``").join(mixedParts) + "``");
-    }
+    // Remove parts that consist of only non-alphanumeric characters (e.g. "," and "!!").
+    otherParts.removeIf(part -> part.matches("[^a-zA-Z0-9]+"));
 
     // Validate numeric-only parts.
     if (numericOnlyParts.isEmpty()) {
@@ -141,19 +133,19 @@ public class GratsParser {
     }
     int dkpAmount = numericOnlyParts.get(0);
 
-    // Validate alpha-only parts.
-    if (alphaOnlyParts.size() != 1) {
+    // Validate other parts.
+    if (otherParts.size() != 1) {
       return ValueOrError.error(
           "``"
           + String.format(LOOT_COMMAND_FORMAT,
               item.getNameWithBackticksReplaced(), "???", dkpAmount)
           + "`` "
-          + (alphaOnlyParts.isEmpty()
+          + (otherParts.isEmpty()
               ? "(No name found)"
               : "(Multiple name candidates found: ``"
-                  + Joiner.on("``, ``").join(alphaOnlyParts) + "``)"));
+                  + Joiner.on("``, ``").join(otherParts) + "``)"));
     }
-    String playerName = StringUtils.capitalize(alphaOnlyParts.get(0).toLowerCase());
+    String playerName = StringUtils.capitalize(otherParts.get(0).toLowerCase());
 
     // If you've gotten this far, there is a single name and number, so you can assume it's a player
     // name and DKP amount.

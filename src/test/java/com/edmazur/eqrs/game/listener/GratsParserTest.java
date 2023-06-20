@@ -129,7 +129,8 @@ class GratsParserTest {
         + "'!Grats Braid of Golden Hair Bobbydobby 333 (britters alt)'").get();
     gratsParser.parse(eqLogEvent);
     assertEquals(
-        "Unrecognized input found: ``(britters``, ``alt)``",
+        "``$loot Braid of Golden Hair ??? 333`` "
+            + "(Multiple name candidates found: ``Bobbydobby``, ``(britters``, ``alt)``)",
         lootCommandOrError.getError());
   }
 
@@ -159,7 +160,10 @@ class GratsParserTest {
         "[Tue May 23 17:31:38 2023] Faldimir tells the guild, "
         + "'!grats Spear of Fate 400 Hamfork / Guzmak'").get();
     gratsParser.parse(eqLogEvent);
-    assertEquals("Unrecognized input found: ``/``", lootCommandOrError.getError());
+    assertEquals(
+        "``$loot Spear of Fate ??? 400`` "
+            + "(Multiple name candidates found: ``Hamfork``, ``Guzmak``)",
+        lootCommandOrError.getError());
   }
 
   @Test
@@ -180,6 +184,15 @@ class GratsParserTest {
     assertEquals(
         "$loot Abashi's Rod of Disempowerment Mccreary 3333",
         lootCommandOrError.getValue());
+  }
+
+  @Test
+  void lootStringPunctuation() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Thu Jun 15 21:55:21 2023] Trys tells the guild, "
+        + "'!grats Spiroc Wingblade 1 Trys .'").get();
+    gratsParser.parse(eqLogEvent);
+    assertEquals("$loot Spiroc Wingblade Trys 1", lootCommandOrError.getValue());
   }
 
 }
