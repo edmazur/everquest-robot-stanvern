@@ -3,6 +3,7 @@ package com.edmazur.eqrs.discord;
 import com.edmazur.eqrs.Config;
 import java.io.File;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -218,6 +219,19 @@ public class Discord {
     }
   }
 
+  public Optional<MessageSet> getMessagesBetween(
+      DiscordChannel discordChannel,
+      Instant start,
+      Instant end) {
+    try {
+      return Optional.of(getTextChannel(discordChannel)
+          .getMessagesBetween(getSnowflake(start), getSnowflake(end)).get());
+    } catch (InterruptedException | ExecutionException e) {
+      e.printStackTrace();
+      return Optional.empty();
+    }
+  }
+
   private User getUser(DiscordUser discordUser) {
     return discordApi.getUserById(discordUser.getId()).join();
   }
@@ -240,6 +254,10 @@ public class Discord {
 
   public void addListener(ReactionRemoveListener listener) {
     discordApi.addListener(listener);
+  }
+
+  private static long getSnowflake(Instant instant) {
+    return (instant.toEpochMilli() - 1420070400000L) << 22;
   }
 
 }

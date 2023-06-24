@@ -39,6 +39,11 @@ task runGameTodDetectorBenchmark(type: JavaExec) {
    classpath = sourceSets.main.runtimeClasspath
 }
 
+task runGratsAutoParseStats(type: JavaExec) {
+   mainClass = 'com.edmazur.eqrs.discord.GratsAutoParseStats'
+   classpath = sourceSets.main.runtimeClasspath
+}
+
 task runP99WikiItemReader(type: JavaExec) {
    mainClass = 'com.edmazur.eqrs.game.P99WikiItemReader'
    classpath = sourceSets.main.runtimeClasspath
