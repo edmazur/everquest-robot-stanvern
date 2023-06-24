@@ -62,7 +62,7 @@ public class LootStatusListener implements MessageCreateListener {
 
     // Collect stats.
     int messagesWithReactions = 0;
-    int messagesWithoutReactions = 1;
+    int messagesWithoutReactions = 0;
     Message oldestMessageWithoutReaction = null;
     for (Message message : messageSet) {
       if (message.getReactions().isEmpty()) {
