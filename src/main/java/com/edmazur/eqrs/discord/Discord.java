@@ -2,6 +2,7 @@ package com.edmazur.eqrs.discord;
 
 import com.edmazur.eqrs.Config;
 import java.io.File;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
@@ -21,6 +23,7 @@ import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.intent.Intent;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageBuilder;
+import org.javacord.api.entity.message.MessageSet;
 import org.javacord.api.entity.permission.Role;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
@@ -201,6 +204,18 @@ public class Discord {
 
   public CompletableFuture<Message> getMessage(long id, TextChannel textChannel) {
     return discordApi.getMessageById(id, textChannel);
+  }
+
+  public Optional<MessageSet> getMessagesWithinPast(
+      DiscordChannel discordChannel,
+      Duration duration) {
+    try {
+      return Optional.of(getTextChannel(discordChannel)
+          .getMessagesUntil(DiscordPredicate.isOlderThan(duration)).get());
+    } catch (InterruptedException | ExecutionException e) {
+      e.printStackTrace();
+      return Optional.empty();
+    }
   }
 
   private User getUser(DiscordUser discordUser) {

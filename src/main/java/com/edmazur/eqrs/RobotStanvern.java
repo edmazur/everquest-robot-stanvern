@@ -10,6 +10,7 @@ import com.edmazur.eqrs.discord.listener.CharInfoScreenshotListener;
 import com.edmazur.eqrs.discord.listener.DiscordTodListener;
 import com.edmazur.eqrs.discord.listener.GratsChannelListener;
 import com.edmazur.eqrs.discord.listener.ItemListener;
+import com.edmazur.eqrs.discord.listener.LootStatusListener;
 import com.edmazur.eqrs.discord.speaker.TodWindowSpeaker;
 import com.edmazur.eqrs.game.CharInfoOcrScrapeComparator;
 import com.edmazur.eqrs.game.CharInfoScraper;
@@ -124,6 +125,7 @@ public class RobotStanvern {
       new ItemListener(config, discord, itemDatabase, itemScreenshotter);
       EventChannelChecker eventChannelChecker = new EventChannelChecker();
       new GratsChannelListener(config, discord, eventChannelChecker);
+      new LootStatusListener(config, discord);
 
       // Add heartbeat listener.
       HeartbeatListener heartbeatListener = new HeartbeatListener(discord);

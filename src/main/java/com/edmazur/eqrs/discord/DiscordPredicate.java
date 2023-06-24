@@ -1,5 +1,7 @@
 package com.edmazur.eqrs.discord;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -64,6 +66,15 @@ public class DiscordPredicate {
       @Override
       public boolean test(Message message) {
         return pattern.matcher(message.getContent()).matches();
+      }
+    };
+  }
+
+  public static Predicate<Message> isOlderThan(Duration duration) {
+    return new Predicate<Message>() {
+      @Override
+      public boolean test(Message message) {
+        return message.getCreationTimestamp().plus(duration).isBefore(Instant.now());
       }
     };
   }
