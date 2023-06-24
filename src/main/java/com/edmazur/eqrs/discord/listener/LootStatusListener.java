@@ -1,11 +1,15 @@
 package com.edmazur.eqrs.discord.listener;
 
+import com.beust.jcommander.internal.Lists;
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -19,6 +23,8 @@ import org.javacord.api.listener.message.MessageCreateListener;
 public class LootStatusListener implements MessageCreateListener {
 
   private static final String TRIGGER = "!lootstatus";
+  private static final int MAX_LINKS = 10;
+  private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
   private static final DiscordChannel PROD_COMMAND_CHANNEL = DiscordChannel.GG_GROUP_TEXT;
   private static final DiscordChannel TEST_COMMAND_CHANNEL = DiscordChannel.TEST_GENERAL;
@@ -62,36 +68,47 @@ public class LootStatusListener implements MessageCreateListener {
 
     // Collect stats.
     int messagesWithReactions = 0;
-    int messagesWithoutReactions = 0;
-    Message oldestMessageWithoutReaction = null;
+    List<Message> messagesWithoutReactions = Lists.newArrayList();
     for (Message message : messageSet) {
       if (message.getReactions().isEmpty()) {
-        messagesWithoutReactions++;
-        if (oldestMessageWithoutReaction == null
-            || oldestMessageWithoutReaction.getCreationTimestamp()
-                .isAfter(message.getCreationTimestamp())) {
-          oldestMessageWithoutReaction = message;
-        }
+        messagesWithoutReactions.add(message);
       } else {
         messagesWithReactions++;
       }
     }
 
     // Report loot status.
-    sendReply(
-        event,
+    StringBuilder sb = new StringBuilder();
+    sb.append(
         String.format(
-            "Scanned past %s of messages in <#%d>:\n"
-            + "\\- %d total\n"
-            + "\\- %d with reactions\n"
-            + "\\- %d without reactions "
-            + (messagesWithoutReactions > 0 ? "⚠️, oldest: %s" : "✅"),
+            "Scanned past %s of messages in <#%d>:\n",
             LOOKBACK_STRING,
-            QUERY_CHANNEL.getId(),
-            messagesWithReactions + messagesWithoutReactions,
+            QUERY_CHANNEL.getId()));
+    sb.append(messagesWithoutReactions.isEmpty() ? "✅" : "⚠️");
+    sb.append(
+        String.format(
+            " `%d total, %d with reactions, %d without reactions`",
+            messagesWithReactions + messagesWithoutReactions.size(),
             messagesWithReactions,
-            messagesWithoutReactions,
-            oldestMessageWithoutReaction.getLink().toString()));
+            messagesWithoutReactions.size()));
+    if (!messagesWithoutReactions.isEmpty()) {
+      sb.append("\n");
+      sb.append(String.format("First without reactions (limited to %d):\n", MAX_LINKS));
+      DateTimeFormatter dateTimeFormatter = DateTimeFormatter
+          .ofPattern(DATE_TIME_FORMAT)
+          .withZone(ZoneId.of(config.getString(Property.TIMEZONE_GUILD)));
+      for (int i = 0; i < Math.min(MAX_LINKS, messagesWithoutReactions.size()); i++) {
+        Message messageWithoutReactions = messagesWithoutReactions.get(i);
+        sb.append(
+            String.format(
+                "%d. %s (ET: %s - <t:%d:R>)\n",
+                i + 1,
+                messageWithoutReactions.getLink().toString(),
+                dateTimeFormatter.format(messageWithoutReactions.getCreationTimestamp()),
+                messageWithoutReactions.getCreationTimestamp().toEpochMilli() / 1000));
+      }
+    }
+    sendReply(event, sb.toString());
   }
 
   private void sendReply(MessageCreateEvent event, String content) {
