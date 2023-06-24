@@ -92,4 +92,50 @@ class EarthquakeDetectorTest {
     assertFalse(earthquakeDetector.containsEarthquake(eqLogEvent));
   }
 
+  @Test
+  void failsafeNotNeededWithinWindow() {
+    EqLogEvent knownEarthquakeEvent = EqLogEvent.parseFromLine(
+        "[Thu Sep 29 13:17:32 2022] The gods have awoken to unleash their wrath across Norrath.")
+            .get();
+    EqLogEvent failsafeEvent = EqLogEvent.parseFromLine(
+        "[Thu Sep 29 13:18:31 2022] You feel the need to get somewhere safe quickly.")
+            .get();
+    assertTrue(earthquakeDetector.containsEarthquake(knownEarthquakeEvent));
+    assertFalse(earthquakeDetector.containsEarthquake(failsafeEvent));
+  }
+
+  @Test
+  void failsafeNotNeededOutsideWindow() {
+    EqLogEvent knownEarthquakeEvent = EqLogEvent.parseFromLine(
+        "[Thu Sep 29 13:17:32 2022] The gods have awoken to unleash their wrath across Norrath.")
+            .get();
+    EqLogEvent failsafeEvent = EqLogEvent.parseFromLine(
+        "[Thu Sep 29 13:18:33 2022] You feel the need to get somewhere safe quickly.")
+            .get();
+    assertTrue(earthquakeDetector.containsEarthquake(knownEarthquakeEvent));
+    assertTrue(earthquakeDetector.containsEarthquake(failsafeEvent));
+  }
+
+  @Test
+  void failsafeNeededWithinWindow() {
+    EqLogEvent unknownEarthquakeEvent = EqLogEvent.parseFromLine(
+        "[Thu Sep 29 13:17:32 2022] Brand new earthquake message.").get();
+    EqLogEvent failsafeEvent = EqLogEvent.parseFromLine(
+        "[Thu Sep 29 13:18:31 2022] You feel the need to get somewhere safe quickly.")
+            .get();
+    assertFalse(earthquakeDetector.containsEarthquake(unknownEarthquakeEvent));
+    assertTrue(earthquakeDetector.containsEarthquake(failsafeEvent));
+  }
+
+  @Test
+  void failsafeNeededOutsideWindow() {
+    EqLogEvent unknownEarthquakeEvent = EqLogEvent.parseFromLine(
+        "[Thu Sep 29 13:17:32 2022] Brand new earthquake message.").get();
+    EqLogEvent failsafeEvent = EqLogEvent.parseFromLine(
+        "[Thu Sep 29 13:18:33 2022] You feel the need to get somewhere safe quickly.")
+            .get();
+    assertFalse(earthquakeDetector.containsEarthquake(unknownEarthquakeEvent));
+    assertTrue(earthquakeDetector.containsEarthquake(failsafeEvent));
+  }
+
 }
