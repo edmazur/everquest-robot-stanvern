@@ -43,6 +43,14 @@ class EarthquakeDetectorTest {
   }
 
   @Test
+  void godsAwokenUnlesh() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Sat Jun 24 07:16:38 2023] The gods have awoken to unlesh their wrath across Norrath.")
+            .get();
+    assertTrue(earthquakeDetector.containsEarthquake(eqLogEvent));
+  }
+
+  @Test
   void nilbogBroadcast() {
     EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
         "[Sun Oct 17 00:10:33 2021] Nilbog BROADCASTS, 'Minions gather, their forms appearing as "
