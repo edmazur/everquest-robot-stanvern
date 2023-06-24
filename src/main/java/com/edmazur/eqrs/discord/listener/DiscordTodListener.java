@@ -1,6 +1,7 @@
 package com.edmazur.eqrs.discord.listener;
 
 import com.edmazur.eqrs.Config;
+import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.Database;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
@@ -298,7 +299,8 @@ public class DiscordTodListener implements MessageCreateListener {
   }
 
   private long getUnixTimestamp(LocalDateTime localDateTime) {
-    return localDateTime.atZone(ZoneId.of("America/New_York")).toEpochSecond();
+    return localDateTime.atZone(ZoneId.of(config.getString(Property.TIMEZONE_GUILD)))
+        .toEpochSecond();
   }
 
   private DiscordChannel getChannel() {
