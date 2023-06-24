@@ -13,10 +13,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TimeZone;
 import java.util.TreeMap;
-import org.javacord.api.entity.emoji.Emoji;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageSet;
-import org.javacord.api.entity.message.Reaction;
 
 public class GratsAutoParseStats {
 
@@ -52,19 +50,9 @@ public class GratsAutoParseStats {
         continue;
       }
 
-      boolean hasRobot = false;
-      boolean hasX = false;
-      boolean hasOther = false;
-      for (Reaction reaction : message.getReactions()) {
-        Emoji emoji = reaction.getEmoji();
-        if (emoji.equalsEmoji("🤖")) {
-          hasRobot = true;
-        } else if (emoji.equalsEmoji("❌")) {
-          hasX = true;
-        } else {
-          hasOther = true;
-        }
-      }
+      String content = message.getContent();
+      boolean parsedLootCommand = content.contains("✅ **$loot command");
+      boolean parsedChannelMatch = content.contains("✅ **Channel match");
 
       LocalDate localDate = LocalDate.ofInstant(
           message.getCreationTimestamp(),
@@ -73,44 +61,43 @@ public class GratsAutoParseStats {
         datesToCounters.put(localDate, new Counters());
       }
       Counters counters = datesToCounters.get(localDate);
-      if (hasRobot) {
-        counters.parsed++;
-      } else if (hasX) {
-        counters.ignored++;
-      } else if (hasOther) {
-        counters.notParsed++;
+      if (parsedLootCommand && parsedChannelMatch) {
+        counters.parsedLootCommandAndChannelMatch++;
+      } else if (parsedLootCommand) {
+        counters.parsedOnlyLootCommand++;
+      } else if (parsedChannelMatch) {
+        counters.parsedOnlyChannelMatch++;
       } else {
-        counters.notYetHandled++;
+        counters.parsedNeither++;
       }
     }
 
     System.out.println(
         "date,"
         + "parsed,"
-        + "not parsed,"
-        + "ignored,"
-        + "not yet handled");
+        + "$loot parse failed,"
+        + "channel match failed,"
+        + "both failed");
     for (Map.Entry<LocalDate, Counters> mapEntry : datesToCounters.entrySet()) {
       LocalDate localDate = mapEntry.getKey();
       Counters counters = mapEntry.getValue();
       System.out.println(
           localDate + ","
-          + counters.parsed + ","
-          + counters.notParsed + ","
-          + counters.ignored + ","
-          + counters.notYetHandled);
+          + counters.parsedLootCommandAndChannelMatch + ","
+          + counters.parsedOnlyChannelMatch + ","
+          + counters.parsedOnlyLootCommand + ","
+          + counters.parsedNeither);
     }
 
     System.exit(0);
   }
 
-
   private static class Counters {
 
-    public int parsed;
-    public int notParsed;
-    public int ignored;
-    public int notYetHandled;
+    public int parsedLootCommandAndChannelMatch;
+    public int parsedOnlyLootCommand;
+    public int parsedOnlyChannelMatch;
+    public int parsedNeither;
 
   }
 
