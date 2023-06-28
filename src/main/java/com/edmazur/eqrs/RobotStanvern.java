@@ -11,6 +11,7 @@ import com.edmazur.eqrs.discord.listener.DiscordTodListener;
 import com.edmazur.eqrs.discord.listener.GratsChannelListener;
 import com.edmazur.eqrs.discord.listener.ItemListener;
 import com.edmazur.eqrs.discord.listener.LootStatusListener;
+import com.edmazur.eqrs.discord.listener.LootStatusRequester;
 import com.edmazur.eqrs.discord.speaker.TodWindowSpeaker;
 import com.edmazur.eqrs.game.CharInfoOcrScrapeComparator;
 import com.edmazur.eqrs.game.CharInfoScraper;
@@ -38,8 +39,10 @@ import com.edmazur.eqrs.game.listener.RaidTargetSpawnListener;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -126,6 +129,20 @@ public class RobotStanvern {
       EventChannelChecker eventChannelChecker = new EventChannelChecker();
       new GratsChannelListener(config, discord, eventChannelChecker);
       new LootStatusListener(config, discord);
+
+      // Add loot status requester.
+      ZonedDateTime now = ZonedDateTime.now(ZoneId.of(config.getString(Property.TIMEZONE_GUILD)));
+      // Run at 5am daily.
+      ZonedDateTime nextRun = now.withHour(5).withMinute(0).withSecond(0);
+      if (now.isAfter(nextRun)) {
+        nextRun = nextRun.plusDays(1);
+      }
+      ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+      scheduler.scheduleAtFixedRate(
+          new LootStatusRequester(config, discord),
+          Duration.between(now, nextRun).getSeconds(),
+          TimeUnit.DAYS.toSeconds(1),
+          TimeUnit.SECONDS);
 
       // Add heartbeat listener.
       HeartbeatListener heartbeatListener = new HeartbeatListener(discord);

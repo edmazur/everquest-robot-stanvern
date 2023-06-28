@@ -22,7 +22,8 @@ import org.javacord.api.listener.message.MessageCreateListener;
 
 public class LootStatusListener implements MessageCreateListener {
 
-  private static final String TRIGGER = "!lootstatus";
+  static final String TRIGGER = "!lootstatus";
+
   private static final int MAX_LINKS = 10;
   private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
@@ -46,7 +47,7 @@ public class LootStatusListener implements MessageCreateListener {
   @Override
   public void onMessageCreate(MessageCreateEvent event) {
     if (getChannel().isEventChannel(event)
-        && event.getMessage().getContent().trim().toLowerCase().equals(TRIGGER)) {
+        && event.getMessage().getContent().toLowerCase().contains(TRIGGER)) {
       reportLootStatus(event);
     }
   }
