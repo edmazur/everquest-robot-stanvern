@@ -58,11 +58,6 @@ public class Database {
   }
 
   private void update(String query) {
-    if (config.getBoolean(Property.DEBUG)) {
-      LOGGER.log("Debug mode enabled, skipping query: " + query);
-      return;
-    }
-
     try {
       getConnection().createStatement().executeUpdate(query);
     } catch (SQLException e) {
@@ -73,10 +68,16 @@ public class Database {
   }
 
   private Connection getConnection() {
-    String host = config.getString(Config.Property.MYSQL_HOST);
-    String database = config.getString(Config.Property.MYSQL_DATABASE);
-    String username = config.getString(Config.Property.MYSQL_USERNAME);
-    String password = config.getString(Config.Property.MYSQL_PASSWORD);
+    boolean debug = config.getBoolean(Property.DEBUG);
+
+    String host = config.getString(
+        debug ? Config.Property.MYSQL_HOST_TEST : Config.Property.MYSQL_HOST_PROD);
+    String database = config.getString(
+        debug ? Config.Property.MYSQL_DATABASE_TEST : Config.Property.MYSQL_DATABASE_PROD);
+    String username = config.getString(
+        debug ? Config.Property.MYSQL_USERNAME_TEST : Config.Property.MYSQL_USERNAME_PROD);
+    String password = config.getString(
+        debug ? Config.Property.MYSQL_PASSWORD_TEST : Config.Property.MYSQL_PASSWORD_PROD);
 
     String connectionString =
         String.format(MYSQL_CONNECTION_FORMAT_STRING, host, MYSQL_PORT, database);

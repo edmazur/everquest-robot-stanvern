@@ -20,9 +20,10 @@ $ ./gradlew installDist
 $ ./build/install/everquest-robot-stanvern/bin/everquest-robot-stanvern YourCharacterName
 ```
 
-Development (Discord interactions restricted to test server, database writes skipped):
+Development (Discord interactions restricted to test server, database queries go to test server):
 
 ```
+$ ./src/main/scripts/override-test-db-with-prod-db.sh
 $ ./gradlew run --args='YourCharacterName --debug'
 ```
 

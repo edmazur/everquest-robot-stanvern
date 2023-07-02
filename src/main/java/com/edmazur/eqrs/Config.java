@@ -31,10 +31,14 @@ public class Config {
     EVERQUEST_RAID_TARGETS_ENDPOINT("everquest.raid_targets_endpoint"),
     EVERQUEST_SERVER("everquest.server"),
 
-    MYSQL_DATABASE("mysql.database"),
-    MYSQL_HOST("mysql.host"),
-    MYSQL_PASSWORD("mysql.password"),
-    MYSQL_USERNAME("mysql.username"),
+    MYSQL_DATABASE_PROD("mysql.database.prod"),
+    MYSQL_DATABASE_TEST("mysql.database.test"),
+    MYSQL_HOST_PROD("mysql.host.prod"),
+    MYSQL_HOST_TEST("mysql.host.test"),
+    MYSQL_PASSWORD_PROD("mysql.password.prod"),
+    MYSQL_PASSWORD_TEST("mysql.password.test"),
+    MYSQL_USERNAME_PROD("mysql.username.prod"),
+    MYSQL_USERNAME_TEST("mysql.username.test"),
 
     // TODO: Use these everywhere instead of ever relying on machine timezone.
     // The timezone that game logs are in.

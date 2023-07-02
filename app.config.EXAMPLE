@@ -6,10 +6,14 @@ everquest.install_directory=
 everquest.raid_targets_endpoint=
 everquest.server=
 
-mysql.database=
-mysql.host=
-mysql.password=
-mysql.username=
+mysql.database.prod=
+mysql.database.test=
+mysql.host.prod=
+mysql.host.test=
+mysql.password.prod=
+mysql.password.test=
+mysql.username.prod=
+mysql.username.test=
 
 timezone.game=
 timezone.guild=
