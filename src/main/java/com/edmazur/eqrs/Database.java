@@ -4,10 +4,12 @@ import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.game.RaidTarget;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 public class Database {
 
@@ -16,12 +18,9 @@ public class Database {
   private static final String MYSQL_CONNECTION_FORMAT_STRING = "jdbc:mysql://%s:%d/%s";
   private static final int MYSQL_PORT = 3306;
 
-  private static final String UPDATE_TOD_SQL = "UPDATE tods SET tod = '%s' WHERE target = '%s';";
+  private static final String UPDATE_TOD_SQL = "UPDATE tods SET tod = ? WHERE target = ?;";
   private static final String GET_QUAKE_SQL = "SELECT lastquake FROM quakes;";
-  private static final String UPDATE_QUAKE_SQL = "UPDATE quakes SET lastquake = '%s'";
-
-  private static final DateTimeFormatter DATE_TIME_FORMATTER =
-      DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+  private static final String UPDATE_QUAKE_SQL = "UPDATE quakes SET lastquake = ?";
 
   private final Config config;
 
@@ -29,12 +28,16 @@ public class Database {
     this.config = config;
   }
 
-  public void updateTimeOfDeath(RaidTarget raidTarget, LocalDateTime tod) {
-    String query = String.format(
-        UPDATE_TOD_SQL,
-        DATE_TIME_FORMATTER.format(tod),
-        raidTarget.getName());
-    update(query);
+  public Optional<Integer> updateTimeOfDeath(RaidTarget raidTarget, LocalDateTime tod) {
+    try {
+      PreparedStatement preparedStatement = getConnection().prepareStatement(UPDATE_TOD_SQL);
+      preparedStatement.setTimestamp(1, Timestamp.valueOf(tod));
+      preparedStatement.setString(2, raidTarget.getName());
+      return Optional.of(preparedStatement.executeUpdate());
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return Optional.empty();
+    }
   }
 
   public LocalDateTime getQuakeTime() {
@@ -52,18 +55,14 @@ public class Database {
     throw new RuntimeException("Unable to get quake time");
   }
 
-  public void updateQuakeTime(LocalDateTime quakeTime) {
-    String query = String.format(UPDATE_QUAKE_SQL, DATE_TIME_FORMATTER.format(quakeTime));
-    update(query);
-  }
-
-  private void update(String query) {
+  public Optional<Integer> updateQuakeTime(LocalDateTime quakeTime) {
     try {
-      getConnection().createStatement().executeUpdate(query);
+      PreparedStatement preparedStatement = getConnection().prepareStatement(UPDATE_QUAKE_SQL);
+      preparedStatement.setTimestamp(1, Timestamp.valueOf(quakeTime));
+      return Optional.of(preparedStatement.executeUpdate());
     } catch (SQLException e) {
-      // TODO: Handle this more gracefully.
       e.printStackTrace();
-      System.exit(-1);
+      return Optional.empty();
     }
   }
 
