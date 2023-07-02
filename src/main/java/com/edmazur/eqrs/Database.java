@@ -13,8 +13,6 @@ import java.util.Optional;
 
 public class Database {
 
-  private static final Logger LOGGER = new Logger();
-
   private static final String MYSQL_CONNECTION_FORMAT_STRING = "jdbc:mysql://%s:%d/%s";
   private static final int MYSQL_PORT = 3306;
 
@@ -40,19 +38,16 @@ public class Database {
     }
   }
 
-  public LocalDateTime getQuakeTime() {
+  public Optional<LocalDateTime> getQuakeTime() {
     try {
       ResultSet resultSet = getConnection().createStatement().executeQuery(GET_QUAKE_SQL);
       if (resultSet.next()) {
-        return resultSet.getTimestamp(1).toLocalDateTime();
-      } else {
-        LOGGER.log("Tried to get quake time, but no rows returned from database.");
+        return Optional.of(resultSet.getTimestamp(1).toLocalDateTime());
       }
     } catch (SQLException e) {
       e.printStackTrace();
     }
-    // TODO: Handle this more gracefully.
-    throw new RuntimeException("Unable to get quake time");
+    return Optional.empty();
   }
 
   public Optional<Integer> updateQuakeTime(LocalDateTime quakeTime) {

@@ -3,6 +3,7 @@ package com.edmazur.eqrs.discord.listener;
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.Database;
+import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.game.RaidTarget;
@@ -23,6 +24,8 @@ import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
 public class DiscordTodListener implements MessageCreateListener {
+
+  private static final Logger LOGGER = new Logger();
 
   private static final String HELP_TOD_USAGE =
       "\\- !tod usage: `!tod <target>, <timestamp>` Example: `!tod naggy, 5/14 17:55:36`";
@@ -145,15 +148,28 @@ public class DiscordTodListener implements MessageCreateListener {
               "Sorry, ToD cannot be in the future: `" + timestampToParse + "`");
           return;
         }
-        LocalDateTime quakeTime = database.getQuakeTime();
-        if (timestamp.isBefore(quakeTime)) {
-          event.addReactionsToMessage("❌");
-          sendReply(event,
-              "Sorry, ToD cannot be before quake time (" + DATE_TIME_FORMATTER.format(quakeTime)
-                  + " ET)");
-          return;
+        Optional<LocalDateTime> maybeQuakeTime = database.getQuakeTime();
+        if (maybeQuakeTime.isEmpty()) {
+          LOGGER.log("Error getting quake time from database, ignoring");
+        } else {
+          LocalDateTime quakeTime = maybeQuakeTime.get();
+          if (timestamp.isBefore(quakeTime)) {
+            event.addReactionsToMessage("❌");
+            sendReply(event,
+                "Sorry, ToD cannot be before quake time (" + DATE_TIME_FORMATTER.format(quakeTime)
+                    + " ET)");
+            return;
+          }
         }
         String timeSince = "~" + getTimeSince(timestamp) + " ago";
+
+        // Do database update.
+        Optional<Integer> maybeRowsAffected = database.updateTimeOfDeath(raidTarget, timestamp);
+        if (maybeRowsAffected.isEmpty() || maybeRowsAffected.get() != 1) {
+          event.addReactionsToMessage("❌");
+          sendReply(event, "Error updating database");
+          return;
+        }
 
         // Create embed response.
         EmbedBuilder embed = new EmbedBuilder()
@@ -165,8 +181,6 @@ public class DiscordTodListener implements MessageCreateListener {
                 + "`   (ET) ToD:` " + DATE_TIME_FORMATTER.format(timestamp)
                 + " [" + timeSince + "]\n"
                 + "`(local) ToD:` " + "<t:" + getUnixTimestamp(timestamp) + ":F>");
-
-        database.updateTimeOfDeath(raidTarget, timestamp);
         event.addReactionsToMessage("👍");
         sendReply(event, embed);
       }
@@ -202,6 +216,14 @@ public class DiscordTodListener implements MessageCreateListener {
         }
         String timeSince = "~" + getTimeSince(timestamp) + " ago";
 
+        // Do database update.
+        Optional<Integer> maybeRowsAffected = database.updateQuakeTime(timestamp);
+        if (maybeRowsAffected.isEmpty() || maybeRowsAffected.get() != 1) {
+          event.addReactionsToMessage("❌");
+          sendReply(event, "Error updating database");
+          return;
+        }
+
         // Create embed response.
         EmbedBuilder embed = new EmbedBuilder()
             .setTitle("Success!")
@@ -211,8 +233,6 @@ public class DiscordTodListener implements MessageCreateListener {
                 "`   (ET) Quake time:` " + DATE_TIME_FORMATTER.format(timestamp)
                 + " [" + timeSince + "]\n"
                 + "`(local) Quake time:` " + "<t:" + getUnixTimestamp(timestamp) + ":F>");
-
-        database.updateQuakeTime(timestamp);
         event.addReactionsToMessage("👍");
         event.getMessage().reply(embed);
       }
