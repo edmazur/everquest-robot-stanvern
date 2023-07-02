@@ -21,18 +21,30 @@ public class Database {
   private static final String MYSQL_CONNECTION_FORMAT_STRING = "jdbc:mysql://%s:%d/%s";
   private static final int MYSQL_PORT = 3306;
 
+  // CHECKSTYLE.OFF: OperatorWrap
+
   // ToD SQL.
-  private static final String UPDATE_TOD_SQL = "UPDATE tods SET tod = ? WHERE target = ?;";
-  private static final String GET_QUAKE_SQL = "SELECT lastquake FROM quakes;";
-  private static final String UPDATE_QUAKE_SQL = "UPDATE quakes SET lastquake = ?;";
+  private static final String UPDATE_TOD_SQL =
+      "UPDATE tods " +
+      "SET tod = ? " +
+      "WHERE target = ?;";
+  private static final String GET_QUAKE_SQL =
+      "SELECT lastquake " +
+      "FROM quakes;";
+  private static final String UPDATE_QUAKE_SQL =
+      "UPDATE quakes " +
+      "SET lastquake = ?;";
 
   // Park SQL.
   private static final String GET_PARK_LOCATIONS_SQL =
-      "SELECT id, name, aliases FROM park_locations;";
+      "SELECT id, name, aliases " +
+      "FROM park_locations;";
   private static final String UPDATE_BOT_LOCATION_SQL =
-      "INSERT INTO bots (name, location, last_updated)"
-          + " VALUES(?, ?, NOW())"
-          + " ON DUPLICATE KEY UPDATE location = ?, last_updated = NOW();";
+      "INSERT INTO bots (name, location, last_updated) " +
+      "VALUES(?, ?, NOW()) " +
+      "ON DUPLICATE KEY UPDATE location = ?, last_updated = NOW();";
+
+  // CHECKSTYLE.ON: OperatorWrap
 
   private final Config config;
 
