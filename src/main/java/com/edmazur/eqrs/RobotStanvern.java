@@ -7,6 +7,7 @@ import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordTableFormatter;
 import com.edmazur.eqrs.discord.listener.AuditListener;
 import com.edmazur.eqrs.discord.listener.CharInfoScreenshotListener;
+import com.edmazur.eqrs.discord.listener.DiscordParkListener;
 import com.edmazur.eqrs.discord.listener.DiscordTodListener;
 import com.edmazur.eqrs.discord.listener.GratsChannelListener;
 import com.edmazur.eqrs.discord.listener.ItemListener;
@@ -129,6 +130,7 @@ public class RobotStanvern {
       EventChannelChecker eventChannelChecker = new EventChannelChecker();
       new GratsChannelListener(config, discord, eventChannelChecker);
       new LootStatusListener(config, discord);
+      new DiscordParkListener(config, discord, database);
 
       // Add loot status requester.
       ZonedDateTime now = ZonedDateTime.now(ZoneId.of(config.getString(Property.TIMEZONE_GUILD)));
