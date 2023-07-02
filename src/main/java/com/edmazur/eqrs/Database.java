@@ -18,7 +18,7 @@ public class Database {
 
   private static final String UPDATE_TOD_SQL = "UPDATE tods SET tod = ? WHERE target = ?;";
   private static final String GET_QUAKE_SQL = "SELECT lastquake FROM quakes;";
-  private static final String UPDATE_QUAKE_SQL = "UPDATE quakes SET lastquake = ?";
+  private static final String UPDATE_QUAKE_SQL = "UPDATE quakes SET lastquake = ?;";
 
   private final Config config;
 
