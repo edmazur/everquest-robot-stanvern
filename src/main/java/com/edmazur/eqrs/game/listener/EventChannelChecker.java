@@ -10,7 +10,7 @@ public class EventChannelChecker {
     return !textChannel.getMessagesUntil(new Predicate<Message>() {
       @Override
       public boolean test(Message message) {
-        return message.getContent().contains(lootCommand);
+        return message.getContent().toLowerCase().contains(lootCommand.toLowerCase());
       }
     }).join().isEmpty();
   }
