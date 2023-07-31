@@ -29,6 +29,10 @@ public class ItemScreenshotter {
       ChromeOptions options = new ChromeOptions();
       options.addArguments("--headless");
       options.addArguments("--window-size=1980,960");
+      // The P99 wiki certificate periodically expires and takes a day+ to get fixed. Since we're
+      // not doing anything sensitive, accept insecure certificates to prevent item screenshotting
+      // from breaking.
+      options.setAcceptInsecureCerts(true);
       System.setProperty("webdriver.chrome.silentOutput", "true");
       ChromeDriver driver = new ChromeDriver(options);
       System.out.println(String.format(LOG_SPAM_DELINEATOR_FORMAT, "END"));
