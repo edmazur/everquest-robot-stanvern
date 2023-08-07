@@ -144,6 +144,10 @@ public class GratsParser {
               : "(Multiple name candidates found: ``"
                   + Joiner.on("``, ``").join(otherParts) + "``)"));
     }
+    if (!otherParts.get(0).matches("[a-zA-Z]+")) {
+      return ValueOrError.error("Name candidate contains non-alpha characters: ``"
+          + otherParts.get(0) + "``");
+    }
     String playerName = StringUtils.capitalize(otherParts.get(0).toLowerCase());
 
     // If you've gotten this far, there is a single name and number, so you can assume it's a player

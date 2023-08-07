@@ -195,4 +195,15 @@ class GratsParserTest {
     assertEquals("$loot Spiroc Wingblade Trys 1", lootCommandOrError.getValue());
   }
 
+  @Test
+  void lootStringNameInParens() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Mon Aug 07 00:26:07 2023] Gnough tells the guild, "
+        + "'!grats Vyemm's Right Eye 175  (sizar)'").get();
+    gratsParser.parse(eqLogEvent);
+    assertEquals(
+        "Name candidate contains non-alpha characters: ``(sizar)``",
+        lootCommandOrError.getError());
+  }
+
 }
