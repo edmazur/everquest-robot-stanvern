@@ -28,7 +28,8 @@ public class GratsParser {
           List.of(
               "closed",
               "dkp",
-              "swapping").stream(),
+              "swapping",
+              "\\.").stream(),
           GratsDetector.TRIGGERS.stream())
       .collect(Collectors.toList());
   private static final String LOOT_COMMAND_FORMAT = "$loot %s %s %d";

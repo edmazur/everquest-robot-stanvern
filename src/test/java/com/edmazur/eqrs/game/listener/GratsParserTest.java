@@ -206,4 +206,13 @@ class GratsParserTest {
         lootCommandOrError.getError());
   }
 
+  @Test
+  void lootStringPeriodAfterDkpAmount() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Tue Aug 08 22:46:11 2023] Ezzani tells the guild, "
+        + "'!grats Amethyst Amulet Ezzani 1.'").get();
+    gratsParser.parse(eqLogEvent);
+    assertEquals("$loot Amethyst Amulet Ezzani 1", lootCommandOrError.getValue());
+  }
+
 }
