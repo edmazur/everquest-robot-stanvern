@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -32,6 +33,14 @@ public class GratsParser {
               "\\.").stream(),
           GratsDetector.TRIGGERS.stream())
       .collect(Collectors.toList());
+  // This is a little hacky. There's a player named "Pebblespring" whose name thus contains "Espri".
+  // There isn't really a good way to identify this sort of scenario because the item parser
+  // intentionally permits lack of whitespace before/after item names since they commonly get linked
+  // that way in-game. In any case, this is the first time this issue has come up after running the
+  // system for awhile, so it may be rare and can be handled one-off like this. If the list
+  // continues to grow though, you should think about the problem more deeply and come up with a
+  // more robust/graceful solution.
+  private static final Set<String> IGNORED_ITEMS = Set.of("Espri");
   private static final String LOOT_COMMAND_FORMAT = "$loot %s %s %d";
 
   private final Config config;
@@ -67,6 +76,7 @@ public class GratsParser {
     String gratsMessage = matcher.group(1);
 
     List<Item> items = itemDatabase.parse(gratsMessage);
+    items.removeIf(item -> IGNORED_ITEMS.contains(item.getName()));
     for (Item item : items) {
       itemUrls.add(item.getUrl());
       Optional<File> maybeItemScreenshot = itemScreenshotter.get(item);

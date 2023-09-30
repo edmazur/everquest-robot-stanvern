@@ -216,6 +216,15 @@ class GratsParserTest {
     assertSuccessfulParse("$loot Head of the Serpent Foo 0");
   }
 
+  @Test
+  void lootStringItemNameInWinnerName() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Tue Sep 26 04:29:21 2023] Etopia tells the guild, "
+        + "'!gratz Spinning Orb of Confusion Pebblespring 50'").get();
+    gratsParser.parse(eqLogEvent);
+    assertSuccessfulParse("$loot Spinning Orb of Confusion Pebblespring 50");
+  }
+
   private enum ParseOutcome {
     SUCCESS,
     FAILURE,
