@@ -1,6 +1,5 @@
 package com.edmazur.eqrs.game.listener;
 
-import com.beust.jcommander.internal.Lists;
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.ValueOrError;
@@ -8,6 +7,7 @@ import com.edmazur.eqrs.game.Item;
 import com.edmazur.eqrs.game.ItemDatabase;
 import com.edmazur.eqrs.game.ItemScreenshotter;
 import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

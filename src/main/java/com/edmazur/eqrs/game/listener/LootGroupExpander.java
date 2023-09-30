@@ -1,12 +1,12 @@
 package com.edmazur.eqrs.game.listener;
 
-import com.beust.jcommander.internal.Lists;
-import com.beust.jcommander.internal.Maps;
 import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.discord.DiscordPredicate;
 import com.edmazur.eqrs.discord.DiscordUser;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

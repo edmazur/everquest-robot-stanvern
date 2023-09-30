@@ -1,10 +1,10 @@
 package com.edmazur.eqrs.discord.listener;
 
-import com.beust.jcommander.internal.Lists;
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
+import com.google.common.collect.Lists;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
