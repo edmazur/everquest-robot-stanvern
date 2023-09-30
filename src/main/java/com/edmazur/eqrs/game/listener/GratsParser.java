@@ -51,9 +51,22 @@ public class GratsParser {
   }
 
   public GratsParseResult parse(EqLogEvent eqLogEvent) {
-    List<Item> items = itemDatabase.parse(eqLogEvent.getPayload());
     List<String> itemUrls = Lists.newArrayList();
     List<ValueOrError<File>> itemScreenshotsOrErrors = Lists.newArrayList();
+
+    // Parse out the guild chat part.
+    Matcher matcher = getPattern().matcher(eqLogEvent.getPayload());
+    if (!matcher.matches()) {
+      return new GratsParseResult(
+          eqLogEvent,
+          itemUrls,
+          ValueOrError.error("Error reading guild chat"),
+          ValueOrError.error("Error reading guild chat"),
+          itemScreenshotsOrErrors);
+    }
+    String gratsMessage = matcher.group(1);
+
+    List<Item> items = itemDatabase.parse(gratsMessage);
     for (Item item : items) {
       itemUrls.add(item.getUrl());
       Optional<File> maybeItemScreenshot = itemScreenshotter.get(item);
@@ -67,7 +80,7 @@ public class GratsParser {
     return new GratsParseResult(
         eqLogEvent,
         itemUrls,
-        getLootCommandOrError(eqLogEvent, items),
+        getLootCommandOrError(gratsMessage, items),
         eventChannelMatcher.getChannel(eqLogEvent, items),
         itemScreenshotsOrErrors);
   }
@@ -81,7 +94,7 @@ public class GratsParser {
    * - (and various other orderings, extra whitespace, etc.)
    * Expected output: $loot Earthcaller Stanvern 1000
    */
-  private ValueOrError<String> getLootCommandOrError(EqLogEvent eqLogEvent, List<Item> items) {
+  private ValueOrError<String> getLootCommandOrError(String gratsMessage, List<Item> items) {
     if (items.isEmpty()) {
       return ValueOrError.error("No items found");
     } else if (items.size() > 1) {
@@ -89,14 +102,8 @@ public class GratsParser {
     }
     Item item = items.get(0);
 
-    Matcher matcher = getPattern().matcher(eqLogEvent.getPayload());
-    if (!matcher.matches()) {
-      return ValueOrError.error("Error reading guild chat");
-    }
-    String gratsMessage = matcher.group(1);
-
     // Remove the item name.
-    matcher = item.getNamePattern().matcher(gratsMessage);
+    Matcher matcher = item.getNamePattern().matcher(gratsMessage);
     if (!matcher.matches()) {
       return ValueOrError.error("Error getting item name");
     }

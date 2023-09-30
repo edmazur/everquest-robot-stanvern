@@ -207,6 +207,15 @@ class GratsParserTest {
     assertSuccessfulParse("$loot Amethyst Amulet Ezzani 1");
   }
 
+  @Test
+  void lootStringItemNameInAuthorName() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Fri Sep 08 18:40:18 2023] Pebblespring tells the guild, "
+        + "'!gratz Head of the Serpent Foo 0'").get();
+    gratsParser.parse(eqLogEvent);
+    assertSuccessfulParse("$loot Head of the Serpent Foo 0");
+  }
+
   private enum ParseOutcome {
     SUCCESS,
     FAILURE,
