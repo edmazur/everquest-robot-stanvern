@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.SortedMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.regex.Pattern;
@@ -63,9 +64,13 @@ public class EventChannelMatcher {
     SortedMap<Instant, Message> messagesInTimestampOrder =
         Maps.newTreeMap(Collections.reverseOrder());
     for (CompletableFuture<MessageSet> completableFuture : completableFutures) {
-      Message message = completableFuture.join().getNewestMessage().get();
-      Instant eventChannelTimestamp = message.getCreationTimestamp();
-      messagesInTimestampOrder.put(eventChannelTimestamp, message);
+      Optional<Message> maybeFirstMessage = completableFuture.join().getNewestMessage();
+      // This check is needed in case an event channel has no messages.
+      if (maybeFirstMessage.isPresent()) {
+        Message message = maybeFirstMessage.get();
+        Instant eventChannelTimestamp = message.getCreationTimestamp();
+        messagesInTimestampOrder.put(eventChannelTimestamp, message);
+      }
     }
 
     // Process the responses in timestamp order to select the first matching candidate.
