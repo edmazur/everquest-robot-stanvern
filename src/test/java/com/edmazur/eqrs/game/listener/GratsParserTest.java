@@ -58,6 +58,15 @@ class GratsParserTest {
   }
 
   @Test
+  void badInput() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Wed May 24 23:00:41 2023] Veriasse shouts, "
+            + "'!grats Resplendent Robe Veriasse 69'").get();
+    gratsParser.parse(eqLogEvent);
+    assertFailedParse("Error reading guild chat");
+  }
+
+  @Test
   void exclamationGrats() {
     EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
         "[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
@@ -223,6 +232,50 @@ class GratsParserTest {
         + "'!gratz Spinning Orb of Confusion Pebblespring 50'").get();
     gratsParser.parse(eqLogEvent);
     assertSuccessfulParse("$loot Spinning Orb of Confusion Pebblespring 50");
+  }
+
+  @Test
+  void lootStringNoDkpAmount() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Thu Sep 07 17:00:02 2023] Ualine tells the guild, "
+        + "'!grats Chestplate of Vindication ualine'").get();
+    gratsParser.parse(eqLogEvent);
+    assertFailedParse("No DKP amount found");
+  }
+
+  @Test
+  void lootStringMulipleDkpAmounts() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Thu Oct 05 15:19:42 2023] Trys tells the guild, "
+        + "'!grats Reaper's Ring 420 Trys / Britters 419 .'").get();
+    gratsParser.parse(eqLogEvent);
+    assertFailedParse("Multiple DKP amount candidates found: ``420``, ``419``");
+  }
+
+  @Test
+  void lootStringNoItem() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Sun May 28 19:53:52 2023] Zalkestna tells the guild, '!grats Zalkestna 475'").get();
+    gratsParser.parse(eqLogEvent);
+    assertFailedParse("No items found");
+  }
+
+  @Test
+  void lootStringTypoItem() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Sun Jun 04 02:29:03 2023] Robomonk tells the guild, "
+        + "'!grats Bow of the Hutsman Vill 12'").get();
+    gratsParser.parse(eqLogEvent);
+    assertFailedParse("No items found");
+  }
+
+  @Test
+  void lootStringMultipleItems() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Wed May 24 23:00:41 2023] Stanvern tells the guild, "
+            + "'!grats Swiftwind Earthcaller Stanvern 1337'").get();
+    gratsParser.parse(eqLogEvent);
+    assertFailedParse("Multiple items found");
   }
 
   private enum ParseOutcome {
