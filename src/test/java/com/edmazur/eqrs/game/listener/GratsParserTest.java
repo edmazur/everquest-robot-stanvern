@@ -172,6 +172,15 @@ class GratsParserTest {
   }
 
   @Test
+  void lootStringTwoNamesNoSpace() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Tue May 23 17:31:38 2023] Faldimir tells the guild, "
+        + "'!grats Spear of Fate 400 Hamfork/Guzmak'").get();
+    gratsParser.parse(eqLogEvent);
+    assertFailedParse("Name candidate contains non-alpha characters: ``Hamfork/Guzmak``");
+  }
+
+  @Test
   void lootStringUppercaseName() {
     EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
         "[Tue May 23 17:31:38 2023] Faldimir tells the guild, "
@@ -214,6 +223,15 @@ class GratsParserTest {
         + "'!grats Amethyst Amulet Ezzani 1.'").get();
     gratsParser.parse(eqLogEvent);
     assertSuccessfulParse("$loot Amethyst Amulet Ezzani 1");
+  }
+
+  @Test
+  void lootStringSlashAfterDkpAmount() {
+    EqLogEvent eqLogEvent = EqLogEvent.parseFromLine(
+        "[Thu Oct 05 17:09:48 2023] Dedale tells the guild, "
+        + "'!grats Great Spear of Dawn Dedale 100/'").get();
+    gratsParser.parse(eqLogEvent);
+    assertSuccessfulParse("$loot Great Spear of Dawn Dedale 100");
   }
 
   @Test

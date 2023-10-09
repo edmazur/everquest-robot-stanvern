@@ -29,8 +29,7 @@ public class GratsParser {
           List.of(
               "closed",
               "dkp",
-              "swapping",
-              "\\.").stream(),
+              "swapping").stream(),
           GratsDetector.TRIGGERS.stream())
       .collect(Collectors.toList());
   // This is a little hacky. There's a player named "Pebblespring" whose name thus contains "Espri".
@@ -131,8 +130,15 @@ public class GratsParser {
       }
 
       // Group what's remaining into categories.
-      if (part.matches("[0-9]+")) {
-        numericOnlyParts.add(Integer.parseInt(part));
+      boolean partIsNonAlphaAndNumeric = part.matches("[^a-zA-Z]+") && part.matches(".*[0-9].*");
+      if (partIsNonAlphaAndNumeric) {
+        // Parts that are technically *not* numeric-only are still treated as numeric-only if their
+        // non-numeric characters are all non-alpha. For example:
+        // - "1337." will be treated as numeric-only because it's only non-numeric character is ".".
+        // - "1337a" will *not* be treated as numeric-only because "a" is an alpha character.
+        // The main goal is to permit stray non-alpha characters (e.g. "." and "/") in DKP values.
+        String numericOnlyPart = part.replaceAll("[^0-9]", "");
+        numericOnlyParts.add(Integer.parseInt(numericOnlyPart));
       } else {
         otherParts.add(part);
       }
