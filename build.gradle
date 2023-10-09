@@ -2,6 +2,7 @@ apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'checkstyle'
 apply plugin: 'eclipse'
+apply plugin: 'jacoco'
 
 repositories {
   mavenCentral()

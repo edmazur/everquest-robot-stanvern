@@ -27,6 +27,12 @@ $ ./src/main/scripts/override-test-db-with-prod-db.sh
 $ ./gradlew run --args='YourCharacterName --debug'
 ```
 
+Code coverage report (see `./build/reports/jacoco/test/html/index.html`):
+
+```
+$ ./gradlew build jacocoTestReport
+```
+
 # Capabilities
 - Discord: Listens for reported ToDs and saves them to a database.
 - Discord: Listens for messages in announcement/batphone channels and records them in a separate audit channel.
