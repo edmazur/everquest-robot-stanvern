@@ -36,7 +36,7 @@ public class EarthquakeListener implements EqLogListener {
     if (earthquakeDetector.containsEarthquake(eqLogEvent)) {
       if (rateLimiter.getPermission()) {
         discord.sendMessage(
-            getChannel(), "@everyone QUAKE" + "\n" + "(ET: `" + eqLogEvent.getFullLine() + "`");
+            getChannel(), "@everyone QUAKE" + "\n" + "(ET: `" + eqLogEvent.getFullLine() + "`)");
       }
     }
   }
