@@ -21,7 +21,7 @@ dependencies {
   implementation 'com.edmazur.eqlp:everquest-log-parser:0.1.0'
   implementation 'com.google.guava:guava:32.0.0-jre'
   implementation 'commons-io:commons-io:2.11.0'
-  implementation 'io.github.bonigarcia:webdrivermanager:5.3.0'
+  implementation 'io.github.bonigarcia:webdrivermanager:5.5.3'
   implementation 'mysql:mysql-connector-java:8.0.25'
   implementation 'org.ahocorasick:ahocorasick:0.6.3'
   implementation 'org.apache.commons:commons-text:1.9'
