@@ -95,7 +95,7 @@ public class DiscordTodListener implements MessageCreateListener {
           }
         }
         if (commaCount != 1) {
-          event.addReactionsToMessage("❌");
+          event.addReactionsToMessage(":x:");
           sendReply(event,
               "Sorry, unrecognized !tod command, there should be exactly 1 comma"
               + "\n" + HELP_TOD_USAGE
@@ -108,7 +108,7 @@ public class DiscordTodListener implements MessageCreateListener {
 
         // !tod was used, but arguments could not be parsed.
         if (!todParseMatcher.matches() || todParseMatcher.groupCount() != 2) {
-          event.addReactionsToMessage("❌");
+          event.addReactionsToMessage(":x:");
           sendReply(event,
               "Sorry, unrecognized !tod command"
               + "\n" + HELP_TOD_USAGE
@@ -121,7 +121,7 @@ public class DiscordTodListener implements MessageCreateListener {
         String raidTargetToParse = todParseMatcher.group(1);
         Optional<RaidTarget> maybeRaidTarget = raidTargets.getRaidTarget(raidTargetToParse);
         if (maybeRaidTarget.isEmpty()) {
-          event.addReactionsToMessage("❌");
+          event.addReactionsToMessage(":x:");
           sendReply(event,
               "Sorry, I don't know this target: `" + raidTargetToParse + "`"
               + "\n" + HELP_TARGET);
@@ -135,7 +135,7 @@ public class DiscordTodListener implements MessageCreateListener {
         String timestampToParse = todParseMatcher.group(2);
         Optional<LocalDateTime> maybeTimestamp = getTimestamp(timestampToParse);
         if (maybeTimestamp.isEmpty()) {
-          event.addReactionsToMessage("❌");
+          event.addReactionsToMessage(":x:");
           sendReply(event,
               "Sorry, I can't read this timestamp: `" + timestampToParse + "`"
               + "\n" + HELP_TIMESTAMP);
@@ -143,7 +143,7 @@ public class DiscordTodListener implements MessageCreateListener {
         }
         LocalDateTime timestamp = maybeTimestamp.get();
         if (timestamp.isAfter(LocalDateTime.now())) {
-          event.addReactionsToMessage("❌");
+          event.addReactionsToMessage(":x:");
           sendReply(event,
               "Sorry, ToD cannot be in the future: `" + timestampToParse + "`");
           return;
@@ -154,7 +154,7 @@ public class DiscordTodListener implements MessageCreateListener {
         } else {
           LocalDateTime quakeTime = maybeQuakeTime.get();
           if (timestamp.isBefore(quakeTime)) {
-            event.addReactionsToMessage("❌");
+            event.addReactionsToMessage(":x:");
             sendReply(event,
                 "Sorry, ToD cannot be before quake time (" + DATE_TIME_FORMATTER.format(quakeTime)
                     + " ET)");
@@ -166,7 +166,7 @@ public class DiscordTodListener implements MessageCreateListener {
         // Do database update.
         Optional<Integer> maybeRowsAffected = database.updateTimeOfDeath(raidTarget, timestamp);
         if (maybeRowsAffected.isEmpty() || maybeRowsAffected.get() != 1) {
-          event.addReactionsToMessage("❌");
+          event.addReactionsToMessage(":x:");
           sendReply(event, "Error updating database");
           return;
         }
@@ -191,7 +191,7 @@ public class DiscordTodListener implements MessageCreateListener {
 
         // !quake was used, but argument could not be parsed.
         if (!quakeParseMatcher.matches() || quakeParseMatcher.groupCount() != 1) {
-          event.addReactionsToMessage("❌");
+          event.addReactionsToMessage(":x:");
           event.getMessage().reply("Sorry, unrecognized !quake command"
               + "\n" + HELP_QUAKE_USAGE
               + "\n" + HELP_TIMESTAMP);
@@ -202,14 +202,14 @@ public class DiscordTodListener implements MessageCreateListener {
         String timestampToParse = quakeParseMatcher.group(1);
         Optional<LocalDateTime> maybeTimestamp = getTimestamp(timestampToParse);
         if (maybeTimestamp.isEmpty()) {
-          event.addReactionsToMessage("❌");
+          event.addReactionsToMessage(":x:");
           event.getMessage().reply("Sorry, I can't read this timestamp: `" + timestampToParse + "`"
               + "\n" + HELP_TIMESTAMP);
           return;
         }
         LocalDateTime timestamp = maybeTimestamp.get();
         if (timestamp.isAfter(LocalDateTime.now())) {
-          event.addReactionsToMessage("❌");
+          event.addReactionsToMessage(":x:");
           event.getMessage().reply(
               "Sorry, quake time cannot be in the future: `" + timestampToParse + "`");
           return;
@@ -219,7 +219,7 @@ public class DiscordTodListener implements MessageCreateListener {
         // Do database update.
         Optional<Integer> maybeRowsAffected = database.updateQuakeTime(timestamp);
         if (maybeRowsAffected.isEmpty() || maybeRowsAffected.get() != 1) {
-          event.addReactionsToMessage("❌");
+          event.addReactionsToMessage(":x:");
           sendReply(event, "Error updating database");
           return;
         }

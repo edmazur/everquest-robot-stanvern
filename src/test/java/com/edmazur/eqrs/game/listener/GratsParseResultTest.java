@@ -34,10 +34,10 @@ class GratsParseResultTest {
         List.of(ValueOrError.value(FILE)));
     FakeMessageBuilder fakeMessageBuilder = new FakeMessageBuilder();
     assertEquals(
-        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+        ":moneybag: ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
             + "'!grats Resplendent Robe Veriasse 69'``\n"
-        + "✅ **$loot command**: ``(loot command)``\n"
-        + "✅ **Channel match**: <#123>\n"
+        + ":white_check_mark: **$loot command**: ``(loot command)``\n"
+        + ":white_check_mark: **Channel match**: <#123>\n"
         + "https://wiki.project1999.com/Resplendent_Robe\n",
         gratsParseResult.prepareForCreate(fakeMessageBuilder).getStringBuilder().toString());
     assertEquals(FILE, fakeMessageBuilder.getAttachment());
@@ -55,10 +55,10 @@ class GratsParseResultTest {
         List.of(ValueOrError.value(FILE)));
     FakeMessageBuilder fakeMessageBuilder = new FakeMessageBuilder();
     assertEquals(
-        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+        ":moneybag: ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
             + "'!grats Chief Ry`Gorr's Head Veriasse 69'``\n"
-        + "✅ **$loot command**: ``(loot command)``\n"
-        + "✅ **Channel match**: <#123>\n"
+        + ":white_check_mark: **$loot command**: ``(loot command)``\n"
+        + ":white_check_mark: **Channel match**: <#123>\n"
         + "https://wiki.project1999.com/Chief_Ry%60Gorr%27s_Head\n",
         gratsParseResult.prepareForCreate(fakeMessageBuilder).getStringBuilder().toString());
     assertEquals(FILE, fakeMessageBuilder.getAttachment());
@@ -74,10 +74,10 @@ class GratsParseResultTest {
         List.of(ValueOrError.value(FILE)));
     FakeMessageBuilder fakeMessageBuilder = new FakeMessageBuilder();
     assertEquals(
-        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+        ":moneybag: ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
             + "'!grats Resplendent Robe Veriasse 69'``\n"
-        + "❌ **$loot command**: (loot command error)\n"
-        + "✅ **Channel match**: <#123>\n"
+        + ":x: **$loot command**: (loot command error)\n"
+        + ":white_check_mark: **Channel match**: <#123>\n"
         + "https://wiki.project1999.com/Resplendent_Robe\n",
         gratsParseResult.prepareForCreate(fakeMessageBuilder).getStringBuilder().toString());
     assertEquals(FILE, fakeMessageBuilder.getAttachment());
@@ -93,10 +93,10 @@ class GratsParseResultTest {
         List.of(ValueOrError.value(FILE)));
     FakeMessageBuilder fakeMessageBuilder = new FakeMessageBuilder();
     assertEquals(
-        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+        ":moneybag: ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
             + "'!grats Resplendent Robe Veriasse 69'``\n"
-        + "✅ **$loot command**: ``(loot command)``\n"
-        + "❌ **Channel match**: (channel match error)\n"
+        + ":white_check_mark: **$loot command**: ``(loot command)``\n"
+        + ":x: **Channel match**: (channel match error)\n"
         + "https://wiki.project1999.com/Resplendent_Robe\n",
         gratsParseResult.prepareForCreate(fakeMessageBuilder).getStringBuilder().toString());
     assertEquals(FILE, fakeMessageBuilder.getAttachment());
@@ -111,64 +111,66 @@ class GratsParseResultTest {
         ValueOrError.value(CHANNEL_ID),
         List.of(ValueOrError.error("(item screenshot error)")));
     FakeMessageBuilder fakeMessageBuilder = new FakeMessageBuilder();
-    assertEquals(
-        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
-            + "'!grats Resplendent Robe Veriasse 69'``\n"
-        + "✅ **$loot command**: ``(loot command)``\n"
-        + "✅ **Channel match**: <#123>\n"
+    String expected = ":moneybag: ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+        + "'!grats Resplendent Robe Veriasse 69'``\n"
+        + ":white_check_mark: **$loot command**: ``(loot command)``\n"
+        + ":white_check_mark: **Channel match**: <#123>\n"
         + "https://wiki.project1999.com/Resplendent_Robe\n"
-        + "(item screenshot error)\n",
-        gratsParseResult.prepareForCreate(fakeMessageBuilder).getStringBuilder().toString());
+        + "(item screenshot error)\n";
+    String actual = gratsParseResult.prepareForCreate(fakeMessageBuilder).getStringBuilder().toString();
+    assertEquals(
+        expected,
+        actual);
     assertNull(fakeMessageBuilder.getAttachment());
   }
 
   @Test
   void fromMessage() {
     runFromMessageTest(
-        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+        ":moneybag: ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
             + "'!grats Resplendent Robe Veriasse 69'``\n"
-        + "✅ **$loot command**: ``(loot command)``\n"
-        + "✅ **Channel match**: <#123>\n"
+        + ":white_check_mark: **$loot command**: ``(loot command)``\n"
+        + ":white_check_mark: **Channel match**: <#123>\n"
         + "https://wiki.project1999.com/Resplendent_Robe", true);
   }
 
   @Test
   void fromMessage_apostropheBacktick() {
     runFromMessageTest(
-        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+        ":moneybag: ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
             + "'!grats Chief Ry`Gorr's Head Veriasse 69'``\n"
-        + "✅ **$loot command**: ``(loot command)``\n"
-        + "✅ **Channel match**: <#123>\n"
+        + ":white_check_mark: **$loot command**: ``(loot command)``\n"
+        + ":white_check_mark: **Channel match**: <#123>\n"
         + "https://wiki.project1999.com/Chief_Ry%60Gorr%27s_Head", true);
   }
 
   @Test
   void fromMessage_lootCommandError() {
     runFromMessageTest(
-        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+        ":moneybag: ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
             + "'!grats Resplendent Robe Veriasse 69'``\n"
-        + "❌ **$loot command**: (loot command error)\n"
-        + "✅ **Channel match**: <#123>\n"
+        + ":x: **$loot command**: (loot command error)\n"
+        + ":white_check_mark: **Channel match**: <#123>\n"
         + "https://wiki.project1999.com/Resplendent_Robe", true);
   }
 
   @Test
   void fromMessage_channelMatchError() {
     runFromMessageTest(
-        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+        ":moneybag: ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
             + "'!grats Resplendent Robe Veriasse 69'``\n"
-        + "✅ **$loot command**: ``(loot command)``\n"
-        + "❌ **Channel match**: (channel match error)\n"
+        + ":white_check_mark: **$loot command**: ``(loot command)``\n"
+        + ":x: **Channel match**: (channel match error)\n"
         + "https://wiki.project1999.com/Resplendent_Robe", true);
   }
 
   @Test
   void fromMessage_missingScreenshot() {
     runFromMessageTest(
-        "💰 ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
+        ":moneybag: ET: ``[Wed May 24 23:00:41 2023] Veriasse tells the guild, "
             + "'!grats Resplendent Robe Veriasse 69'``\n"
-        + "✅ **$loot command**: ``(loot command)``\n"
-        + "✅ **Channel match**: <#123>\n"
+        + ":white_check_mark: **$loot command**: ``(loot command)``\n"
+        + ":white_check_mark: **Channel match**: <#123>\n"
         + "https://wiki.project1999.com/Resplendent_Robe\n"
         + "(item screenshot error)", false);
   }

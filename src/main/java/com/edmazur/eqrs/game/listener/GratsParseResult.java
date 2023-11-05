@@ -18,14 +18,14 @@ import org.javacord.api.entity.message.component.ButtonStyle;
 
 public class GratsParseResult {
 
-  private static final char SUCCESS_ICON = '✅';
-  private static final char ERROR_ICON = '❌';
+  private static final String SUCCESS_ICON = ":white_check_mark:";
+  private static final String ERROR_ICON = ":x:";
   // Note that this must be preceded by "//" in regexs.
   private static final String LOOT_COMMAND_LABEL = "$loot command";
   private static final String CHANNEL_MATCH_LABEL = "Channel match";
 
-  private static final String RAW_GRATS_MESSAGE_FORMAT = "💰 ET: ``%s``";
-  private static final Pattern RAW_GRATS_MESSAGE_PATTERN = Pattern.compile("^💰 ET: ``(.+)``$");
+  private static final String RAW_GRATS_MESSAGE_FORMAT = ":moneybag: ET: ``%s``";
+  private static final Pattern RAW_GRATS_MESSAGE_PATTERN = Pattern.compile("^:moneybag: ET: ``(.+)``$");
 
   private static final String LOOT_COMMAND_SUCCESS_FORMAT =
       SUCCESS_ICON + " **" + LOOT_COMMAND_LABEL + "**: ``%s``";
