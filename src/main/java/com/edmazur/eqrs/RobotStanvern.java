@@ -95,8 +95,6 @@ public class RobotStanvern {
       System.exit(-1);
     }
 
-    Discord discord = new Discord(config);
-
     // Uncomment to send one-off images/messages.
     // TODO: Add a better way to send one-off images/messages that doesn't require code changes.
     /*
@@ -112,6 +110,7 @@ public class RobotStanvern {
       Database database = new Database(config);
       Json json = new Json();
       RaidTargets raidTargets = new RaidTargets(config, json);
+      Discord discord = new Discord(config, raidTargets);
       // TODO: Set this up more like how game log messages are received centrally and passed out to
       // listeners?
       new DiscordTodListener(config, discord, database, raidTargets);
@@ -188,6 +187,7 @@ public class RobotStanvern {
     }
 
     if (mode == Mode.ACTIVE) {
+      Discord discord = new Discord(config);
       // Add FTE listener.
       eqLogListeners.add(new FteListener(config, discord));
 

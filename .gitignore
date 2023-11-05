@@ -8,6 +8,9 @@
 /.settings/
 /bin/
 
+# IntelliJ
+/.idea
+
 # Gradle
 /.gradle/
 /build/

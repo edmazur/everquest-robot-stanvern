@@ -1,7 +1,9 @@
 package com.edmazur.eqrs.discord;
 
 import com.edmazur.eqrs.Config;
+import com.edmazur.eqrs.game.RaidTargets;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
+import me.s3ns3iw00.jcommands.CommandHandler;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.activity.ActivityType;
@@ -34,20 +37,68 @@ import org.javacord.api.listener.message.reaction.ReactionAddListener;
 import org.javacord.api.listener.message.reaction.ReactionRemoveAllListener;
 import org.javacord.api.listener.message.reaction.ReactionRemoveListener;
 import org.javacord.api.util.logging.ExceptionLogger;
+import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
 
 public class Discord {
 
   private final DiscordApi discordApi;
+  private final Config config;
+  private static RaidTargets raidTargets;
 
   public Discord(Config config) {
+    this(config, null);
+  }
+
+  public Discord(Config config, RaidTargets raidTargets) {
+    Discord.raidTargets = raidTargets;
+    this.config = config;
     discordApi = new DiscordApiBuilder()
         .setToken(config.getString(Config.Property.DISCORD_PRIVATE_KEY))
         .addIntents(Intent.MESSAGE_CONTENT)
         .login()
         .join();
 
+    // Register all slash-commands
+    registerCommands();
+
     // TODO: Randomly update this every so often and cycle through a bunch of fun ones.
     discordApi.updateActivity(ActivityType.WATCHING, "everything, always");
+  }
+
+  public static RaidTargets getRaidTargets() {
+    return Discord.raidTargets;
+  }
+
+  private void registerCommands() {
+    CommandHandler.setApi(discordApi);
+
+    // Discover all existing commands
+    Reflections reflections = new Reflections(
+        "com.edmazur.eqrs.discord.commands", Scanners.SubTypes);
+    Set<Class<? extends DiscordSlashCommand>> commands = reflections.getSubTypesOf(
+        DiscordSlashCommand.class);
+
+    // Determine which server we're using
+    Server server;
+    if (this.config.getBoolean(Config.Property.DEBUG)) {
+      server = discordApi.getServerById(DiscordServer.TEST.getId()).orElse(null);
+    } else {
+      server = discordApi.getServerById(DiscordServer.GOOD_GUYS.getId()).orElse(null);
+    }
+
+    if (server != null) {
+      // Register all discovered commands
+      for (Class<? extends DiscordSlashCommand> commandClass : commands) {
+        try {
+          DiscordSlashCommand command = commandClass.getDeclaredConstructor().newInstance();
+          CommandHandler.registerCommand(command, server);
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException
+                 | InvocationTargetException ignored) {
+          System.out.println("Error creating command: " + commandClass.getName());
+        }
+      }
+    }
   }
 
   public CompletableFuture<Message> sendMessage(
