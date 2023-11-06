@@ -1,5 +1,6 @@
 package com.edmazur.eqrs.discord.commands.raidtarget;
 
+import com.edmazur.eqrs.Database;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordSlashSubCommand;
 import com.edmazur.eqrs.game.RaidTarget;
@@ -33,6 +34,13 @@ public class RaidTargetSubscribe extends DiscordSlashSubCommand {
         SearchAutocomplete.SearchType.CONTAINS, targetStringList
     ).ignoreCase().limit(10).sort(SearchAutocomplete.SortType.ASCENDING).minCharToSearch(2);
     targetNameArgument.addAutocomplete(searchAutocomplete);
+    targetNameArgument.getArgumentValidator().when(value -> ! targetStringList.contains(value))
+        .thenRespond(event -> {
+          event.getResponder().respondNow()
+              .setContent("Provided target name not valid! Please provide one from the list.")
+              .setFlags(MessageFlag.EPHEMERAL)
+              .respond();
+        });
     addArgument(targetNameArgument);
   }
 
@@ -41,9 +49,18 @@ public class RaidTargetSubscribe extends DiscordSlashSubCommand {
     CommandResponder responder = event.getResponder();
 
     String targetName = args[1].get();
-
+    long userId = event.getSender().getId();
+    boolean success = Database.getDatabase().addSubscription(targetName, userId);
+    String message;
+    if (success) {
+      message = "Subscribed to " + targetName + ".";
+    } else {
+      message = "Failed to subscribe to " + targetName + ". "
+          + "Either this subscription already exists, or something went *horribly wrong* "
+          + "and everything is about to be on fire.";
+    }
     responder.respondNow()
-        .setContent("Subscribing to " + targetName)
+        .setContent(message)
         .setFlags(MessageFlag.EPHEMERAL)
         .respond();
   }

@@ -51,6 +51,7 @@ public class Discord {
   }
 
   public Discord(Config config, RaidTargets raidTargets) {
+    // TODO: this could also be a singleton?
     Discord.raidTargets = raidTargets;
     this.config = config;
     discordApi = new DiscordApiBuilder()
@@ -111,6 +112,13 @@ public class Discord {
   public CompletableFuture<Message> sendMessage(
       DiscordUser discordUser, String message) {
     return getUser(discordUser)
+        .sendMessage(message)
+        .exceptionally(ExceptionLogger.get());
+  }
+
+  public CompletableFuture<Message> sendMessage(
+      long discordUserId, String message) {
+    return getUser(discordUserId)
         .sendMessage(message)
         .exceptionally(ExceptionLogger.get());
   }
@@ -285,6 +293,10 @@ public class Discord {
 
   private User getUser(DiscordUser discordUser) {
     return discordApi.getUserById(discordUser.getId()).join();
+  }
+
+  private User getUser(long discordUserId) {
+    return discordApi.getUserById(discordUserId).join();
   }
 
   public void addListener(MessageCreateListener listener) {

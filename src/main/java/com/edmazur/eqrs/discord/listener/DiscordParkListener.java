@@ -82,7 +82,8 @@ public class DiscordParkListener implements MessageCreateListener {
     sendReply(
         event,
         String.format(
-            ":white_check_mark: Park location for `%s` updated to `%s`", botName, parkLocation.getName()));
+            ":white_check_mark: Park location for `%s` updated to `%s`",
+            botName, parkLocation.getName()));
   }
 
   private void sendReply(MessageCreateEvent event, String content) {

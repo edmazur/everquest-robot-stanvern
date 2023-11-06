@@ -13,6 +13,7 @@ import com.edmazur.eqrs.discord.listener.GratsChannelListener;
 import com.edmazur.eqrs.discord.listener.ItemListener;
 import com.edmazur.eqrs.discord.listener.LootStatusListener;
 import com.edmazur.eqrs.discord.listener.LootStatusRequester;
+import com.edmazur.eqrs.discord.speaker.SubscriptionSpeaker;
 import com.edmazur.eqrs.discord.speaker.TodWindowSpeaker;
 import com.edmazur.eqrs.game.CharInfoOcrScrapeComparator;
 import com.edmazur.eqrs.game.CharInfoScraper;
@@ -107,7 +108,7 @@ public class RobotStanvern {
     List<EqLogListener> eqLogListeners = new ArrayList<>();
 
     if (mode == Mode.PASSIVE) {
-      Database database = new Database(config);
+      Database database = Database.getDatabase(config);
       Json json = new Json();
       RaidTargets raidTargets = new RaidTargets(config, json);
       Discord discord = new Discord(config, raidTargets);
@@ -184,6 +185,9 @@ public class RobotStanvern {
       TodWindowSpeaker todWindowSpeaker =
           new TodWindowSpeaker(config, discord, raidTargetTableMaker, discordTableFormatter);
       scheduledExecutorService.scheduleAtFixedRate(todWindowSpeaker, 0, 1, TimeUnit.MINUTES);
+      SubscriptionSpeaker subscriptionSpeaker =
+          new SubscriptionSpeaker(config, discord, raidTargets);
+      scheduledExecutorService.scheduleAtFixedRate(subscriptionSpeaker, 0, 5, TimeUnit.MINUTES);
     }
 
     if (mode == Mode.ACTIVE) {

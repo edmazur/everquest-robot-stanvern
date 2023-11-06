@@ -25,7 +25,8 @@ public class GratsParseResult {
   private static final String CHANNEL_MATCH_LABEL = "Channel match";
 
   private static final String RAW_GRATS_MESSAGE_FORMAT = ":moneybag: ET: ``%s``";
-  private static final Pattern RAW_GRATS_MESSAGE_PATTERN = Pattern.compile("^:moneybag: ET: ``(.+)``$");
+  private static final Pattern RAW_GRATS_MESSAGE_PATTERN = Pattern.compile(
+      "^:moneybag: ET: ``(.+)``$");
 
   private static final String LOOT_COMMAND_SUCCESS_FORMAT =
       SUCCESS_ICON + " **" + LOOT_COMMAND_LABEL + "**: ``%s``";

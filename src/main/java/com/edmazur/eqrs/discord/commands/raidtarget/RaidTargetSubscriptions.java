@@ -1,5 +1,6 @@
 package com.edmazur.eqrs.discord.commands.raidtarget;
 
+import com.edmazur.eqrs.Database;
 import com.edmazur.eqrs.discord.DiscordSlashSubCommand;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,21 +16,17 @@ public class RaidTargetSubscriptions extends DiscordSlashSubCommand {
   }
 
   public void onAction(CommandActionEvent event) {
-    // TODO: Get current active subscriptions for this user from the DB
-    String[] subscriptions = {
-        // Testing Examples
-        "Cazic Thule",
-        "Trakanon",
-        "Lodizal",
-        "Avatar of War"
-    };
+    long userId = event.getSender().getId();
+    List<Database.Subscription> subscriptionList =
+        Database.getDatabase().getSubscriptionsForUser(userId);
 
     List<EmbedBuilder> embeds = new ArrayList<>();
-    for (String target : subscriptions) {
+    for (Database.Subscription subscription : subscriptionList) {
+      long expirySeconds = subscription.expiryTime.toInstant().getEpochSecond();
       // TODO: Embeds may be too heavyweight for this considering there are only two pieces of info
       EmbedBuilder embed = new EmbedBuilder()
-          .setTitle(target)
-          .setDescription("Expires at " + "TODO: expiration date");
+          .setTitle(subscription.targetName)
+          .setDescription("Expires <t:" + expirySeconds + ":R>");
       embeds.add(embed);
       // TODO: button or reaction based responses to each existing subscription
       // * Unsubscribe
@@ -38,6 +35,7 @@ public class RaidTargetSubscriptions extends DiscordSlashSubCommand {
 
     CommandResponder responder = event.getResponder();
     responder.respondNow()
+        .setContent("Subscriptions:")
         .addEmbeds(embeds)
         .setFlags(MessageFlag.EPHEMERAL)
         .respond();

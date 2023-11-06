@@ -117,7 +117,8 @@ class GratsParseResultTest {
         + ":white_check_mark: **Channel match**: <#123>\n"
         + "https://wiki.project1999.com/Resplendent_Robe\n"
         + "(item screenshot error)\n";
-    String actual = gratsParseResult.prepareForCreate(fakeMessageBuilder).getStringBuilder().toString();
+    String actual = gratsParseResult.prepareForCreate(fakeMessageBuilder)
+        .getStringBuilder().toString();
     assertEquals(
         expected,
         actual);
