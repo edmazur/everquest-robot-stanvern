@@ -187,7 +187,7 @@ public class RobotStanvern {
       scheduledExecutorService.scheduleAtFixedRate(todWindowSpeaker, 0, 1, TimeUnit.MINUTES);
       SubscriptionSpeaker subscriptionSpeaker =
           new SubscriptionSpeaker(config, discord, raidTargets);
-      scheduledExecutorService.scheduleAtFixedRate(subscriptionSpeaker, 0, 5, TimeUnit.MINUTES);
+      scheduledExecutorService.scheduleAtFixedRate(subscriptionSpeaker, 0, 1, TimeUnit.MINUTES);
     }
 
     if (mode == Mode.ACTIVE) {

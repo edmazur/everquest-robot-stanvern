@@ -60,8 +60,8 @@ public class SubscriptionSpeaker implements Runnable {
         String targetName = raidTarget.getName();
         // Check for subscriptions for the upcoming window
         if (subscriptionMap.containsKey(targetName)) {
-          String message = "Target Notification: " + targetName
-              + " entering window at " + activeWindow.getStart();
+          String message = "**Target Notification** `" + targetName
+              + "` entering window <t:" + activeWindow.getStart().getEpochSecond() + ":R>";
           // Send a notification for each subscription
           for (long userId : subscriptionMap.get(targetName)) {
             // Send a discord message
