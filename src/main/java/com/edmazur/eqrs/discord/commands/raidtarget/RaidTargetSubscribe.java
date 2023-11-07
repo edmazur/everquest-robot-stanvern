@@ -53,7 +53,7 @@ public class RaidTargetSubscribe extends DiscordSlashSubCommand {
     long userId = event.getSender().getId();
     String message;
 
-    if (!Discord.getDiscord().isUserAuthorized(userId, DiscordRole.MEMBER)) {
+    if (Discord.getDiscord().isUserAuthorized(userId, DiscordRole.MEMBER)) {
       String targetName = args[1].get();
       boolean success = Database.getDatabase().addSubscription(targetName, userId);
 
