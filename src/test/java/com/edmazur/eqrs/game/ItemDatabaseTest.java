@@ -13,8 +13,7 @@ class ItemDatabaseTest {
 
   @BeforeAll
   static void beforeAll() {
-    itemDatabase = new ItemDatabase();
-    itemDatabase.initialize();
+    itemDatabase = ItemDatabase.getItemDatabase(); // Initialize the Trie
   }
 
   @Test

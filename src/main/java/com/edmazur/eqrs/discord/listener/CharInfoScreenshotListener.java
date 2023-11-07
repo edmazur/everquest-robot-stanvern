@@ -2,6 +2,7 @@ package com.edmazur.eqrs.discord.listener;
 
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.Config.Property;
+import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.discord.DiscordPredicate;
@@ -23,28 +24,20 @@ import org.javacord.api.listener.message.MessageCreateListener;
 
 public class CharInfoScreenshotListener implements MessageCreateListener {
 
+  private static final Logger LOGGER = new Logger();
   private static final DiscordChannel PROD_CHANNEL = DiscordChannel.GG_BOT_CAMP;
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_BOT_SCRAPE;
   private static final Predicate<Message> PREDICATE = DiscordPredicate.hasImage();
 
   private static final File SUCCESS_IMAGE = new File("src/main/resources/str.png");
 
-  private Config config;
-  private Discord discord;
-  private CharInfoScraper charInfoScraper;
+  private final CharInfoScraper charInfoScraper;
 
-  public CharInfoScreenshotListener(
-      Config config,
-      Discord discord,
-      CharInfoScraper charInfoScraper) {
-    this.config = config;
-    this.discord = discord;
-    this.discord.addListener(this);
-    this.charInfoScraper = charInfoScraper;
-  }
-
-  public void init() {
-    for (Message message : discord.getUnrepliedMessagesMatchingPredicate(getChannel(), PREDICATE)) {
+  public CharInfoScreenshotListener() {
+    this.charInfoScraper = new CharInfoScraper();
+    LOGGER.log("%s running", this.getClass().getName());
+    for (Message message : Discord.getDiscord().getUnrepliedMessagesMatchingPredicate(
+        getChannel(), PREDICATE)) {
       handle(message);
     }
   }
@@ -101,7 +94,7 @@ public class CharInfoScreenshotListener implements MessageCreateListener {
   }
 
   private DiscordChannel getChannel() {
-    if (config.getBoolean(Property.DEBUG)) {
+    if (Config.getConfig().getBoolean(Property.DEBUG)) {
       return TEST_CHANNEL;
     } else {
       return PROD_CHANNEL;

@@ -8,17 +8,9 @@ import com.edmazur.eqrs.table.Justification;
 import com.edmazur.eqrs.table.SubTable;
 import com.edmazur.eqrs.table.Table;
 import java.util.Map;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class DiscordTableFormatterTest {
-
-  DiscordTableFormatter discordTableFormatter;
-
-  @BeforeEach
-  void beforeEach() {
-    discordTableFormatter = new DiscordTableFormatter();
-  }
 
   @Test
   void getMessages() {
@@ -44,7 +36,7 @@ class DiscordTableFormatterTest {
         + "`-----------------------------------------------`\n"
         + "`Some data                     X  `Some more data\n"
         + "`Another row of data           Y  Yet more data `\n",
-        discordTableFormatter.getMessages(table, Map.of(1, 2)).get(0));
+        DiscordTableFormatter.getMessages(table, Map.of(1, 2)).get(0));
   }
 
 }

@@ -1,4 +1,4 @@
-package com.edmazur.eqrs.game.listener;
+package com.edmazur.eqrs.game.listeners;
 
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.Config;
@@ -16,11 +16,8 @@ public class GratsDetector {
       Pattern.compile("(?:\\p{Alpha}+ tells the guild|You say to your guild), '(.+)'");
   private static final Pattern SAY_CHAT_PATTERN = Pattern.compile("You say, '(.+)'");
 
-  private Config config;
 
-  public GratsDetector(Config config) {
-    this.config = config;
-  }
+  public GratsDetector() { }
 
   public boolean containsGrats(EqLogEvent eqLogEvent) {
     Matcher matcher = getPattern().matcher(eqLogEvent.getPayload());
@@ -38,7 +35,7 @@ public class GratsDetector {
   }
 
   private Pattern getPattern() {
-    if (config.getBoolean(Config.Property.DEBUG)) {
+    if (Config.getConfig().isDebug()) {
       return SAY_CHAT_PATTERN;
     } else {
       return GUILD_CHAT_PATTERN;

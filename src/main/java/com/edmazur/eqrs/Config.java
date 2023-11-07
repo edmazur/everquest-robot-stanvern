@@ -9,6 +9,15 @@ public class Config {
 
   private static final String CONFIG_FILE_NAME = "app.config";
 
+  private static Config config;
+
+  public static Config getConfig() {
+    if (config == null) {
+      config = new Config();
+    }
+    return config;
+  }
+
   public enum Property {
 
     // Either:
@@ -60,9 +69,9 @@ public class Config {
 
   }
 
-  private Properties properties;
+  private final Properties properties;
 
-  public Config() {
+  private Config() {
     properties = new Properties();
     try {
       properties.load(new FileInputStream(CONFIG_FILE_NAME));
@@ -79,6 +88,10 @@ public class Config {
   // development/production environments.
   public void enableDebug() {
     properties.setProperty(Property.DEBUG.getName(), "true");
+  }
+
+  public boolean isDebug() {
+    return getBoolean(Property.DEBUG);
   }
 
   public boolean getBoolean(Property property) {

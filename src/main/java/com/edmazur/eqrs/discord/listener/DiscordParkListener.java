@@ -2,7 +2,7 @@ package com.edmazur.eqrs.discord.listener;
 
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.Database;
-import com.edmazur.eqrs.discord.Discord;
+import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.game.ParkLocation;
 import com.edmazur.eqrs.game.ParkLocations;
@@ -15,23 +15,14 @@ import org.javacord.api.listener.message.MessageCreateListener;
 
 public class DiscordParkListener implements MessageCreateListener {
 
+  private static final Logger LOGGER = new Logger();
   private static final String PARKED_COMMAND = "!parked";
 
   private static final DiscordChannel PROD_CHANNEL = DiscordChannel.GG_PARKED;
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_GENERAL;
 
-  private final Config config;
-  private final Discord discord;
-  private final Database database;
-
-  public DiscordParkListener(
-      Config config,
-      Discord discord,
-      Database database) {
-    this.config = config;
-    this.discord = discord;
-    this.discord.addListener(this);
-    this.database = database;
+  public DiscordParkListener() {
+    LOGGER.log("%s running", this.getClass().getName());
   }
 
   @Override
@@ -59,7 +50,7 @@ public class DiscordParkListener implements MessageCreateListener {
     input = input.replaceAll(parts[parts.length - 1], "").trim();
 
     // Parse park location.
-    Optional<ParkLocations> maybeParkLocations = database.getParkLocations();
+    Optional<ParkLocations> maybeParkLocations = Database.getDatabase().getParkLocations();
     if (maybeParkLocations.isEmpty()) {
       sendReply(event, ":x: Error reading from database");
       return;
@@ -73,7 +64,7 @@ public class DiscordParkListener implements MessageCreateListener {
     ParkLocation parkLocation = maybeParkLocation.get();
 
     // Update database.
-    if (!database.updateBotLocation(botName, parkLocation)) {
+    if (!Database.getDatabase().updateBotLocation(botName, parkLocation)) {
       sendReply(event, ":x: Error updating database");
       return;
     }
@@ -95,7 +86,7 @@ public class DiscordParkListener implements MessageCreateListener {
   }
 
   private DiscordChannel getChannel() {
-    if (config.getBoolean(Config.Property.DEBUG)) {
+    if (Config.getConfig().isDebug()) {
       return TEST_CHANNEL;
     } else {
       return PROD_CHANNEL;

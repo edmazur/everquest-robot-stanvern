@@ -14,33 +14,21 @@ public class TodWindowSpeaker implements Runnable {
   private static final DiscordChannel PROD_CHANNEL = DiscordChannel.GG_TIMERS;
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_TIMERS;
 
-  private final Config config;
-  private final Discord discord;
-  private final RaidTargetTableMaker raidTargetTableMaker;
-  private final DiscordTableFormatter discordTableFormatter;
 
-  public TodWindowSpeaker(
-      Config config,
-      Discord discord,
-      RaidTargetTableMaker raidTargetTableMaker,
-      DiscordTableFormatter discordTableFormatter) {
-    this.config = config;
-    this.discord = discord;
-    this.raidTargetTableMaker = raidTargetTableMaker;
-    this.discordTableFormatter = discordTableFormatter;
-  }
+  public TodWindowSpeaker() { }
 
   @Override
   public void run() {
     try {
-      Table table = raidTargetTableMaker.make();
-      discord.deleteMessagesMatchingPredicate(getChannel(), DiscordPredicate.isFromYourself());
-      for (String messages : discordTableFormatter.getMessages(table, Map.of(0, 1))) {
+      Table table = RaidTargetTableMaker.make();
+      Discord.getDiscord().deleteMessagesMatchingPredicate(
+          getChannel(), DiscordPredicate.isFromYourself());
+      for (String messages : DiscordTableFormatter.getMessages(table, Map.of(0, 1))) {
         // Wait for the Future to complete before sending the next message. In testing, not having
         // this in place led to out-of-order messages when they got sent in rapid succession.
-        discord.sendMessage(getChannel(), messages).join();
+        Discord.getDiscord().sendMessage(getChannel(), messages).join();
       }
-      discord.sendMessage(getChannel(),
+      Discord.getDiscord().sendMessage(getChannel(),
           "**What does `[N]` mean?**\n"
           + "\\- If a number appears before a name, it means the window is extrapolated.\n"
           + "\\- `[1]` indicates that the previous ToD was missed, `[2]` indicates that the 2 "
@@ -66,7 +54,7 @@ public class TodWindowSpeaker implements Runnable {
   }
 
   private DiscordChannel getChannel() {
-    if (config.getBoolean(Config.Property.DEBUG)) {
+    if (Config.getConfig().isDebug()) {
       return TEST_CHANNEL;
     } else {
       return PROD_CHANNEL;

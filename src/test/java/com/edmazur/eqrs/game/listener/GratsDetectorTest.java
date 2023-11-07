@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.edmazur.eqlp.EqLogEvent;
-import com.edmazur.eqrs.Config;
+import com.edmazur.eqrs.game.listeners.GratsDetector;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,8 +14,7 @@ class GratsDetectorTest {
 
   @BeforeEach
   void beforeEach() {
-    Config config = new Config();
-    gratsDetector = new GratsDetector(config);
+    gratsDetector = new GratsDetector();
   }
 
   @Test

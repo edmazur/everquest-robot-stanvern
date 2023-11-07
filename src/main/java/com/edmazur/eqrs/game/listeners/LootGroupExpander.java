@@ -1,4 +1,4 @@
-package com.edmazur.eqrs.game.listener;
+package com.edmazur.eqrs.game.listeners;
 
 import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.discord.Discord;
@@ -21,14 +21,13 @@ public class LootGroupExpander {
 
   private static final Logger LOGGER = new Logger();
 
-  private Discord discord;
 
-  public LootGroupExpander(Discord discord) {
-    this.discord = discord;
+  private LootGroupExpander() {
+    throw new IllegalStateException("Cannot be instantiated");
   }
 
-  public Map<String, String> getExpansions() {
-    Optional<Message> maybeLootGroupMessage = discord.getLastMessageMatchingPredicate(
+  public static Map<String, String> getExpansions() {
+    Optional<Message> maybeLootGroupMessage = Discord.getDiscord().getLastMessageMatchingPredicate(
         DiscordChannel.GG_BOT_TALK,
         DiscordPredicate.isFromUser(DiscordUser.ALFRED).and(DiscordPredicate.hasAttachment()));
     if (maybeLootGroupMessage.isEmpty()) {

@@ -2,7 +2,6 @@ package com.edmazur.eqrs.game;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.edmazur.eqrs.Ocr;
 import java.io.File;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,12 +17,7 @@ class CharInfoScraperTest {
 
   @BeforeEach
   void beforeEach() {
-    Ocr ocr = new Ocr();
-    CharInfoOcrScrapeComparator charInfoOcrScrapeComparator = new CharInfoOcrScrapeComparator();
-    // TODO: Replace this with a mock object since it has its own unit tests.
-    ExpPercentToNextLevelScraper expPercentToNextLevelScraper = new ExpPercentToNextLevelScraper();
-    charInfoScraper =
-        new CharInfoScraper(ocr, charInfoOcrScrapeComparator, expPercentToNextLevelScraper);
+    charInfoScraper = new CharInfoScraper();
   }
 
   private static List<Arguments> provideWorkingCases() {

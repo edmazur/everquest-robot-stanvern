@@ -5,8 +5,8 @@ import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordButton;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.discord.DiscordRole;
-import com.edmazur.eqrs.game.listener.EventChannelChecker;
-import com.edmazur.eqrs.game.listener.GratsParseResult;
+import com.edmazur.eqrs.game.listeners.EventChannelChecker;
+import com.edmazur.eqrs.game.listeners.GratsParseResult;
 import java.util.List;
 import java.util.Optional;
 import org.javacord.api.entity.channel.Channel;
@@ -44,19 +44,14 @@ public class GratsChannelListener implements
   private static final String SEND_NOTICE_PATTERN = "ET: `%s` - <@%d> sent $loot command from %s";
   private static final String IGNORED_PATTERN = "Not sending `%s` because it's already here";
 
-  private final Config config;
-  private final Discord discord;
   private final EventChannelChecker eventChannelChecker;
 
-  public GratsChannelListener(
-      Config config, Discord discord, EventChannelChecker eventChannelChecker) {
-    this.config = config;
-    this.discord = discord;
-    this.discord.addListener((ButtonClickListener) this);
-    this.discord.addListener((ReactionAddListener) this);
-    this.discord.addListener((ReactionRemoveAllListener) this);
-    this.discord.addListener((ReactionRemoveListener) this);
-    this.eventChannelChecker = eventChannelChecker;
+  public GratsChannelListener() {
+    Discord.getDiscord().addListener((ButtonClickListener) this);
+    Discord.getDiscord().addListener((ReactionAddListener) this);
+    Discord.getDiscord().addListener((ReactionRemoveAllListener) this);
+    Discord.getDiscord().addListener((ReactionRemoveListener) this);
+    this.eventChannelChecker = new EventChannelChecker();
   }
 
   @Override
@@ -72,7 +67,8 @@ public class GratsChannelListener implements
 
     // Verify that the user has permission to do this.
     User user = event.getInteraction().getUser();
-    if (!discord.hasAnyRole(user, getPermittedRoles(), event.getInteraction().getServer().get())) {
+    if (!Discord.getDiscord().hasAnyRole(user, getPermittedRoles(),
+        event.getInteraction().getServer().get())) {
       user.sendMessage("You don't have one of the roles needed to use that button.");
       return;
     }
@@ -100,7 +96,7 @@ public class GratsChannelListener implements
     // Check whether this has already been sent to event channel.
     String lootCommand = gratsParseResult.getLootCommandOrError().getValue();
     TextChannel channelMatch =
-        discord.getTextChannel(gratsParseResult.getChannelMatchOrError().getValue());
+        Discord.getDiscord().getTextChannel(gratsParseResult.getChannelMatchOrError().getValue());
     boolean isAlreadyPosted = eventChannelChecker.isAlreadyPosted(lootCommand, channelMatch);
 
     // Send to event channel.
@@ -179,7 +175,7 @@ public class GratsChannelListener implements
   }
 
   private DiscordChannel getChannel() {
-    if (config.getBoolean(Config.Property.DEBUG)) {
+    if (Config.getConfig().isDebug()) {
       return TEST_CHANNEL;
     } else {
       return PROD_CHANNEL;
@@ -187,7 +183,7 @@ public class GratsChannelListener implements
   }
 
   private List<DiscordRole> getPermittedRoles() {
-    if (config.getBoolean(Config.Property.DEBUG)) {
+    if (Config.getConfig().isDebug()) {
       return TEST_ROLES;
     } else {
       return PROD_ROLES;

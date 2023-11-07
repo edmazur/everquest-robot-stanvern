@@ -15,14 +15,10 @@ public class RaidTargets {
 
   private static final Logger LOGGER = new Logger();
 
-  private final Config config;
-  private final Json json;
+  private static List<RaidTarget> raidTargets;
 
-  private List<RaidTarget> raidTargets;
-
-  public RaidTargets(Config config, Json json) {
-    this.config = config;
-    this.json = json;
+  private RaidTargets() {
+    throw new IllegalStateException("Cannot be instantiated");
   }
 
   /**
@@ -30,7 +26,7 @@ public class RaidTargets {
    *
    * <p>Always fresh read.
    */
-  public List<RaidTarget> getAll() {
+  public static List<RaidTarget> getAll() {
     updateCache();
     return getAllInternal();
   }
@@ -40,7 +36,7 @@ public class RaidTargets {
    *
    * <p>Almost always stale read (exception: first call, if updateCache() not called before).
    */
-  public List<RaidTarget> getAllStaleAllowed() {
+  public static List<RaidTarget> getAllStaleAllowed() {
     return getAllInternal();
   }
 
@@ -49,8 +45,8 @@ public class RaidTargets {
    *
    * <p>Almost always stale read (exception: first call, if updateCache() not called before).
    */
-  public Optional<RaidTarget> getRaidTarget(String targetToParse) {
-    for (RaidTarget raidTarget : getAllInternal()) {
+  public static Optional<RaidTarget> getRaidTarget(String targetToParse) {
+    for (RaidTarget raidTarget : RaidTargets.getAllInternal()) {
       if (raidTarget.matchesName(targetToParse)) {
         return Optional.of(raidTarget);
       }
@@ -63,16 +59,16 @@ public class RaidTargets {
    *
    * <p>Almost always stale read (exception: first call, if updateCache() not called before).
    */
-  private List<RaidTarget> getAllInternal() {
+  private static List<RaidTarget> getAllInternal() {
     if (raidTargets == null) {
       updateCache();
     }
     return raidTargets;
   }
 
-  private void updateCache() {
+  private static void updateCache() {
     Optional<JSONObject> maybeJsonObject =
-        json.read(config.getString(Config.Property.EVERQUEST_RAID_TARGETS_ENDPOINT));
+        Json.read(Config.getConfig().getString(Config.Property.EVERQUEST_RAID_TARGETS_ENDPOINT));
     if (maybeJsonObject.isEmpty()) {
       // TODO: Do something more intelligent here.
       LOGGER.log("Unable to update cache");
@@ -80,7 +76,7 @@ public class RaidTargets {
     }
 
     JSONArray raidTargetsJson = maybeJsonObject.get().getJSONArray("raidTargets");
-    List<RaidTarget> raidTargets = new ArrayList<>(raidTargetsJson.length());
+    raidTargets = new ArrayList<>(raidTargetsJson.length());
     for (int i = 0; i < raidTargetsJson.length(); i++) {
       JSONObject raidTargetJson = raidTargetsJson.getJSONObject(i);
       String name = raidTargetJson.getString("name");
@@ -103,7 +99,6 @@ public class RaidTargets {
           windows);
       raidTargets.add(raidTarget);
     }
-    this.raidTargets = raidTargets;
   }
 
 }

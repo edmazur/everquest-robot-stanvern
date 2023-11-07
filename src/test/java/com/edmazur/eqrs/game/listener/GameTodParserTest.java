@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.edmazur.eqlp.EqLogEvent;
-import com.edmazur.eqrs.Config;
-import com.edmazur.eqrs.Json;
-import com.edmazur.eqrs.game.RaidTargets;
+import com.edmazur.eqrs.game.listeners.GameTodDetector;
+import com.edmazur.eqrs.game.listeners.GameTodParseResult;
+import com.edmazur.eqrs.game.listeners.GameTodParser;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,11 +31,8 @@ class GameTodParserTest {
   static void beforeAll() {
     // TODO: Maybe stub out RaidTargets. The current setup has an external dependency, making these
     // unit tests (a) not hermetic and (b) more heavyweight than they ought to be.
-    Config config = new Config();
-    Json json = new Json();
-    RaidTargets raidTargets = new RaidTargets(config, json);
-    gameTodParser = new GameTodParser(raidTargets);
-    gameTodDetector = new GameTodDetector(config);
+    gameTodParser = new GameTodParser();
+    gameTodDetector = new GameTodDetector();
   }
 
   private static List<Arguments> provideTestCases() throws IOException {

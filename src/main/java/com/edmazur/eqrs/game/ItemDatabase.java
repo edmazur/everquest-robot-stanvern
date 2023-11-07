@@ -27,7 +27,16 @@ public class ItemDatabase {
   private Map<String, Item> itemsByUrl;
   private Set<String> spammyItems;
 
-  public void initialize() {
+  private static ItemDatabase itemDatabase;
+
+  public static ItemDatabase getItemDatabase() {
+    if (itemDatabase == null) {
+      itemDatabase = new ItemDatabase();
+    }
+    return itemDatabase;
+  }
+
+  private ItemDatabase() {
     PayloadTrieBuilder<Item> itemsByNameBuilder = PayloadTrie.builder();
     itemsByNameBuilder
         .ignoreCase()

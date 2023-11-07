@@ -1,10 +1,9 @@
-package com.edmazur.eqrs.game.listener;
+package com.edmazur.eqrs.game.listeners;
 
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.ValueOrError;
 import com.edmazur.eqrs.discord.Discord;
-import com.edmazur.eqrs.discord.DiscordServer;
 import com.edmazur.eqrs.game.Item;
 import com.google.common.collect.Maps;
 import java.time.Duration;
@@ -32,17 +31,12 @@ public class EventChannelMatcher {
   private static final Duration EVENT_CHANNEL_MAX_AGE = Duration.ofHours(5);
   private static final String EVENT_CHANNEL_MAX_AGE_STRING = "5 hours";
 
-  private Config config;
-  private Discord discord;
-  private LootGroupExpander lootGroupExpander;
 
-  public EventChannelMatcher(Config config, Discord discord, LootGroupExpander lootGroupExpander) {
-    this.config = config;
-    this.discord = discord;
-    this.lootGroupExpander = lootGroupExpander;
+  private EventChannelMatcher() {
+    throw new IllegalStateException("Cannot be instantiated");
   }
 
-  public ValueOrError<Long> getChannel(EqLogEvent eqLogEvent, List<Item> items) {
+  public static ValueOrError<Long> getChannel(EqLogEvent eqLogEvent, List<Item> items) {
     if (items.isEmpty()) {
       return ValueOrError.error("No items found");
     } else if (items.size() > 1) {
@@ -52,7 +46,8 @@ public class EventChannelMatcher {
 
     // Send requests in parallel to get the first message of each relevant event channel.
     List<CompletableFuture<MessageSet>> completableFutures = new ArrayList<>();
-    for (ChannelCategory category : discord.getChannelCategories(getServer())) {
+    for (ChannelCategory category : Discord.getDiscord().getChannelCategories(
+        Discord.getDiscordServer())) {
       if (category.getName().toLowerCase().startsWith(CATEGORY_PREFIX_CASE_INSENSITIVE)) {
         for (Channel channel : category.getChannels()) {
           completableFutures.add(channel.asServerTextChannel().get().getMessagesAfter(1, 0));
@@ -76,8 +71,8 @@ public class EventChannelMatcher {
     // Process the responses in timestamp order to select the first matching candidate.
     Pattern itemNamePattern = item.getNamePattern();
     Instant gratsTimestamp = eqLogEvent.getTimestamp()
-        .atZone(ZoneId.of(config.getString(Config.Property.TIMEZONE_GAME))).toInstant();
-    Map<String, String> lootGroupExpansions = lootGroupExpander.getExpansions();
+        .atZone(ZoneId.of(Config.getConfig().getString(Config.Property.TIMEZONE_GAME))).toInstant();
+    Map<String, String> lootGroupExpansions = LootGroupExpander.getExpansions();
     for (Map.Entry<Instant, Message> mapEntry : messagesInTimestampOrder.entrySet()) {
       final Instant eventChannelTimestamp = mapEntry.getKey();
       final Message message = mapEntry.getValue();
@@ -103,13 +98,4 @@ public class EventChannelMatcher {
 
     return ValueOrError.error("Item not found in any event channel's loot table");
   }
-
-  private DiscordServer getServer() {
-    if (config.getBoolean(Config.Property.DEBUG)) {
-      return DiscordServer.TEST;
-    } else {
-      return DiscordServer.GOOD_GUYS;
-    }
-  }
-
 }

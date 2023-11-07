@@ -8,17 +8,14 @@ import java.util.Optional;
 
 public class CharInfoScraper {
 
-  private Ocr ocr;
-  private CharInfoOcrScrapeComparator charInfoOcrScrapeComparator;
-  private ExpPercentToNextLevelScraper expPercentToNextLevelScraper;
+  private final Ocr ocr;
+  private final CharInfoOcrScrapeComparator charInfoOcrScrapeComparator;
+  private final ExpPercentToNextLevelScraper expPercentToNextLevelScraper;
 
-  public CharInfoScraper(
-      Ocr ocr,
-      CharInfoOcrScrapeComparator charInfoOcrScrapeComparator,
-      ExpPercentToNextLevelScraper expPercentToNextLevelScraper) {
-    this.ocr = ocr;
-    this.charInfoOcrScrapeComparator = charInfoOcrScrapeComparator;
-    this.expPercentToNextLevelScraper = expPercentToNextLevelScraper;
+  public CharInfoScraper() {
+    this.ocr = new Ocr();
+    this.charInfoOcrScrapeComparator = new CharInfoOcrScrapeComparator();
+    this.expPercentToNextLevelScraper = new ExpPercentToNextLevelScraper();
   }
 
   public CharInfo scrape(File image) {

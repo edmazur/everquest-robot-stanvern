@@ -46,9 +46,9 @@ public class RaidTargetUnsubscribe extends DiscordSlashSubCommand {
     boolean success = Database.getDatabase().removeSubscription(targetName, userId);
     String message;
     if (success) {
-      message = "Unsubscribed from " + targetName + ".";
+      message = "Unsubscribed from `" + targetName + "`.";
     } else {
-      message = "Failed to unsubscribe from " + targetName + ". "
+      message = "Failed to unsubscribe from `" + targetName + "`. "
           + "Either this subscription doesn't exist, or something went *horribly wrong* "
           + "and everything is about to be on fire.";
     }

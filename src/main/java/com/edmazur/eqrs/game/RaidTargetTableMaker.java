@@ -32,17 +32,22 @@ public class RaidTargetTableMaker {
   private static final int MIN_PROGRESS_BAR_WIDTH = 16;
   private static final int MAX_PROGRESS_BAR_WIDTH = 16;
 
-  private final RaidTargets raidTargets;
-  private final DateTimeFormatter humanReadableTimestampFormatter;
+  private static DateTimeFormatter humanReadableTimestampFormatter;
 
-  public RaidTargetTableMaker(Config config, RaidTargets raidTargets) {
-    this.raidTargets = raidTargets;
-    this.humanReadableTimestampFormatter =
-        DateTimeFormatter.ofPattern(HUMAN_READABLE_TIMESTAMP_PATTERN)
-            .withZone(ZoneId.of(config.getString(Property.TIMEZONE_GAME)));
+  private RaidTargetTableMaker() {
+    throw new IllegalStateException("Cannot be instantiated");
   }
 
-  public Table make() {
+  private static DateTimeFormatter getHumanReadableTimestampFormatter() {
+    if (humanReadableTimestampFormatter == null) {
+      humanReadableTimestampFormatter =
+          DateTimeFormatter.ofPattern(HUMAN_READABLE_TIMESTAMP_PATTERN)
+              .withZone(ZoneId.of(Config.getConfig().getString(Property.TIMEZONE_GAME)));
+    }
+    return humanReadableTimestampFormatter;
+  }
+
+  public static Table make() {
     // This is probably overkill, but cache "now" to avoid internal inconsistency in the event that
     // this function somehow takes more than a very small fraction of a second to complete.
     Instant now = Instant.now();
@@ -152,14 +157,14 @@ public class RaidTargetTableMaker {
     return table;
   }
 
-  private SortedMap<Window.Status, SortedSet<RaidTarget>> getRaidTargetsByWindowStatus(
+  private static SortedMap<Window.Status, SortedSet<RaidTarget>> getRaidTargetsByWindowStatus(
       Instant now) {
     SortedMap<Window.Status, SortedSet<RaidTarget>> raidTargetsByWindowStatus = new TreeMap<>();
     RaidTargetComparator raidTargetComparator = new RaidTargetComparator(now);
     for (Window.Status windowStatus : Window.Status.values()) {
       raidTargetsByWindowStatus.put(windowStatus, new TreeSet<>(raidTargetComparator));
     }
-    for (RaidTarget raidTarget : raidTargets.getAll()) {
+    for (RaidTarget raidTarget : RaidTargets.getAll()) {
       SortedSet<RaidTarget> raidTargets = raidTargetsByWindowStatus.get(
           Window.getActiveWindow(raidTarget.getWindows(), now).getStatus(now));
       raidTargets.add(raidTarget);
@@ -167,7 +172,7 @@ public class RaidTargetTableMaker {
     return raidTargetsByWindowStatus;
   }
 
-  private String formatHumanReadableDuration(Duration duration) {
+  private static String formatHumanReadableDuration(Duration duration) {
     List<String> timestampParts = new ArrayList<>();
     boolean hasDays = false;
     boolean hasHours = false;
@@ -185,11 +190,11 @@ public class RaidTargetTableMaker {
     return String.join(" ", timestampParts);
   }
 
-  private String formatHumanReadableTimestamp(Instant instant) {
-    return humanReadableTimestampFormatter.format(instant);
+  private static String formatHumanReadableTimestamp(Instant instant) {
+    return getHumanReadableTimestampFormatter().format(instant);
   }
 
-  private String formatDiscordTimestamp(Instant instant) {
+  private static String formatDiscordTimestamp(Instant instant) {
     return String.format("<t:%d:F>", instant.getEpochSecond());
   }
 

@@ -1,9 +1,8 @@
 // $ ./gradlew runGameTodDetectorBenchmark
 
-package com.edmazur.eqrs.game.listener;
+package com.edmazur.eqrs.game.listeners;
 
 import com.edmazur.eqlp.EqLogEvent;
-import com.edmazur.eqrs.Config;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -68,8 +67,7 @@ public class GameTodDetectorBenchmark {
   }
 
   private static List<EqLogEvent> runBenchmark(List<EqLogEvent> eqLogEvents, boolean expectingTod) {
-    Config config = new Config();
-    GameTodDetector gameTodDetector = new GameTodDetector(config);
+    GameTodDetector gameTodDetector = new GameTodDetector();
     List<EqLogEvent> incorrectDetections = new ArrayList<>();
     for (EqLogEvent eqLogEvent : eqLogEvents) {
       if (gameTodDetector.getTodMessage(eqLogEvent).isPresent() != expectingTod) {

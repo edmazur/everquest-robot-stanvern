@@ -4,7 +4,6 @@ import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.Database;
 import com.edmazur.eqrs.Logger;
-import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.game.RaidTarget;
 import com.edmazur.eqrs.game.RaidTargets;
@@ -56,21 +55,8 @@ public class DiscordTodListener implements MessageCreateListener {
 
   private static final File SUCCESS_IMAGE = new File("src/main/resources/str.png");
 
-  private final Config config;
-  private final Discord discord;
-  private final Database database;
-  private final RaidTargets raidTargets;
-
-  public DiscordTodListener(
-      Config config,
-      Discord discord,
-      Database database,
-      RaidTargets raidTargets) {
-    this.config = config;
-    this.discord = discord;
-    this.discord.addListener(this);
-    this.database = database;
-    this.raidTargets = raidTargets;
+  public DiscordTodListener() {
+    LOGGER.log("%s running", this.getClass().getName());
   }
 
   @Override
@@ -119,7 +105,7 @@ public class DiscordTodListener implements MessageCreateListener {
 
         // Parse target.
         String raidTargetToParse = todParseMatcher.group(1);
-        Optional<RaidTarget> maybeRaidTarget = raidTargets.getRaidTarget(raidTargetToParse);
+        Optional<RaidTarget> maybeRaidTarget = RaidTargets.getRaidTarget(raidTargetToParse);
         if (maybeRaidTarget.isEmpty()) {
           event.addReactionsToMessage(":x:");
           sendReply(event,
@@ -148,7 +134,7 @@ public class DiscordTodListener implements MessageCreateListener {
               "Sorry, ToD cannot be in the future: `" + timestampToParse + "`");
           return;
         }
-        Optional<LocalDateTime> maybeQuakeTime = database.getQuakeTime();
+        Optional<LocalDateTime> maybeQuakeTime = Database.getDatabase().getQuakeTime();
         if (maybeQuakeTime.isEmpty()) {
           LOGGER.log("Error getting quake time from database, ignoring");
         } else {
@@ -164,7 +150,8 @@ public class DiscordTodListener implements MessageCreateListener {
         String timeSince = "~" + getTimeSince(timestamp) + " ago";
 
         // Do database update.
-        Optional<Integer> maybeRowsAffected = database.updateTimeOfDeath(raidTarget, timestamp);
+        Optional<Integer> maybeRowsAffected = Database.getDatabase().updateTimeOfDeath(
+            raidTarget, timestamp);
         if (maybeRowsAffected.isEmpty() || maybeRowsAffected.get() != 1) {
           event.addReactionsToMessage(":x:");
           sendReply(event, "Error updating database");
@@ -217,7 +204,7 @@ public class DiscordTodListener implements MessageCreateListener {
         String timeSince = "~" + getTimeSince(timestamp) + " ago";
 
         // Do database update.
-        Optional<Integer> maybeRowsAffected = database.updateQuakeTime(timestamp);
+        Optional<Integer> maybeRowsAffected = Database.getDatabase().updateQuakeTime(timestamp);
         if (maybeRowsAffected.isEmpty() || maybeRowsAffected.get() != 1) {
           event.addReactionsToMessage(":x:");
           sendReply(event, "Error updating database");
@@ -319,12 +306,12 @@ public class DiscordTodListener implements MessageCreateListener {
   }
 
   private long getUnixTimestamp(LocalDateTime localDateTime) {
-    return localDateTime.atZone(ZoneId.of(config.getString(Property.TIMEZONE_GUILD)))
+    return localDateTime.atZone(ZoneId.of(Config.getConfig().getString(Property.TIMEZONE_GUILD)))
         .toEpochSecond();
   }
 
   private DiscordChannel getChannel() {
-    if (config.getBoolean(Config.Property.DEBUG)) {
+    if (Config.getConfig().isDebug()) {
       return TEST_CHANNEL;
     } else {
       return PROD_CHANNEL;

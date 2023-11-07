@@ -21,13 +21,17 @@ public class DiscordTableFormatter {
   private static final String GREEN_SQUARE = ":green_square:";
   private static final String WHITE_SQUARE = ":white_large_square:";
 
+  private DiscordTableFormatter() {
+    throw new IllegalStateException("Cannot be instantiated");
+  }
+
   /**
    * Formats the table for Discord in a series of messages.
    *
    * <p>Returns one message per sub-table (with additional breaks within the table if needed) to
    * avoid hitting Discord message size limits.
    */
-  public List<String> getMessages(
+  public static List<String> getMessages(
       Table table,
       Map<Integer, Integer> columnIndexToCustomRightSpacing) {
     List<String> messages = new ArrayList<>(table.getColumnCount());
@@ -72,7 +76,7 @@ public class DiscordTableFormatter {
     return messages;
   }
 
-  private int getWidth(Table table, Map<Integer, Integer> columnIndexToCustomRightSpacing) {
+  private static int getWidth(Table table, Map<Integer, Integer> columnIndexToCustomRightSpacing) {
     int width = 0;
     for (int maxColumnWidth : table.getMaxColumnWidths()) {
       width += maxColumnWidth;
@@ -85,7 +89,7 @@ public class DiscordTableFormatter {
     return width;
   }
 
-  private String getRow(
+  private static String getRow(
       List<String> values,
       List<Justification> justifications,
       List<Integer> maxColumnWidths,
@@ -121,7 +125,7 @@ public class DiscordTableFormatter {
     return sb.toString();
   }
 
-  private String getProgressBar(double percentage, int progressWidth) {
+  private static String getProgressBar(double percentage, int progressWidth) {
     StringBuilder sb = new StringBuilder();
     int greenSquares = (int) Math.round(progressWidth * percentage);
     int whiteSquares = progressWidth - greenSquares;

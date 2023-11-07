@@ -1,4 +1,4 @@
-package com.edmazur.eqrs.game.listener;
+package com.edmazur.eqrs.game.listeners;
 
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.Config;
@@ -14,9 +14,7 @@ public class GameTodDetector {
 
   private Config config;
 
-  public GameTodDetector(Config config) {
-    this.config = config;
-  }
+  public GameTodDetector() { }
 
   public Optional<String> getTodMessage(EqLogEvent eqLogEvent) {
     Matcher matcher = getPattern().matcher(eqLogEvent.getPayload());
@@ -33,7 +31,7 @@ public class GameTodDetector {
   }
 
   private Pattern getPattern() {
-    if (config.getBoolean(Config.Property.DEBUG)) {
+    if (Config.getConfig().isDebug()) {
       return SAY_CHAT_PATTERN;
     } else {
       return GUILD_CHAT_PATTERN;

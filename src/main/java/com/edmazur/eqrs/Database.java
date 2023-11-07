@@ -19,6 +19,7 @@ import java.util.Optional;
 
 public class Database {
 
+  private static final Logger LOGGER = new Logger();
   private static final String MYSQL_CONNECTION_FORMAT_STRING = "jdbc:mysql://%s:%d/%s";
   private static final int MYSQL_PORT = 3306;
 
@@ -81,22 +82,11 @@ public class Database {
 
   // CHECKSTYLE.ON: OperatorWrap
 
-  private final Config config;
-
-  public Database(Config config) {
-    this.config = config;
-  }
+  private Database() { }
 
   public static Database getDatabase() {
-    return getDatabase(null);
-  }
-
-  public static Database getDatabase(Config config) {
-    if (Database.database == null) {
-      if (config == null) {
-        config = new Config();
-      }
-      Database.database = new Database(config);
+    if (database == null) {
+      database = new Database();
     }
     return database;
   }
@@ -169,7 +159,7 @@ public class Database {
   }
 
   public List<Subscription> getSubscriptionsForUser(long userId) {
-    System.out.println("Getting subscriptions for " + userId);
+    LOGGER.log("Getting subscriptions for " + userId);
     List<Subscription> subscriptionList = new ArrayList<>();
     try {
       PreparedStatement preparedStatement =
@@ -188,7 +178,7 @@ public class Database {
   }
 
   public List<Subscription> getSubscriptionsForNotification() {
-    System.out.println("Getting all subscriptions with no recent notifications.");
+    //LOGGER.log("Getting all subscriptions with no recent notifications.");
     List<Subscription> subscriptionList = new ArrayList<>();
     try {
       PreparedStatement preparedStatement =
@@ -207,7 +197,7 @@ public class Database {
   }
 
   public List<Subscription> getSubscriptions() {
-    System.out.println("Getting all subscriptions.");
+    LOGGER.log("Getting all subscriptions.");
     List<Subscription> subscriptionList = new ArrayList<>();
     try {
       PreparedStatement preparedStatement =
@@ -226,7 +216,7 @@ public class Database {
   }
 
   public boolean addSubscription(String targetName, long userId) {
-    System.out.println("Adding subscription to " + targetName + " for " + userId);
+    LOGGER.log("Adding subscription to " + targetName + " for " + userId);
     try {
       PreparedStatement preparedStatement =
           getConnection().prepareStatement(ADD_SUBSCRIPTION_SQL);
@@ -241,7 +231,7 @@ public class Database {
   }
 
   public boolean removeSubscription(String targetName, long userId) {
-    System.out.println("Removing subscription to " + targetName + " for " + userId);
+    LOGGER.log("Removing subscription to " + targetName + " for " + userId);
     try {
       PreparedStatement preparedStatement =
           getConnection().prepareStatement(REMOVE_SUBSCRIPTION_SQL);
@@ -270,11 +260,14 @@ public class Database {
   }
 
   public boolean cleanExpiredSubscriptions() {
-    System.out.println("Cleaning up expired subscriptions.");
+    //LOGGER.log("Cleaning up expired subscriptions.");
     try {
       PreparedStatement preparedStatement =
           getConnection().prepareStatement(CLEAN_EXPIRED_SUBSCRIPTIONS_SQL);
-      preparedStatement.execute();
+      int resultSet = preparedStatement.executeUpdate();
+      if (resultSet > 0) {
+        LOGGER.log("Cleaned up " + resultSet + " expired subscriptions.");
+      }
       return true;
     } catch (SQLException e) {
       e.printStackTrace();
@@ -283,6 +276,7 @@ public class Database {
   }
 
   private Connection getConnection() {
+    Config config = Config.getConfig();
     boolean debug = config.getBoolean(Property.DEBUG);
 
     String host = config.getString(

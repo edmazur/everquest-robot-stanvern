@@ -1,7 +1,8 @@
-package com.edmazur.eqrs.game.listener;
+package com.edmazur.eqrs.game.listeners.passive;
 
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqlp.EqLogListener;
+import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordUser;
 import java.time.Duration;
@@ -9,19 +10,18 @@ import java.time.LocalDateTime;
 
 public class HeartbeatListener implements EqLogListener, Runnable {
 
+  private static final Logger LOGGER = new Logger();
   // Notify if activity hasn't been seen in this amount of time.
   private static final Duration ACTIVITY_THRESHOLD = Duration.ofMinutes(5);
 
   // Notify if the previous was more than this amount of time ago.
   private static final Duration NOTIFICATION_THRESHOLD = Duration.ofHours(1);
 
-  private final Discord discord;
+  private static LocalDateTime lastSeenActivity = LocalDateTime.MAX;
+  private static LocalDateTime lastSentNotification = LocalDateTime.MIN;
 
-  private LocalDateTime lastSeenActivity = LocalDateTime.MAX;
-  private LocalDateTime lastSentNotification = LocalDateTime.MIN;
-
-  public HeartbeatListener(Discord discord) {
-    this.discord = discord;
+  public HeartbeatListener() {
+    LOGGER.log("%s running", this.getClass().getName());
   }
 
   @Override
@@ -41,7 +41,7 @@ public class HeartbeatListener implements EqLogListener, Runnable {
             Duration.between(lastSeenActivity, LocalDateTime.now());
         String message = String.format("No EQ log activity seen in %d minutes",
             durationSinceLastActivity.toMinutes());
-        discord.sendMessage(DiscordUser.EDMAZUR, message);
+        Discord.getDiscord().sendMessage(DiscordUser.EDMAZUR, message);
         lastSentNotification = LocalDateTime.now();
       }
     } catch (Throwable t) {

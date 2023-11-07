@@ -2,6 +2,7 @@ package com.edmazur.eqrs.discord.listener;
 
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.Config.Property;
+import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.google.common.collect.Lists;
@@ -22,6 +23,7 @@ import org.javacord.api.listener.message.MessageCreateListener;
 
 public class LootStatusListener implements MessageCreateListener {
 
+  private static final Logger LOGGER = new Logger();
   static final String TRIGGER = "!lootstatus";
 
   private static final int MAX_LINKS = 10;
@@ -35,13 +37,8 @@ public class LootStatusListener implements MessageCreateListener {
   private static final Duration LOOKBACK = Duration.ofDays(7);
   private static final String LOOKBACK_STRING = "7 days";
 
-  private Config config;
-  private Discord discord;
-
-  public LootStatusListener(Config config, Discord discord) {
-    this.config = config;
-    this.discord = discord;
-    this.discord.addListener(this);
+  public LootStatusListener() {
+    LOGGER.log("%s running", this.getClass().getName());
   }
 
   @Override
@@ -53,7 +50,8 @@ public class LootStatusListener implements MessageCreateListener {
   }
 
   private void reportLootStatus(MessageCreateEvent event) {
-    Optional<MessageSet> maybeMessageSet = discord.getMessagesWithinPast(QUERY_CHANNEL, LOOKBACK);
+    Optional<MessageSet> maybeMessageSet = Discord.getDiscord()
+        .getMessagesWithinPast(QUERY_CHANNEL, LOOKBACK);
     if (maybeMessageSet.isEmpty()) {
       sendReply(event, String.format("Error getting messages from <#%d>", QUERY_CHANNEL.getId()));
       return;
@@ -97,7 +95,7 @@ public class LootStatusListener implements MessageCreateListener {
       sb.append(String.format("First without reactions (limited to %d):\n", MAX_LINKS));
       DateTimeFormatter dateTimeFormatter = DateTimeFormatter
           .ofPattern(DATE_TIME_FORMAT)
-          .withZone(ZoneId.of(config.getString(Property.TIMEZONE_GUILD)));
+          .withZone(ZoneId.of(Config.getConfig().getString(Property.TIMEZONE_GUILD)));
       for (int i = 0; i < Math.min(MAX_LINKS, messagesWithoutReactions.size()); i++) {
         Message messageWithoutReactions = messagesWithoutReactions.get(i);
         sb.append(
@@ -121,7 +119,7 @@ public class LootStatusListener implements MessageCreateListener {
   }
 
   private DiscordChannel getChannel() {
-    if (config.getBoolean(Property.DEBUG)) {
+    if (Config.getConfig().getBoolean(Property.DEBUG)) {
       return TEST_COMMAND_CHANNEL;
     } else {
       return PROD_COMMAND_CHANNEL;

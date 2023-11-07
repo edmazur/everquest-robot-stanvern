@@ -19,10 +19,9 @@ import org.javacord.api.entity.message.MessageSet;
 public class GratsAutoParseStats {
 
   public static void main(String[] args) {
-    Config config = new Config();
-
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-    simpleDateFormat.setTimeZone(TimeZone.getTimeZone(config.getString(Property.TIMEZONE_GUILD)));
+    simpleDateFormat.setTimeZone(
+        TimeZone.getTimeZone(Config.getConfig().getString(Property.TIMEZONE_GUILD)));
     Instant start = null;
     Instant end = null;
     try {
@@ -34,10 +33,8 @@ public class GratsAutoParseStats {
       System.exit(-1);
     }
 
-    Discord discord = new Discord(config);
-
     Optional<MessageSet> maybeMessageSet =
-        discord.getMessagesBetween(DiscordChannel.GG_TICKS_AND_GRATS, start, end);
+        Discord.getDiscord().getMessagesBetween(DiscordChannel.GG_TICKS_AND_GRATS, start, end);
     if (maybeMessageSet.isEmpty()) {
       System.err.println("Error getting messages");
       System.exit(-1);
@@ -56,7 +53,7 @@ public class GratsAutoParseStats {
 
       LocalDate localDate = LocalDate.ofInstant(
           message.getCreationTimestamp(),
-          ZoneId.of(config.getString(Property.TIMEZONE_GUILD)));
+          ZoneId.of(Config.getConfig().getString(Property.TIMEZONE_GUILD)));
       if (!datesToCounters.containsKey(localDate)) {
         datesToCounters.put(localDate, new Counters());
       }

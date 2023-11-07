@@ -1,5 +1,6 @@
 package com.edmazur.eqrs.discord;
 
+import com.edmazur.eqrs.Logger;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.reflections.scanners.Scanners;
 public abstract class DiscordSlashCommand
     extends ServerCommand implements CommandActionEventListener {
 
+  private static final Logger LOGGER = new Logger();
   private final List<DiscordSlashSubCommand> subCommands = new ArrayList<>();
 
   public DiscordSlashCommand(String name, String description) {
@@ -33,7 +35,7 @@ public abstract class DiscordSlashCommand
         addArgument(subCommand);
       } catch (NoSuchMethodException | InstantiationException | IllegalAccessException
                | InvocationTargetException e) {
-        System.out.println("Error creating command: " + subCommandClass.getName());
+        LOGGER.log("Error creating command: " + subCommandClass.getName());
       }
     }
   }

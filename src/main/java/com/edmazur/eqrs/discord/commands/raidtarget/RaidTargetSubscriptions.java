@@ -35,7 +35,7 @@ public class RaidTargetSubscriptions extends DiscordSlashSubCommand {
 
     CommandResponder responder = event.getResponder();
     responder.respondNow()
-        .setContent("Subscriptions:")
+        .setContent(!embeds.isEmpty() ? "Subscriptions:" : "No subscriptions.")
         .addEmbeds(embeds)
         .setFlags(MessageFlag.EPHEMERAL)
         .respond();

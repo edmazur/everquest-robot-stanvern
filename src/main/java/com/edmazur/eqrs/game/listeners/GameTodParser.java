@@ -1,4 +1,4 @@
-package com.edmazur.eqrs.game.listener;
+package com.edmazur.eqrs.game.listeners;
 
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.game.RaidTarget;
@@ -26,11 +26,7 @@ public class GameTodParser {
   private static final int MIN_LENGTH_TO_ALLOW_FUZZY_MATCH = 5;
   private static final int MAX_EDIT_DISTANCE = 1;
 
-  private RaidTargets raidTargets;
-
-  public GameTodParser(RaidTargets raidTargets) {
-    this.raidTargets = raidTargets;
-  }
+  public GameTodParser() { }
 
   public GameTodParseResult parse(EqLogEvent eqLogEvent, String todMessage) {
     if (!todMessage.toLowerCase().contains(TRIGGER)) {
@@ -87,10 +83,10 @@ public class GameTodParser {
       for (int end = start + 1; end < parts.size() + 1; end++) {
         String subText = String.join(" ", parts.subList(start, end));
         // ...and for each possible target...
-        for (RaidTarget raidTarget : raidTargets.getAllStaleAllowed()) {
+        for (RaidTarget raidTarget : RaidTargets.getAllStaleAllowed()) {
           for (String nameForMatching : getNamesForMatching(raidTarget)) {
             if (nameForMatching.length() >= MIN_LENGTH_TO_ALLOW_FUZZY_MATCH) {
-              // If fuzzy match and it's better than what's been seen so far, save result.
+              // If fuzzy match, and it's better than what's been seen so far, save result.
               int editDistance = editDistanceCalculator.apply(nameForMatching, subText);
               if (editDistance != -1 && editDistance < bestFuzzyMatchEditDistance) {
                 if (DEBUG) {

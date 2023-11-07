@@ -7,8 +7,11 @@ import java.util.Scanner;
 import org.json.JSONObject;
 
 public class Json {
+  private Json() {
+    throw new IllegalStateException("Cannot be instantiated");
+  }
 
-  public Optional<JSONObject> read(String url) {
+  public static Optional<JSONObject> read(String url) {
     Scanner scanner = null;
     try {
       scanner = new Scanner(new URL(url).openStream(), "UTF-8");

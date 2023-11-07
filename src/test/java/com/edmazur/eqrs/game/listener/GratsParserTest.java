@@ -9,21 +9,24 @@ import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.ValueOrError;
 import com.edmazur.eqrs.game.ItemDatabase;
 import com.edmazur.eqrs.game.ItemScreenshotter;
+import com.edmazur.eqrs.game.listeners.EventChannelMatcher;
+import com.edmazur.eqrs.game.listeners.GratsParseResult;
+import com.edmazur.eqrs.game.listeners.GratsParser;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.MockedConstruction;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 class GratsParserTest {
 
-  private static ItemDatabase itemDatabase;
-
-  @Mock private Config mockConfig;
-  @Mock private ItemScreenshotter mockItemScreenshotter;
-  @Mock private EventChannelMatcher mockEventChannelMatcher;
+  private static MockedStatic<Config> mockConfig;
+  private static MockedStatic<ItemScreenshotter> mockItemScreenshotter;
+  private static MockedStatic<EventChannelMatcher> mockEventChannelMatcher;
 
   private GratsParser gratsParser;
 
@@ -32,8 +35,18 @@ class GratsParserTest {
 
   @BeforeAll
   static void beforeAll() {
-    itemDatabase = new ItemDatabase();
-    itemDatabase.initialize();
+    ItemDatabase.getItemDatabase(); // Initialize the Trie
+    mockConfig = Mockito.mockStatic(Config.class);
+    mockConfig.when(Config::getConfig).thenReturn(Mockito.mock(Config.class));
+    mockItemScreenshotter = Mockito.mockStatic(ItemScreenshotter.class);
+    mockEventChannelMatcher = Mockito.mockStatic(EventChannelMatcher.class);
+  }
+
+  @AfterAll
+  static void afterAll() {
+    mockConfig.close();
+    mockItemScreenshotter.close();
+    mockEventChannelMatcher.close();
   }
 
   @SuppressWarnings("unchecked")
@@ -41,11 +54,7 @@ class GratsParserTest {
   void beforeEach() {
     MockitoAnnotations.openMocks(this);
 
-    gratsParser = new GratsParser(
-        mockConfig,
-        itemDatabase,
-        mockItemScreenshotter,
-        mockEventChannelMatcher);
+    gratsParser = new GratsParser();
 
     mockGratsParseResult = mockConstruction(GratsParseResult.class, (mock, context) -> {
       lootCommandOrError = (ValueOrError<String>) context.arguments().get(2);
@@ -55,6 +64,11 @@ class GratsParserTest {
   @AfterEach
   void afterEach() {
     mockGratsParseResult.close();
+    try {
+      MockitoAnnotations.openMocks(this).close();
+    } catch (Exception e) {
+      // This is fine
+    }
   }
 
   @Test

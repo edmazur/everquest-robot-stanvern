@@ -21,7 +21,11 @@ public class ItemScreenshotter {
   private static final String LOG_SPAM_DELINEATOR_FORMAT =
       LOG_SPAM_DELINEATOR_SIDE + " (ItemScreenshotter log spam - %s) " + LOG_SPAM_DELINEATOR_SIDE;
 
-  public Optional<File> get(Item item) {
+  private ItemScreenshotter() {
+    throw new IllegalStateException("Cannot be instantiated");
+  }
+
+  public static Optional<File> get(Item item) {
     try {
       // TODO: Eliminate all of the log spam from here and then remove the delineators.
       System.out.println(String.format(LOG_SPAM_DELINEATOR_FORMAT, "START"));

@@ -1,8 +1,9 @@
 package com.edmazur.eqrs.discord.speaker;
 
-import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.Database;
+import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.discord.Discord;
+import com.edmazur.eqrs.discord.DiscordRole;
 import com.edmazur.eqrs.game.RaidTarget;
 import com.edmazur.eqrs.game.RaidTargets;
 import com.edmazur.eqrs.game.Window;
@@ -16,26 +17,19 @@ import java.util.concurrent.CompletableFuture;
 import org.javacord.api.entity.message.Message;
 
 public class SubscriptionSpeaker implements Runnable {
-  private final Discord discord;
-  private final RaidTargets raidTargets;
-  private final Database database;
+  private static final Logger LOGGER = new Logger();
 
-  public SubscriptionSpeaker(
-      Config config,
-      Discord discord,
-      RaidTargets raidTargets) {
-    this.discord = discord;
-    this.raidTargets = raidTargets;
-    this.database = Database.getDatabase(config);
+  public SubscriptionSpeaker() {
   }
 
   @Override
   public void run() {
     Instant now = Instant.now();
-    database.cleanExpiredSubscriptions();
+    Database.getDatabase().cleanExpiredSubscriptions();
 
     // Get all subscriptions from the DB
-    List<Database.Subscription> subscriptionList = database.getSubscriptionsForNotification();
+    List<Database.Subscription> subscriptionList =
+        Database.getDatabase().getSubscriptionsForNotification();
     // Convert the list of subscriptions to a map
     Map<String, List<Long>> subscriptionMap = new HashMap<>();
     for (Database.Subscription subscription : subscriptionList) {
@@ -52,7 +46,7 @@ public class SubscriptionSpeaker implements Runnable {
 
     // Get upcoming windows (within 30m)
     List<CompletableFuture<Message>> messages = new ArrayList<>();
-    for (RaidTarget raidTarget : raidTargets.getAll()) {
+    for (RaidTarget raidTarget : RaidTargets.getAll()) {
       Window activeWindow = Window.getActiveWindow(raidTarget.getWindows(), now);
       Window.Status status = activeWindow.getStatus(now);
       if (status == Window.Status.SOON
@@ -60,14 +54,19 @@ public class SubscriptionSpeaker implements Runnable {
         String targetName = raidTarget.getName();
         // Check for subscriptions for the upcoming window
         if (subscriptionMap.containsKey(targetName)) {
-          String message = "**Target Notification** `" + targetName
+          String message = ":boom:**Target Notification**:boom: `" + targetName
               + "` entering window <t:" + activeWindow.getStart().getEpochSecond() + ":R>";
           // Send a notification for each subscription
           for (long userId : subscriptionMap.get(targetName)) {
-            // Send a discord message
-            messages.add(discord.sendMessage(userId, message));
-            // Mark as sent
-            database.markSubscriptionNotified(targetName, userId);
+            if (Discord.getDiscord().isUserAuthorized(userId, DiscordRole.MEMBER)) {
+              // Send a discord message
+              messages.add(Discord.getDiscord().sendMessage(userId, message));
+              // Mark as sent
+              Database.getDatabase().markSubscriptionNotified(targetName, userId);
+            } else {
+              LOGGER.log("User did not have the required role, removing watch.");
+              Database.getDatabase().removeSubscription(targetName, userId);
+            }
           }
         }
       }

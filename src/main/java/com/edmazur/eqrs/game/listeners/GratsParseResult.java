@@ -1,4 +1,4 @@
-package com.edmazur.eqrs.game.listener;
+package com.edmazur.eqrs.game.listeners;
 
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.ValueOrError;

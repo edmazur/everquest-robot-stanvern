@@ -1,4 +1,4 @@
-package com.edmazur.eqrs.game.listener;
+package com.edmazur.eqrs.game.listeners.passive;
 
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqlp.EqLogListener;
@@ -23,12 +23,8 @@ public class MotdListener implements EqLogListener {
   private static final DiscordChannel PROD_CHANNEL = DiscordChannel.GG_GMOTD;
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_GENERAL;
 
-  private final Config config;
-  private final Discord discord;
-
-  public MotdListener(Config config, Discord discord) {
-    this.config = config;
-    this.discord = discord;
+  public MotdListener() {
+    LOGGER.log("%s running", this.getClass().getName());
   }
 
   @Override
@@ -45,7 +41,7 @@ public class MotdListener implements EqLogListener {
         }
       }
 
-      discord.sendMessage(getChannel(), "`" + eqLogEvent.getPayload() + "`");
+      Discord.getDiscord().sendMessage(getChannel(), "`" + eqLogEvent.getPayload() + "`");
     }
   }
 
@@ -53,7 +49,7 @@ public class MotdListener implements EqLogListener {
    * Gets the current MotD as reported in the Discord channel.
    */
   public Optional<String> getCurrentMotd(DiscordChannel discordChannel) {
-    Optional<Message> maybeMotd = discord.getLastMessageMatchingPredicate(
+    Optional<Message> maybeMotd = Discord.getDiscord().getLastMessageMatchingPredicate(
         discordChannel,
         DiscordPredicate.isFromYourself().and(
             DiscordPredicate.textMatchesPattern(DISCORD_MOTD_PATTERN)));
@@ -66,7 +62,7 @@ public class MotdListener implements EqLogListener {
   }
 
   private DiscordChannel getChannel() {
-    if (config.getBoolean(Config.Property.DEBUG)) {
+    if (Config.getConfig().isDebug()) {
       return TEST_CHANNEL;
     } else {
       return PROD_CHANNEL;

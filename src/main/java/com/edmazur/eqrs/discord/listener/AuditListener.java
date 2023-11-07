@@ -61,13 +61,8 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
     }
   }
 
-  private final Config config;
-  private final Discord discord;
 
-  public AuditListener(Config config, Discord discord) {
-    this.config = config;
-    this.discord = discord;
-    this.discord.addListener(this);
+  public AuditListener() {
     LOGGER.log("%s running", this.getClass().getName());
   }
 
@@ -117,10 +112,10 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
             messageType.getDescription(),
             author.getId(),
             eventChannel.getId(),
-            instant.atZone(ZoneId.of(config.getString(Property.TIMEZONE_GUILD)))
+            instant.atZone(ZoneId.of(Config.getConfig().getString(Property.TIMEZONE_GUILD)))
                 .format(DateTimeFormatter.RFC_1123_DATE_TIME),
             content);
-        discord.sendMessage(
+        Discord.getDiscord().sendMessage(
             discordChannelToWriteAuditLogTo,
             new MessageBuilder()
                 .setAllowedMentions(new AllowedMentionsBuilder().build())
@@ -131,7 +126,7 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
   }
 
   private Map<DiscordCategory, DiscordChannel> getCategoryChannelMap() {
-    if (config.getBoolean(Config.Property.DEBUG)) {
+    if (Config.getConfig().isDebug()) {
       return TEST_CATEGORY_CHANNEL_MAP;
     } else {
       return PROD_CATEGORY_CHANNEL_MAP;
@@ -139,7 +134,7 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
   }
 
   private List<DiscordChannel> getUnauditedChannels() {
-    if (config.getBoolean(Config.Property.DEBUG)) {
+    if (Config.getConfig().isDebug()) {
       return TEST_UNAUDITED_CHANNELS;
     } else {
       return PROD_UNAUDITED_CHANNELS;

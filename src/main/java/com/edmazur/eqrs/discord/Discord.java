@@ -1,7 +1,7 @@
 package com.edmazur.eqrs.discord;
 
 import com.edmazur.eqrs.Config;
-import com.edmazur.eqrs.game.RaidTargets;
+import com.edmazur.eqrs.Logger;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.time.Duration;
@@ -42,21 +42,21 @@ import org.reflections.scanners.Scanners;
 
 public class Discord {
 
+  private static final Logger LOGGER = new Logger();
   private final DiscordApi discordApi;
-  private final Config config;
-  private static RaidTargets raidTargets;
+  private static Discord discord;
 
-  public Discord(Config config) {
-    this(config, null);
+  public static Discord getDiscord() {
+    if (discord == null) {
+      discord = new Discord();
+    }
+    return discord;
   }
 
-  public Discord(Config config, RaidTargets raidTargets) {
-    // TODO: this could also be a singleton?
-    Discord.raidTargets = raidTargets;
-    this.config = config;
+  private Discord() {
     discordApi = new DiscordApiBuilder()
-        .setToken(config.getString(Config.Property.DISCORD_PRIVATE_KEY))
-        .addIntents(Intent.MESSAGE_CONTENT)
+        .setToken(Config.getConfig().getString(Config.Property.DISCORD_PRIVATE_KEY))
+        .addIntents(Intent.MESSAGE_CONTENT, Intent.GUILD_MEMBERS)
         .login()
         .join();
 
@@ -65,10 +65,6 @@ public class Discord {
 
     // TODO: Randomly update this every so often and cycle through a bunch of fun ones.
     discordApi.updateActivity(ActivityType.WATCHING, "everything, always");
-  }
-
-  public static RaidTargets getRaidTargets() {
-    return Discord.raidTargets;
   }
 
   private void registerCommands() {
@@ -80,26 +76,43 @@ public class Discord {
     Set<Class<? extends DiscordSlashCommand>> commands = reflections.getSubTypesOf(
         DiscordSlashCommand.class);
 
-    // Determine which server we're using
-    Server server;
-    if (this.config.getBoolean(Config.Property.DEBUG)) {
-      server = discordApi.getServerById(DiscordServer.TEST.getId()).orElse(null);
-    } else {
-      server = discordApi.getServerById(DiscordServer.GOOD_GUYS.getId()).orElse(null);
-    }
-
-    if (server != null) {
+    if (getServer() != null) {
       // Register all discovered commands
       for (Class<? extends DiscordSlashCommand> commandClass : commands) {
         try {
           DiscordSlashCommand command = commandClass.getDeclaredConstructor().newInstance();
-          CommandHandler.registerCommand(command, server);
+          CommandHandler.registerCommand(command, getServer());
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException
                  | InvocationTargetException ignored) {
-          System.out.println("Error creating command: " + commandClass.getName());
+          LOGGER.log("Error creating command: " + commandClass.getName());
         }
       }
     }
+  }
+
+  public static DiscordServer getDiscordServer() {
+    if (Config.getConfig().isDebug()) {
+      return DiscordServer.TEST;
+    }
+    return DiscordServer.GOOD_GUYS;
+  }
+
+  private Server getServer() {
+    // Determine which server we're using
+    if (Config.getConfig().isDebug()) {
+      return discordApi.getServerById(DiscordServer.TEST.getId()).orElse(null);
+    } else {
+      return discordApi.getServerById(DiscordServer.GOOD_GUYS.getId()).orElse(null);
+    }
+  }
+
+  public boolean isUserAuthorized(long userId, DiscordRole requiredRole) {
+    Server server = getServer();
+    User discordUser = getUser(userId);
+    Role discordRole = server.getRoleById(requiredRole.getForServer(getDiscordServer()).getId())
+        .orElse(null);
+    List<Role> roleList = discordUser.getRoles(server);
+    return roleList.contains(discordRole);
   }
 
   public CompletableFuture<Message> sendMessage(

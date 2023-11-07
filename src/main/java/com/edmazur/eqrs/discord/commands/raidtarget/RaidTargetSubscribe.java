@@ -2,8 +2,10 @@ package com.edmazur.eqrs.discord.commands.raidtarget;
 
 import com.edmazur.eqrs.Database;
 import com.edmazur.eqrs.discord.Discord;
+import com.edmazur.eqrs.discord.DiscordRole;
 import com.edmazur.eqrs.discord.DiscordSlashSubCommand;
 import com.edmazur.eqrs.game.RaidTarget;
+import com.edmazur.eqrs.game.RaidTargets;
 import java.util.ArrayList;
 import java.util.List;
 import me.s3ns3iw00.jcommands.CommandResponder;
@@ -18,7 +20,7 @@ public class RaidTargetSubscribe extends DiscordSlashSubCommand {
   public RaidTargetSubscribe() {
     super("subscribe", "Subscribe to a raid target timer");
 
-    List<RaidTarget> targetList = Discord.getRaidTargets().getAll();
+    List<RaidTarget> targetList = RaidTargets.getAll();
     List<Object> targetStringList = new ArrayList<>();
     for (RaidTarget target : targetList) {
       targetStringList.add(target.getName());
@@ -48,16 +50,22 @@ public class RaidTargetSubscribe extends DiscordSlashSubCommand {
     ArgumentResult[] args = event.getArguments();
     CommandResponder responder = event.getResponder();
 
-    String targetName = args[1].get();
     long userId = event.getSender().getId();
-    boolean success = Database.getDatabase().addSubscription(targetName, userId);
     String message;
-    if (success) {
-      message = "Subscribed to " + targetName + ".";
+
+    if (!Discord.getDiscord().isUserAuthorized(userId, DiscordRole.MEMBER)) {
+      String targetName = args[1].get();
+      boolean success = Database.getDatabase().addSubscription(targetName, userId);
+
+      if (success) {
+        message = "Subscribed to `" + targetName + "`.";
+      } else {
+        message = "Failed to subscribe to `" + targetName + "`. "
+            + "Either this subscription already exists, or something went *horribly wrong* "
+            + "and everything is about to be on fire.";
+      }
     } else {
-      message = "Failed to subscribe to " + targetName + ". "
-          + "Either this subscription already exists, or something went *horribly wrong* "
-          + "and everything is about to be on fire.";
+      message = "You are not authorized to subscribe to targets.";
     }
     responder.respondNow()
         .setContent(message)

@@ -1,8 +1,9 @@
-package com.edmazur.eqrs.game.listener;
+package com.edmazur.eqrs.game.listeners.active;
 
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.Config;
+import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.RateLimiter;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 public class RaidTargetSpawnListener implements EqLogListener {
 
+  private static final Logger LOGGER = new Logger();
   private static final DiscordChannel PROD_CHANNEL = DiscordChannel.GG_RAID_DISCUSSION;
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_GENERAL;
 
@@ -28,20 +30,14 @@ public class RaidTargetSpawnListener implements EqLogListener {
 
   private static final Duration RATE_LIMIT = Duration.ofHours(24);
 
-  private final Config config;
   private final GameScreenshotter gameScreenshotter;
-  private final Discord discord;
 
   // TODO: Make this a per-target rate limiter if/when you add more targets.
   private final RateLimiter rateLimiter = new RateLimiter(RATE_LIMIT);
 
-  public RaidTargetSpawnListener(
-      Config config,
-      GameScreenshotter gameScreenshotter,
-      Discord discord) {
-    this.config = config;
-    this.gameScreenshotter = gameScreenshotter;
-    this.discord = discord;
+  public RaidTargetSpawnListener() {
+    this.gameScreenshotter = new GameScreenshotter();
+    LOGGER.log("%s running", this.getClass().getName());
   }
 
   @Override
@@ -54,19 +50,17 @@ public class RaidTargetSpawnListener implements EqLogListener {
       if (eqLogEvent.getPayload().startsWith(trigger)) {
         if (rateLimiter.getPermission()) {
           String message = String.format(MESSAGE, target, eqLogEvent.getFullLine());
-          discord.sendMessage(getChannel(), message);
+          Discord.getDiscord().sendMessage(getChannel(), message);
 
           Optional<File> maybeScreenshot = gameScreenshotter.get();
-          if (maybeScreenshot.isPresent()) {
-            discord.sendMessage(getChannel(), maybeScreenshot.get());
-          }
+          maybeScreenshot.ifPresent(file -> Discord.getDiscord().sendMessage(getChannel(), file));
         }
       }
     }
   }
 
   private DiscordChannel getChannel() {
-    if (config.getBoolean(Config.Property.DEBUG)) {
+    if (Config.getConfig().isDebug()) {
       return TEST_CHANNEL;
     } else {
       return PROD_CHANNEL;

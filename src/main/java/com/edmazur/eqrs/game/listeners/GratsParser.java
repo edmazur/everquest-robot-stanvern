@@ -1,4 +1,4 @@
-package com.edmazur.eqrs.game.listener;
+package com.edmazur.eqrs.game.listeners;
 
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.Config;
@@ -42,21 +42,8 @@ public class GratsParser {
   private static final Set<String> IGNORED_ITEMS = Set.of("Espri");
   private static final String LOOT_COMMAND_FORMAT = "$loot %s %s %d";
 
-  private final Config config;
-  private final ItemDatabase itemDatabase;
-  private final ItemScreenshotter itemScreenshotter;
-  private final EventChannelMatcher eventChannelMatcher;
 
-  public GratsParser(
-      Config config,
-      ItemDatabase itemDatabase,
-      ItemScreenshotter itemScreenshotter,
-      EventChannelMatcher eventChannelMatcher) {
-    this.config = config;
-    this.itemDatabase = itemDatabase;
-    this.itemScreenshotter = itemScreenshotter;
-    this.eventChannelMatcher = eventChannelMatcher;
-  }
+  public GratsParser() { }
 
   public GratsParseResult parse(EqLogEvent eqLogEvent) {
     List<String> itemUrls = Lists.newArrayList();
@@ -74,11 +61,11 @@ public class GratsParser {
     }
     String gratsMessage = matcher.group(1);
 
-    List<Item> items = itemDatabase.parse(gratsMessage);
+    List<Item> items = ItemDatabase.getItemDatabase().parse(gratsMessage);
     items.removeIf(item -> IGNORED_ITEMS.contains(item.getName()));
     for (Item item : items) {
       itemUrls.add(item.getUrl());
-      Optional<File> maybeItemScreenshot = itemScreenshotter.get(item);
+      Optional<File> maybeItemScreenshot = ItemScreenshotter.get(item);
       if (maybeItemScreenshot.isPresent()) {
         itemScreenshotsOrErrors.add(ValueOrError.value(maybeItemScreenshot.get()));
       } else {
@@ -90,7 +77,7 @@ public class GratsParser {
         eqLogEvent,
         itemUrls,
         getLootCommandOrError(gratsMessage, items),
-        eventChannelMatcher.getChannel(eqLogEvent, items),
+        EventChannelMatcher.getChannel(eqLogEvent, items),
         itemScreenshotsOrErrors);
   }
 
@@ -181,7 +168,7 @@ public class GratsParser {
   }
 
   private Pattern getPattern() {
-    if (config.getBoolean(Config.Property.DEBUG)) {
+    if (Config.getConfig().isDebug()) {
       return SAY_CHAT_PATTERN;
     } else {
       return GUILD_CHAT_PATTERN;
