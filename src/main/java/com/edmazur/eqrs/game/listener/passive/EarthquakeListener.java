@@ -1,4 +1,4 @@
-package com.edmazur.eqrs.game.listeners.passive;
+package com.edmazur.eqrs.game.listener.passive;
 
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqlp.EqLogListener;
@@ -7,7 +7,7 @@ import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.RateLimiter;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
-import com.edmazur.eqrs.game.listeners.EarthquakeDetector;
+import com.edmazur.eqrs.game.listener.EarthquakeDetector;
 import java.time.Duration;
 
 public class EarthquakeListener implements EqLogListener {

@@ -1,4 +1,4 @@
-package com.edmazur.eqrs.game.listeners.passive;
+package com.edmazur.eqrs.game.listener.passive;
 
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqlp.EqLogListener;
@@ -6,9 +6,9 @@ import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
-import com.edmazur.eqrs.game.listeners.GameTodDetector;
-import com.edmazur.eqrs.game.listeners.GameTodParseResult;
-import com.edmazur.eqrs.game.listeners.GameTodParser;
+import com.edmazur.eqrs.game.listener.GameTodDetector;
+import com.edmazur.eqrs.game.listener.GameTodParseResult;
+import com.edmazur.eqrs.game.listener.GameTodParser;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;

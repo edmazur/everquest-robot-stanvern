@@ -1,4 +1,4 @@
-package com.edmazur.eqrs.game.listeners;
+package com.edmazur.eqrs.game.listener;
 
 import com.edmazur.eqrs.game.RaidTarget;
 import com.google.common.base.Preconditions;

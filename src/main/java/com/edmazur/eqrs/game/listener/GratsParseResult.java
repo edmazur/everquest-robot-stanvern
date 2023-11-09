@@ -1,4 +1,4 @@
-package com.edmazur.eqrs.game.listeners;
+package com.edmazur.eqrs.game.listener;
 
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.ValueOrError;
@@ -18,8 +18,8 @@ import org.javacord.api.entity.message.component.ButtonStyle;
 
 public class GratsParseResult {
 
-  private static final String SUCCESS_ICON = "✅";
-  private static final String ERROR_ICON = "❌";
+  private static final char SUCCESS_ICON = '✅';
+  private static final char ERROR_ICON = '❌';
   // Note that this must be preceded by "//" in regexs.
   private static final String LOOT_COMMAND_LABEL = "$loot command";
   private static final String CHANNEL_MATCH_LABEL = "Channel match";

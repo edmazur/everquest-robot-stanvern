@@ -1,4 +1,4 @@
-package com.edmazur.eqrs.game.listeners;
+package com.edmazur.eqrs.game.listener;
 
 import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.discord.Discord;

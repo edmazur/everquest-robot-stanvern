@@ -1,4 +1,4 @@
-package com.edmazur.eqrs.game.listeners;
+package com.edmazur.eqrs.game.listener;
 
 import java.util.function.Predicate;
 import org.javacord.api.entity.channel.TextChannel;

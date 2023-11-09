@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqrs.FakeMessageBuilder;
 import com.edmazur.eqrs.ValueOrError;
-import com.edmazur.eqrs.game.listeners.GratsParseResult;
+
 import java.io.File;
 import java.util.List;
 import org.javacord.api.entity.message.Message;

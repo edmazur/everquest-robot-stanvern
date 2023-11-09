@@ -4,9 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.edmazur.eqlp.EqLogEvent;
-import com.edmazur.eqrs.game.listeners.GameTodDetector;
-import com.edmazur.eqrs.game.listeners.GameTodParseResult;
-import com.edmazur.eqrs.game.listeners.GameTodParser;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
