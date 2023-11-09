@@ -43,7 +43,7 @@ public class DiscordParkListener implements MessageCreateListener {
     String input = event.getMessageContent().replace(PARKED_COMMAND, "").trim();
     String[] parts = input.split("\\s+");
     if (parts.length < 2) {
-      sendReply(event, ":x: Usage: <park location> <bot name>");
+      sendReply(event, "❌ Usage: <park location> <bot name>");
       return;
     }
 
@@ -54,20 +54,20 @@ public class DiscordParkListener implements MessageCreateListener {
     // Parse park location.
     Optional<ParkLocations> maybeParkLocations = Database.getDatabase().getParkLocations();
     if (maybeParkLocations.isEmpty()) {
-      sendReply(event, ":x: Error reading from database");
+      sendReply(event, "❌ Error reading from database");
       return;
     }
     ParkLocations parkLocations = maybeParkLocations.get();
     Optional<ParkLocation> maybeParkLocation = parkLocations.getParkLocation(input);
     if (maybeParkLocation.isEmpty()) {
-      sendReply(event, String.format(":x: Unrecognized park location: `%s`", input));
+      sendReply(event, String.format("❌ Unrecognized park location: `%s`", input));
       return;
     }
     ParkLocation parkLocation = maybeParkLocation.get();
 
     // Update database.
     if (!Database.getDatabase().updateBotLocation(botName, parkLocation)) {
-      sendReply(event, ":x: Error updating database");
+      sendReply(event, "❌ Error updating database");
       return;
     }
 
@@ -75,7 +75,7 @@ public class DiscordParkListener implements MessageCreateListener {
     sendReply(
         event,
         String.format(
-            ":white_check_mark: Park location for `%s` updated to `%s`",
+            "✅ Park location for `%s` updated to `%s`",
             botName, parkLocation.getName()));
   }
 

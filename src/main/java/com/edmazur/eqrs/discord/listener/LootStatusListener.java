@@ -84,7 +84,7 @@ public class LootStatusListener implements MessageCreateListener {
             "Scanned past %s of messages in <#%d>:\n",
             LOOKBACK_STRING,
             QUERY_CHANNEL.getId()));
-    sb.append(messagesWithoutReactions.isEmpty() ? ":white_check_mark:" : "⚠️");
+    sb.append(messagesWithoutReactions.isEmpty() ? "✅" : "⚠️");
     sb.append(
         String.format(
             " `%d total, %d with reactions, %d without reactions`",

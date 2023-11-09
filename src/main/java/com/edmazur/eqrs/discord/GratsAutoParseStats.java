@@ -48,8 +48,8 @@ public class GratsAutoParseStats {
       }
 
       String content = message.getContent();
-      boolean parsedLootCommand = content.contains(":white_check_mark: **$loot command");
-      boolean parsedChannelMatch = content.contains(":white_check_mark: **Channel match");
+      boolean parsedLootCommand = content.contains("✅ **$loot command");
+      boolean parsedChannelMatch = content.contains("✅ **Channel match");
 
       LocalDate localDate = LocalDate.ofInstant(
           message.getCreationTimestamp(),
