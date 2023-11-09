@@ -11,7 +11,6 @@ import com.edmazur.eqrs.discord.listener.GratsChannelListener;
 import com.edmazur.eqrs.discord.listener.ItemListener;
 import com.edmazur.eqrs.discord.listener.LootStatusListener;
 import com.edmazur.eqrs.discord.listener.LootStatusRequester;
-import com.edmazur.eqrs.discord.speaker.SubscriptionSpeaker;
 import com.edmazur.eqrs.discord.speaker.TodWindowSpeaker;
 import com.edmazur.eqrs.game.listeners.active.FteListener;
 import com.edmazur.eqrs.game.listeners.active.RaidTargetSpawnListener;
@@ -90,10 +89,10 @@ public class RobotStanvern {
 
     if (mode == Mode.PASSIVE) {
       // Set up discord listeners
-      new CharInfoScreenshotListener();
-      new ItemListener();
       new DiscordTodListener();
       new AuditListener();
+      new CharInfoScreenshotListener();
+      new ItemListener();
       new GratsChannelListener();
       new LootStatusListener();
       new DiscordParkListener();
@@ -115,6 +114,8 @@ public class RobotStanvern {
 
       // Add heartbeat listener.
       HeartbeatListener heartbeatListener = new HeartbeatListener();
+      ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
+      scheduledExecutorService.scheduleAtFixedRate(heartbeatListener, 1, 1, TimeUnit.SECONDS);
       eqLogListeners.add(heartbeatListener);
 
       // Add MotD listener.
@@ -133,20 +134,9 @@ public class RobotStanvern {
       EarthquakeListener earthquakeListener = new EarthquakeListener();
       eqLogListeners.add(earthquakeListener);
 
-      /* SCHEDULED TASKS */
-
-      // Set up the Scheduled Task Executor
-      ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
-
-      // Add heartbeat listener
-      scheduledExecutorService.scheduleAtFixedRate(
-          heartbeatListener, 1, 1, TimeUnit.SECONDS);
       // Add ToD window speaker.
       scheduledExecutorService.scheduleAtFixedRate(
           new TodWindowSpeaker(), 0, 1, TimeUnit.MINUTES);
-      // Add Window Subscription speaker
-      scheduledExecutorService.scheduleAtFixedRate(
-          new SubscriptionSpeaker(), 0, 1, TimeUnit.MINUTES);
     }
 
     if (mode == Mode.ACTIVE) {

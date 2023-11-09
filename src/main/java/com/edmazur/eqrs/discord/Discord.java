@@ -1,8 +1,6 @@
 package com.edmazur.eqrs.discord;
 
 import com.edmazur.eqrs.Config;
-import com.edmazur.eqrs.Logger;
-import com.edmazur.eqrs.discord.commands.RaidTargetCommand;
 import java.io.File;
 import java.time.Duration;
 import java.time.Instant;
@@ -17,7 +15,6 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
-import me.s3ns3iw00.jcommands.CommandHandler;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.activity.ActivityType;
@@ -40,7 +37,6 @@ import org.javacord.api.util.logging.ExceptionLogger;
 
 public class Discord {
 
-  private static final Logger LOGGER = new Logger();
   private final DiscordApi discordApi;
   private static Discord discord;
 
@@ -54,24 +50,12 @@ public class Discord {
   private Discord() {
     discordApi = new DiscordApiBuilder()
         .setToken(Config.getConfig().getString(Config.Property.DISCORD_PRIVATE_KEY))
-        .addIntents(Intent.MESSAGE_CONTENT, Intent.GUILD_MEMBERS)
+        .addIntents(Intent.MESSAGE_CONTENT)
         .login()
         .join();
 
-    // Register all slash-commands
-    registerCommands();
-
     // TODO: Randomly update this every so often and cycle through a bunch of fun ones.
     discordApi.updateActivity(ActivityType.WATCHING, "everything, always");
-  }
-
-  private void registerCommands() {
-    CommandHandler.setApi(discordApi);
-
-    Server server = getServer();
-
-    // RaidTarget subscription command
-    CommandHandler.registerCommand(new RaidTargetCommand(), server);
   }
 
   public static DiscordServer getDiscordServer() {
@@ -79,24 +63,6 @@ public class Discord {
       return DiscordServer.TEST;
     }
     return DiscordServer.GOOD_GUYS;
-  }
-
-  private Server getServer() {
-    // Determine which server we're using
-    if (Config.getConfig().isDebug()) {
-      return discordApi.getServerById(DiscordServer.TEST.getId()).orElse(null);
-    } else {
-      return discordApi.getServerById(DiscordServer.GOOD_GUYS.getId()).orElse(null);
-    }
-  }
-
-  public boolean isUserAuthorized(long userId, DiscordRole requiredRole) {
-    Server server = getServer();
-    User discordUser = getUser(userId);
-    Role discordRole = server.getRoleById(requiredRole.getForServer(getDiscordServer()).getId())
-        .orElse(null);
-    List<Role> roleList = discordUser.getRoles(server);
-    return roleList.contains(discordRole);
   }
 
   public CompletableFuture<Message> sendMessage(
@@ -109,13 +75,6 @@ public class Discord {
   public CompletableFuture<Message> sendMessage(
       DiscordUser discordUser, String message) {
     return getUser(discordUser)
-        .sendMessage(message)
-        .exceptionally(ExceptionLogger.get());
-  }
-
-  public CompletableFuture<Message> sendMessage(
-      long discordUserId, String message) {
-    return getUser(discordUserId)
         .sendMessage(message)
         .exceptionally(ExceptionLogger.get());
   }
@@ -290,10 +249,6 @@ public class Discord {
 
   private User getUser(DiscordUser discordUser) {
     return discordApi.getUserById(discordUser.getId()).join();
-  }
-
-  private User getUser(long discordUserId) {
-    return discordApi.getUserById(discordUserId).join();
   }
 
   public void addListener(MessageCreateListener listener) {

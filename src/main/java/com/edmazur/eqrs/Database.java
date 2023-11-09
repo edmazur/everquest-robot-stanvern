@@ -12,14 +12,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public class Database {
 
-  private static final Logger LOGGER = new Logger();
   private static final String MYSQL_CONNECTION_FORMAT_STRING = "jdbc:mysql://%s:%d/%s";
   private static final int MYSQL_PORT = 3306;
 
@@ -47,38 +45,6 @@ public class Database {
       "INSERT INTO bots (name, location, last_updated) " +
       "VALUES(?, ?, NOW()) " +
       "ON DUPLICATE KEY UPDATE location = ?, last_updated = NOW();";
-
-  // Subscription SQL.
-  private static final String GET_SUBSCRIPTIONS_BY_USER_SQL =
-      "SELECT target, expiry " +
-      "FROM subscriptions " +
-      "WHERE user_id = ?;";
-
-  private static final String GET_SUBSCRIPTIONS_SQL =
-      "SELECT target, expiry, user_id " +
-      "FROM subscriptions;";
-
-  private static final String GET_SUBSCRIPTIONS_FOR_NOTIFICATION_SQL =
-      "SELECT target, expiry, user_id " +
-      "FROM subscriptions " +
-      "WHERE last_notified < DATE_SUB(NOW(), INTERVAL 31 MINUTE);";
-
-  private static final String ADD_SUBSCRIPTION_SQL =
-      "INSERT INTO subscriptions (user_id, target, expiry, last_notified) " +
-      "VALUES(?, ?, DATE_ADD(NOW(), INTERVAL 30 DAY), 0);";
-
-  private static final String REMOVE_SUBSCRIPTION_SQL =
-      "DELETE FROM subscriptions " +
-      "WHERE user_id = ? AND target = ?;";
-
-  private static final String MARK_SUBSCRIPTION_NOTIFIED_SQL =
-      "UPDATE subscriptions " +
-      "SET last_notified = NOW() " +
-      "WHERE user_id = ? AND target = ?;";
-
-  private static final String CLEAN_EXPIRED_SUBSCRIPTIONS_SQL =
-      "DELETE FROM subscriptions " +
-      "WHERE expiry <= NOW();";
 
   // CHECKSTYLE.ON: OperatorWrap
 
@@ -158,123 +124,6 @@ public class Database {
     }
   }
 
-  public List<Subscription> getSubscriptionsForUser(long userId) {
-    LOGGER.log("Getting subscriptions for " + userId);
-    List<Subscription> subscriptionList = new ArrayList<>();
-    try {
-      PreparedStatement preparedStatement =
-          getConnection().prepareStatement(GET_SUBSCRIPTIONS_BY_USER_SQL);
-      preparedStatement.setLong(1, userId);
-      ResultSet resultSet = preparedStatement.executeQuery();
-      while (resultSet.next()) {
-        String targetName = resultSet.getString("target");
-        Timestamp expiryTime = resultSet.getTimestamp("expiry");
-        subscriptionList.add(new Subscription(targetName, userId, expiryTime));
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return subscriptionList;
-  }
-
-  public List<Subscription> getSubscriptionsForNotification() {
-    //LOGGER.log("Getting all subscriptions with no recent notifications.");
-    List<Subscription> subscriptionList = new ArrayList<>();
-    try {
-      PreparedStatement preparedStatement =
-          getConnection().prepareStatement(GET_SUBSCRIPTIONS_FOR_NOTIFICATION_SQL);
-      ResultSet resultSet = preparedStatement.executeQuery();
-      while (resultSet.next()) {
-        String targetName = resultSet.getString("target");
-        Timestamp expiryTime = resultSet.getTimestamp("expiry");
-        long userId = resultSet.getLong("user_id");
-        subscriptionList.add(new Subscription(targetName, userId, expiryTime));
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return subscriptionList;
-  }
-
-  public List<Subscription> getSubscriptions() {
-    LOGGER.log("Getting all subscriptions.");
-    List<Subscription> subscriptionList = new ArrayList<>();
-    try {
-      PreparedStatement preparedStatement =
-          getConnection().prepareStatement(GET_SUBSCRIPTIONS_SQL);
-      ResultSet resultSet = preparedStatement.executeQuery();
-      while (resultSet.next()) {
-        String targetName = resultSet.getString("target");
-        Timestamp expiryTime = resultSet.getTimestamp("expiry");
-        long userId = resultSet.getLong("user_id");
-        subscriptionList.add(new Subscription(targetName, userId, expiryTime));
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return subscriptionList;
-  }
-
-  public boolean addSubscription(String targetName, long userId) {
-    LOGGER.log("Adding subscription to " + targetName + " for " + userId);
-    try {
-      PreparedStatement preparedStatement =
-          getConnection().prepareStatement(ADD_SUBSCRIPTION_SQL);
-      preparedStatement.setLong(1, userId);
-      preparedStatement.setString(2, targetName);
-      preparedStatement.execute();
-      return true;
-    } catch (SQLException e) {
-      e.printStackTrace();
-      return false;
-    }
-  }
-
-  public boolean removeSubscription(String targetName, long userId) {
-    LOGGER.log("Removing subscription to " + targetName + " for " + userId);
-    try {
-      PreparedStatement preparedStatement =
-          getConnection().prepareStatement(REMOVE_SUBSCRIPTION_SQL);
-      preparedStatement.setLong(1, userId);
-      preparedStatement.setString(2, targetName);
-      preparedStatement.execute();
-      return true;
-    } catch (SQLException e) {
-      e.printStackTrace();
-      return false;
-    }
-  }
-
-  public boolean markSubscriptionNotified(String targetName, long userId) {
-    try {
-      PreparedStatement preparedStatement =
-          getConnection().prepareStatement(MARK_SUBSCRIPTION_NOTIFIED_SQL);
-      preparedStatement.setLong(1, userId);
-      preparedStatement.setString(2, targetName);
-      preparedStatement.execute();
-      return true;
-    } catch (SQLException e) {
-      e.printStackTrace();
-      return false;
-    }
-  }
-
-  public boolean cleanExpiredSubscriptions() {
-    //LOGGER.log("Cleaning up expired subscriptions.");
-    try {
-      PreparedStatement preparedStatement =
-          getConnection().prepareStatement(CLEAN_EXPIRED_SUBSCRIPTIONS_SQL);
-      int resultSet = preparedStatement.executeUpdate();
-      if (resultSet > 0) {
-        LOGGER.log("Cleaned up " + resultSet + " expired subscriptions.");
-      }
-      return true;
-    } catch (SQLException e) {
-      e.printStackTrace();
-      return false;
-    }
-  }
-
   private Connection getConnection() {
     Config config = Config.getConfig();
     boolean debug = config.getBoolean(Property.DEBUG);
@@ -300,16 +149,4 @@ public class Database {
     }
   }
 
-  public static class Subscription {
-
-    public final String targetName;
-    public final Timestamp expiryTime;
-    public final long userId;
-
-    public Subscription(String targetName, long userId, Timestamp expiryTime) {
-      this.targetName = targetName;
-      this.userId = userId;
-      this.expiryTime = expiryTime;
-    }
-  }
 }
