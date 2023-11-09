@@ -54,16 +54,17 @@ public class RobotStanvern {
     final String character = args[0];
     boolean enableDebug = args.length == 2 && args[1].equals("--debug");
 
+    Config config = Config.getConfig();
     if (enableDebug) {
-      Config.getConfig().enableDebug();
+      config.enableDebug();
     }
 
-    if (Config.getConfig().isDebug()) {
+    if (config.isDebug()) {
       LOGGER.log("Debug mode enabled, Discord output will only be sent as DM and database writes "
           + "will be skipped (SQL will be logged)");
     }
 
-    String suppliedMode = Config.getConfig().getString(Config.Property.BASE_MODE);
+    String suppliedMode = config.getString(Config.Property.BASE_MODE);
     Mode mode = null;
     try {
       if (suppliedMode.isBlank()) {
@@ -98,8 +99,7 @@ public class RobotStanvern {
       new DiscordParkListener();
 
       // Add loot status requester.
-      ZonedDateTime now = ZonedDateTime.now(ZoneId.of(Config.getConfig()
-          .getString(Property.TIMEZONE_GUILD)));
+      ZonedDateTime now = ZonedDateTime.now(ZoneId.of(config.getString(Property.TIMEZONE_GUILD)));
       // Run at 5am daily.
       ZonedDateTime nextRun = now.withHour(5).withMinute(0).withSecond(0);
       if (now.isAfter(nextRun)) {
@@ -151,9 +151,9 @@ public class RobotStanvern {
     // Parse the log.
     while (true) {
       EqLog eqLog = new EqLog(
-          Paths.get(Config.getConfig().getString(Property.EVERQUEST_INSTALL_DIRECTORY)),
-          ZoneId.of(Config.getConfig().getString(Property.TIMEZONE_GAME)),
-          Config.getConfig().getString(Property.EVERQUEST_SERVER),
+          Paths.get(config.getString(Property.EVERQUEST_INSTALL_DIRECTORY)),
+          ZoneId.of(config.getString(Property.TIMEZONE_GAME)),
+          config.getString(Property.EVERQUEST_SERVER),
           character,
           Instant.now(),
           Instant.MAX);
