@@ -98,6 +98,21 @@ public class RobotStanvern {
       new LootStatusListener();
       new DiscordParkListener();
 
+      // Add loot status requester.
+      ZonedDateTime now = ZonedDateTime.now(ZoneId.of(Config.getConfig()
+          .getString(Property.TIMEZONE_GUILD)));
+      // Run at 5am daily.
+      ZonedDateTime nextRun = now.withHour(5).withMinute(0).withSecond(0);
+      if (now.isAfter(nextRun)) {
+        nextRun = nextRun.plusDays(1);
+      }
+      ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+      scheduler.scheduleAtFixedRate(
+          new LootStatusRequester(),
+          Duration.between(now, nextRun).getSeconds(),
+          TimeUnit.DAYS.toSeconds(1),
+          TimeUnit.SECONDS);
+
       // Add heartbeat listener.
       HeartbeatListener heartbeatListener = new HeartbeatListener();
       eqLogListeners.add(heartbeatListener);
@@ -117,21 +132,6 @@ public class RobotStanvern {
       // Add earthquake listener.
       EarthquakeListener earthquakeListener = new EarthquakeListener();
       eqLogListeners.add(earthquakeListener);
-
-      // Add loot status requester.
-      ZonedDateTime now = ZonedDateTime.now(ZoneId.of(Config.getConfig()
-          .getString(Property.TIMEZONE_GUILD)));
-      // Run at 5am daily.
-      ZonedDateTime nextRun = now.withHour(5).withMinute(0).withSecond(0);
-      if (now.isAfter(nextRun)) {
-        nextRun = nextRun.plusDays(1);
-      }
-      ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-      scheduler.scheduleAtFixedRate(
-          new LootStatusRequester(),
-          Duration.between(now, nextRun).getSeconds(),
-          TimeUnit.DAYS.toSeconds(1),
-          TimeUnit.SECONDS);
 
       /* SCHEDULED TASKS */
 
