@@ -3,6 +3,7 @@ package com.edmazur.eqrs.discord.listener;
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.Database;
 import com.edmazur.eqrs.Logger;
+import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.game.ParkLocation;
 import com.edmazur.eqrs.game.ParkLocations;
@@ -22,6 +23,7 @@ public class DiscordParkListener implements MessageCreateListener {
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_GENERAL;
 
   public DiscordParkListener() {
+    Discord.getDiscord().addListener(this);
     LOGGER.log("%s running", this.getClass().getName());
   }
 

@@ -3,26 +3,35 @@ package com.edmazur.eqrs;
 import com.edmazur.eqlp.EqLog;
 import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.Config.Property;
-import com.edmazur.eqrs.discord.Discord;
+import com.edmazur.eqrs.discord.listener.AuditListener;
+import com.edmazur.eqrs.discord.listener.CharInfoScreenshotListener;
+import com.edmazur.eqrs.discord.listener.DiscordParkListener;
+import com.edmazur.eqrs.discord.listener.DiscordTodListener;
+import com.edmazur.eqrs.discord.listener.GratsChannelListener;
+import com.edmazur.eqrs.discord.listener.ItemListener;
+import com.edmazur.eqrs.discord.listener.LootStatusListener;
 import com.edmazur.eqrs.discord.listener.LootStatusRequester;
 import com.edmazur.eqrs.discord.speaker.SubscriptionSpeaker;
 import com.edmazur.eqrs.discord.speaker.TodWindowSpeaker;
+import com.edmazur.eqrs.game.listeners.active.FteListener;
+import com.edmazur.eqrs.game.listeners.active.RaidTargetSpawnListener;
+import com.edmazur.eqrs.game.listeners.passive.EarthquakeListener;
+import com.edmazur.eqrs.game.listeners.passive.GameTodListener;
+import com.edmazur.eqrs.game.listeners.passive.GratsListener;
 import com.edmazur.eqrs.game.listeners.passive.HeartbeatListener;
+import com.edmazur.eqrs.game.listeners.passive.MotdListener;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import org.javacord.api.listener.message.MessageCreateListener;
-import org.reflections.Reflections;
-import org.reflections.scanners.Scanners;
 
 public class RobotStanvern {
 
@@ -48,6 +57,9 @@ public class RobotStanvern {
 
     if (enableDebug) {
       Config.getConfig().enableDebug();
+    }
+
+    if (Config.getConfig().isDebug()) {
       LOGGER.log("Debug mode enabled, Discord output will only be sent as DM and database writes "
           + "will be skipped (SQL will be logged)");
     }
@@ -74,8 +86,37 @@ public class RobotStanvern {
     }
     */
 
+    List<EqLogListener> eqLogListeners = new ArrayList<>();
+
     if (mode == Mode.PASSIVE) {
-      initializeDiscordListeners();
+      // Set up discord listeners
+      new CharInfoScreenshotListener();
+      new ItemListener();
+      new DiscordTodListener();
+      new AuditListener();
+      new GratsChannelListener();
+      new LootStatusListener();
+      new DiscordParkListener();
+
+      // Add heartbeat listener.
+      HeartbeatListener heartbeatListener = new HeartbeatListener();
+      eqLogListeners.add(heartbeatListener);
+
+      // Add MotD listener.
+      MotdListener motdListener = new MotdListener();
+      eqLogListeners.add(motdListener);
+
+      // Add ToD listener.
+      GameTodListener gameTodListener = new GameTodListener();
+      eqLogListeners.add(gameTodListener);
+
+      // Add grats listener.
+      GratsListener gratsListener = new GratsListener();
+      eqLogListeners.add(gratsListener);
+
+      // Add earthquake listener.
+      EarthquakeListener earthquakeListener = new EarthquakeListener();
+      eqLogListeners.add(earthquakeListener);
 
       // Add loot status requester.
       ZonedDateTime now = ZonedDateTime.now(ZoneId.of(Config.getConfig()
@@ -99,13 +140,22 @@ public class RobotStanvern {
 
       // Add heartbeat listener
       scheduledExecutorService.scheduleAtFixedRate(
-          new HeartbeatListener(), 1, 1, TimeUnit.SECONDS);
+          heartbeatListener, 1, 1, TimeUnit.SECONDS);
       // Add ToD window speaker.
       scheduledExecutorService.scheduleAtFixedRate(
           new TodWindowSpeaker(), 0, 1, TimeUnit.MINUTES);
       // Add Window Subscription speaker
       scheduledExecutorService.scheduleAtFixedRate(
           new SubscriptionSpeaker(), 0, 1, TimeUnit.MINUTES);
+    }
+
+    if (mode == Mode.ACTIVE) {
+      // Add FTE listener.
+      eqLogListeners.add(new FteListener());
+
+      // Add raid target spawn listener.
+      RaidTargetSpawnListener raidTargetSpawnListener = new RaidTargetSpawnListener();
+      eqLogListeners.add(raidTargetSpawnListener);
     }
 
     // Parse the log.
@@ -118,7 +168,9 @@ public class RobotStanvern {
           Instant.now(),
           Instant.MAX);
       LOGGER.log("Reading log from: " + character);
-      initializeGameListeners(eqLog, mode);
+      for (EqLogListener eqLogListener : eqLogListeners) {
+        eqLog.addListener(eqLogListener);
+      }
       try {
         eqLog.run();
       } catch (Exception e) {
@@ -130,52 +182,6 @@ public class RobotStanvern {
             "Uncaught exception from main thread, restarting. This generally should not happen.\n"
             + stackTrace);
       }
-    }
-  }
-
-  private static void initializeDiscordListeners() {
-    // Discover all Discord listeners
-    Reflections reflections = new Reflections(
-        "com.edmazur.eqrs.discord.listener", Scanners.SubTypes);
-    Set<Class<? extends MessageCreateListener>> listeners = reflections.getSubTypesOf(
-        MessageCreateListener.class);
-    for (Class<? extends MessageCreateListener> listenerClass : listeners) {
-      MessageCreateListener listener = null;
-      try {
-        listener = listenerClass.getDeclaredConstructor().newInstance();
-      } catch (NoSuchMethodException | InstantiationException | IllegalAccessException
-               | InvocationTargetException ignored) {
-        LOGGER.log("Error creating Discord listener: " + listenerClass.getName());
-      }
-      Discord.getDiscord().addListener(listener);
-      //LOGGER.log("Added Discord listener: " + listenerClass.getName());
-    }
-  }
-
-  private static void initializeGameListeners(EqLog eqLog, Mode mode) {
-    String packagePath;
-    if (mode == Mode.PASSIVE) {
-      packagePath = "com.edmazur.eqrs.game.listeners.passive";
-    } else if (mode == Mode.ACTIVE) {
-      packagePath = "com.edmazur.eqrs.game.listeners.active";
-    } else {
-      return;
-    }
-
-    // Discover all EqLogListeners in the specified package
-    Reflections reflections = new Reflections(packagePath, Scanners.SubTypes);
-    Set<Class<? extends EqLogListener>> listeners = reflections.getSubTypesOf(
-        EqLogListener.class);
-    for (Class<? extends EqLogListener> listenerClass : listeners) {
-      EqLogListener listener = null;
-      try {
-        listener = listenerClass.getDeclaredConstructor().newInstance();
-      } catch (NoSuchMethodException | InstantiationException | IllegalAccessException
-               | InvocationTargetException ignored) {
-        LOGGER.log("Error creating listener: " + listenerClass.getName());
-      }
-      eqLog.addListener(listener);
-      //LOGGER.log("Added EqLog listener: " + listenerClass.getName());
     }
   }
 

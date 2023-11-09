@@ -4,6 +4,7 @@ import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.Database;
 import com.edmazur.eqrs.Logger;
+import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.game.RaidTarget;
 import com.edmazur.eqrs.game.RaidTargets;
@@ -56,6 +57,7 @@ public class DiscordTodListener implements MessageCreateListener {
   private static final File SUCCESS_IMAGE = new File("src/main/resources/str.png");
 
   public DiscordTodListener() {
+    Discord.getDiscord().addListener(this);
     LOGGER.log("%s running", this.getClass().getName());
   }
 

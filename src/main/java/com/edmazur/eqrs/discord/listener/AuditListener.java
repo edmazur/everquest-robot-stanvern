@@ -63,6 +63,7 @@ public class AuditListener implements MessageCreateListener, MessageEditListener
 
 
   public AuditListener() {
+    Discord.getDiscord().addListener(this);
     LOGGER.log("%s running", this.getClass().getName());
   }
 

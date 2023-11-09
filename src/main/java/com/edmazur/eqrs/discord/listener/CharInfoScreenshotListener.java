@@ -35,6 +35,7 @@ public class CharInfoScreenshotListener implements MessageCreateListener {
 
   public CharInfoScreenshotListener() {
     this.charInfoScraper = new CharInfoScraper();
+    Discord.getDiscord().addListener(this);
     LOGGER.log("%s running", this.getClass().getName());
     for (Message message : Discord.getDiscord().getUnrepliedMessagesMatchingPredicate(
         getChannel(), PREDICATE)) {

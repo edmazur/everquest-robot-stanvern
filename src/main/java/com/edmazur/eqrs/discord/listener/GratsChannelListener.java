@@ -1,6 +1,7 @@
 package com.edmazur.eqrs.discord.listener;
 
 import com.edmazur.eqrs.Config;
+import com.edmazur.eqrs.Logger;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordButton;
 import com.edmazur.eqrs.discord.DiscordChannel;
@@ -28,6 +29,7 @@ import org.javacord.api.listener.message.reaction.ReactionRemoveListener;
 public class GratsChannelListener implements
     ButtonClickListener, ReactionAddListener, ReactionRemoveAllListener, ReactionRemoveListener {
 
+  private static final Logger LOGGER = new Logger();
   private static final DiscordChannel PROD_CHANNEL = DiscordChannel.GG_TICKS_AND_GRATS;
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_GENERAL;
 
@@ -47,11 +49,12 @@ public class GratsChannelListener implements
   private final EventChannelChecker eventChannelChecker;
 
   public GratsChannelListener() {
+    this.eventChannelChecker = new EventChannelChecker();
     Discord.getDiscord().addListener((ButtonClickListener) this);
     Discord.getDiscord().addListener((ReactionAddListener) this);
     Discord.getDiscord().addListener((ReactionRemoveAllListener) this);
     Discord.getDiscord().addListener((ReactionRemoveListener) this);
-    this.eventChannelChecker = new EventChannelChecker();
+    LOGGER.log("%s running", this.getClass().getName());
   }
 
   @Override

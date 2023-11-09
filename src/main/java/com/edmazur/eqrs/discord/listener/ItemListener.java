@@ -3,6 +3,7 @@ package com.edmazur.eqrs.discord.listener;
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.Config.Property;
 import com.edmazur.eqrs.Logger;
+import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordServer;
 import com.edmazur.eqrs.game.Item;
 import com.edmazur.eqrs.game.ItemDatabase;
@@ -22,6 +23,7 @@ public class ItemListener implements MessageCreateListener {
 
 
   public ItemListener() {
+    Discord.getDiscord().addListener(this);
     LOGGER.log("%s running", this.getClass().getName());
   }
 

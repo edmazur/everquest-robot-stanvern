@@ -38,6 +38,7 @@ public class LootStatusListener implements MessageCreateListener {
   private static final String LOOKBACK_STRING = "7 days";
 
   public LootStatusListener() {
+    Discord.getDiscord().addListener(this);
     LOGGER.log("%s running", this.getClass().getName());
   }
 
