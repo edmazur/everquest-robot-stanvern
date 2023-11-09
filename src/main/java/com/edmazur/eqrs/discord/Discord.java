@@ -2,8 +2,8 @@ package com.edmazur.eqrs.discord;
 
 import com.edmazur.eqrs.Config;
 import com.edmazur.eqrs.Logger;
+import com.edmazur.eqrs.discord.commands.RaidTargetCommand;
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -37,8 +37,6 @@ import org.javacord.api.listener.message.reaction.ReactionAddListener;
 import org.javacord.api.listener.message.reaction.ReactionRemoveAllListener;
 import org.javacord.api.listener.message.reaction.ReactionRemoveListener;
 import org.javacord.api.util.logging.ExceptionLogger;
-import org.reflections.Reflections;
-import org.reflections.scanners.Scanners;
 
 public class Discord {
 
@@ -70,24 +68,10 @@ public class Discord {
   private void registerCommands() {
     CommandHandler.setApi(discordApi);
 
-    // Discover all existing commands
-    Reflections reflections = new Reflections(
-        "com.edmazur.eqrs.discord.commands", Scanners.SubTypes);
-    Set<Class<? extends DiscordSlashCommand>> commands = reflections.getSubTypesOf(
-        DiscordSlashCommand.class);
+    Server server = getServer();
 
-    if (getServer() != null) {
-      // Register all discovered commands
-      for (Class<? extends DiscordSlashCommand> commandClass : commands) {
-        try {
-          DiscordSlashCommand command = commandClass.getDeclaredConstructor().newInstance();
-          CommandHandler.registerCommand(command, getServer());
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException
-                 | InvocationTargetException ignored) {
-          LOGGER.log("Error creating command: " + commandClass.getName());
-        }
-      }
-    }
+    // RaidTarget subscription command
+    CommandHandler.registerCommand(new RaidTargetCommand(), server);
   }
 
   public static DiscordServer getDiscordServer() {
