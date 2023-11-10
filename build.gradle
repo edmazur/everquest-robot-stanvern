@@ -60,6 +60,10 @@ checkstyle {
   maxWarnings 0
 }
 
+compileJava {
+  options.encoding = "UTF-8"
+}
+
 tasks.register("installGitHooks", Copy) {
   from file("$rootDir/pre-commit")
   into file("$rootDir/.git/hooks")

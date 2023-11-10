@@ -72,7 +72,7 @@ public class RobotStanvern {
     final String character = args[0];
     boolean enableDebug = args.length == 2 && args[1].equals("--debug");
 
-    Config config = new Config();
+    Config config = Config.getConfig();
     if (enableDebug) {
       config.enableDebug();
     }
@@ -95,7 +95,7 @@ public class RobotStanvern {
       System.exit(-1);
     }
 
-    Discord discord = new Discord(config);
+    Discord discord = Discord.getDiscord(config);
 
     // Uncomment to send one-off images/messages.
     // TODO: Add a better way to send one-off images/messages that doesn't require code changes.
@@ -109,7 +109,7 @@ public class RobotStanvern {
     List<EqLogListener> eqLogListeners = new ArrayList<>();
 
     if (mode == Mode.PASSIVE) {
-      Database database = new Database(config);
+      Database database = Database.getDatabase(config);
       Json json = new Json();
       RaidTargets raidTargets = new RaidTargets(config, json);
       // TODO: Set this up more like how game log messages are received centrally and passed out to

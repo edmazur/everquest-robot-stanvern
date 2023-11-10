@@ -14,7 +14,7 @@ class GratsDetectorTest {
 
   @BeforeEach
   void beforeEach() {
-    Config config = new Config();
+    Config config = Config.getConfig();
     gratsDetector = new GratsDetector(config);
   }
 

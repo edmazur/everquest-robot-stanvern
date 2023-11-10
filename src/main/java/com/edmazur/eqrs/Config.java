@@ -62,7 +62,16 @@ public class Config {
 
   private Properties properties;
 
-  public Config() {
+  private static Config config;
+
+  public static Config getConfig() {
+    if (config == null) {
+      config = new Config();
+    }
+    return config;
+  }
+
+  private Config() {
     properties = new Properties();
     try {
       properties.load(new FileInputStream(CONFIG_FILE_NAME));

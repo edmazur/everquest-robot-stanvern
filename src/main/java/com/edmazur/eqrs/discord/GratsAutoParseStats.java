@@ -19,7 +19,7 @@ import org.javacord.api.entity.message.MessageSet;
 public class GratsAutoParseStats {
 
   public static void main(String[] args) {
-    Config config = new Config();
+    Config config = Config.getConfig();
 
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
     simpleDateFormat.setTimeZone(TimeZone.getTimeZone(config.getString(Property.TIMEZONE_GUILD)));
@@ -34,7 +34,7 @@ public class GratsAutoParseStats {
       System.exit(-1);
     }
 
-    Discord discord = new Discord(config);
+    Discord discord = Discord.getDiscord(config);
 
     Optional<MessageSet> maybeMessageSet =
         discord.getMessagesBetween(DiscordChannel.GG_TICKS_AND_GRATS, start, end);

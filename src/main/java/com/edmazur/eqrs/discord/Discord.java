@@ -39,7 +39,20 @@ public class Discord {
 
   private final DiscordApi discordApi;
 
-  public Discord(Config config) {
+  private static Discord discord;
+
+  public static Discord getDiscord(Config config) {
+    if (discord == null) {
+      discord = new Discord(config);
+    }
+    return discord;
+  }
+
+  public static Discord getDiscord() {
+    return getDiscord(Config.getConfig());
+  }
+
+  private Discord(Config config) {
     discordApi = new DiscordApiBuilder()
         .setToken(config.getString(Config.Property.DISCORD_PRIVATE_KEY))
         .addIntents(Intent.MESSAGE_CONTENT)

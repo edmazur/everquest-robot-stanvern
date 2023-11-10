@@ -48,7 +48,20 @@ public class Database {
 
   private final Config config;
 
-  public Database(Config config) {
+  private static Database database;
+
+  public static Database getDatabase(Config config) {
+    if (database == null) {
+      database = new Database(config);
+    }
+    return database;
+  }
+
+  public static Database getDatabase() {
+    return getDatabase(Config.getConfig());
+  }
+
+  private Database(Config config) {
     this.config = config;
   }
 

@@ -68,7 +68,7 @@ public class GameTodDetectorBenchmark {
   }
 
   private static List<EqLogEvent> runBenchmark(List<EqLogEvent> eqLogEvents, boolean expectingTod) {
-    Config config = new Config();
+    Config config = Config.getConfig();
     GameTodDetector gameTodDetector = new GameTodDetector(config);
     List<EqLogEvent> incorrectDetections = new ArrayList<>();
     for (EqLogEvent eqLogEvent : eqLogEvents) {
