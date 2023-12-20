@@ -1,6 +1,6 @@
 # What is RobotStanvern?
-RobotStanvern is a multi-purpose Discord bot for EverQuest, originally built for the <Black Lotus>
-guild on the Project 1999 green server and today run for <Good Guys>. It can parse in-game logs,
+RobotStanvern is a multi-purpose Discord bot for EverQuest, originally built for the \<Black Lotus>
+guild on the Project 1999 green server and today run for \<Good Guys>. It can parse in-game logs,
 manage ToDs, and perform a variety of Discord functions including sharing item screenshots,
 batphoning earthquakes, and parsing guild chat for special commands.
 
@@ -8,7 +8,7 @@ batphoning earthquakes, and parsing guild chat for special commands.
 
 ## Will you run this for me for a P99 guild?
 
-Unfortunately no, this is not something I'm currently offering outside of <Good Guys> on P99 green.
+Unfortunately no, this is not something I'm currently offering outside of \<Good Guys> on P99 green.
 Currently there's a lot of per-instance overhead that would require too much effort and ongoing
 maintenance from me than I'm able to commit to (even for pay as some folks have generously offered).
 
