@@ -49,7 +49,7 @@ public class TodWindowSpeaker implements Runnable {
           + "decreases.\n"
           + "\n"
           + "**Is there another way to view this data?**\n"
-          + "\\- Yes! See http://edmazur.com/eq (username/password is pinned in #tod).\n"
+          + "\\- Yes! See <http://edmazur.com/eq> (username/password is pinned in #tod).\n"
           + "\\- Extrapolated windows are also easier to visualize/understand in that UI.\n"
           + "\n"
           + "**How do I avoid being continuously pinged by this channel?**\n"
@@ -62,7 +62,7 @@ public class TodWindowSpeaker implements Runnable {
           + "as much as you want.\n"
           + "\n"
           + "**Where can I learn more about this bot, run it for Quarm, etc.?**\n"
-          + "\\- Check out the FAQ: https://github.com/edmazur/everquest-robot-stanvern#faq");
+          + "\\- Check out the FAQ: <https://github.com/edmazur/everquest-robot-stanvern#faq>");
     } catch (Throwable t) {
       t.printStackTrace();
     }
