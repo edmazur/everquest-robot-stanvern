@@ -59,7 +59,10 @@ public class TodWindowSpeaker implements Runnable {
           + "\\- I (Stanvern) am **very** open to feedback! My goal is to streamline ToD/windows "
           + "as much as possible, so if you have any feedback at all, positive or negative, I "
           + "really want to hear it. Feel free to reach out to me (GG Discord, DM, in-game, etc.) "
-          + "as much as you want.");
+          + "as much as you want.\n"
+          + "\n"
+          + "**Where can I learn more about this bot, run it for Quarm, etc.?**\n"
+          + "\\- Check out the FAQ: https://github.com/edmazur/everquest-robot-stanvern#faq");
     } catch (Throwable t) {
       t.printStackTrace();
     }
