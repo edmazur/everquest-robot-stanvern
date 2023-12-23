@@ -7,11 +7,19 @@ import com.edmazur.eqrs.RateLimiter;
 import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import java.time.Duration;
+import java.time.format.DateTimeFormatter;
+import org.javacord.api.entity.message.Message;
 
 public class EarthquakeListener implements EqLogListener {
 
-  private static final DiscordChannel PROD_CHANNEL = DiscordChannel.GG_BATPHONE;
-  private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_BATPHONE;
+  private static final DateTimeFormatter DATE_TIME_FORMATTER =
+      DateTimeFormatter.ofPattern("M/d HH:mm:ss");
+
+  private static final DiscordChannel PROD_BATPHONE_CHANNEL = DiscordChannel.GG_BATPHONE;
+  private static final DiscordChannel TEST_BATPHONE_CHANNEL = DiscordChannel.TEST_BATPHONE;
+
+  private static final DiscordChannel PROD_TOD_CHANNEL = DiscordChannel.GG_TOD;
+  private static final DiscordChannel TEST_TOD_CHANNEL = DiscordChannel.TEST_TOD;
 
   // This rate limit is just to safeguard against repeated false positive detection (code bug, GM
   // trolling, etc.), which would result in repeated batphones. 1 hour is somewhat arbitrary - long
@@ -35,17 +43,49 @@ public class EarthquakeListener implements EqLogListener {
   public void onEvent(EqLogEvent eqLogEvent) {
     if (earthquakeDetector.containsEarthquake(eqLogEvent)) {
       if (rateLimiter.getPermission()) {
+        // Send batphone.
         discord.sendMessage(
-            getChannel(), "@everyone QUAKE" + "\n" + "(ET: `" + eqLogEvent.getFullLine() + "`)");
+            getBatphoneChannel(),
+            "@everyone QUAKE" + "\n" + "(ET: `" + eqLogEvent.getFullLine() + "`)");
+
+        // Log the earthquake in the ToD channel.
+        Message earthquakeLogMessage = discord
+            .sendMessage(
+                getTodChannel(),
+                String.format("ET: `%s`", eqLogEvent.getFullLine()))
+            .join();
+
+        // Enter the !quake command.
+        earthquakeLogMessage.reply(
+            String.format("!quake %s", DATE_TIME_FORMATTER.format(eqLogEvent.getTimestamp())));
+
+        // Enter Ring 8 "ToD".
+        earthquakeLogMessage.reply(
+            String.format(
+                "!tod ring 8, %s",
+                DATE_TIME_FORMATTER.format(eqLogEvent.getTimestamp().minusMinutes(30))));
+
+        // Enter Vaniki ToD.
+        earthquakeLogMessage.reply(
+            String.format(
+                "!tod vaniki, %s", DATE_TIME_FORMATTER.format(eqLogEvent.getTimestamp())));
       }
     }
   }
 
-  private DiscordChannel getChannel() {
+  private DiscordChannel getBatphoneChannel() {
     if (config.getBoolean(Config.Property.DEBUG)) {
-      return TEST_CHANNEL;
+      return TEST_BATPHONE_CHANNEL;
     } else {
-      return PROD_CHANNEL;
+      return PROD_BATPHONE_CHANNEL;
+    }
+  }
+
+  private DiscordChannel getTodChannel() {
+    if (config.getBoolean(Config.Property.DEBUG)) {
+      return TEST_TOD_CHANNEL;
+    } else {
+      return PROD_TOD_CHANNEL;
     }
   }
 
