@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.javacord.api.entity.message.MessageBuilder;
@@ -55,6 +56,10 @@ public class DiscordTodListener implements MessageCreateListener {
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_TOD;
 
   private static final File SUCCESS_IMAGE = new File("src/main/resources/str.png");
+
+  private static final Set<String> TARGETS_WITH_TODS_BEFORE_QUAKE_ALLOWED = Set.of(
+      "an ancient cyclops",
+      "Ring 8");
 
   private final Config config;
   private final Discord discord;
@@ -148,17 +153,19 @@ public class DiscordTodListener implements MessageCreateListener {
               "Sorry, ToD cannot be in the future: `" + timestampToParse + "`");
           return;
         }
-        Optional<LocalDateTime> maybeQuakeTime = database.getQuakeTime();
-        if (maybeQuakeTime.isEmpty()) {
-          LOGGER.log("Error getting quake time from database, ignoring");
-        } else {
-          LocalDateTime quakeTime = maybeQuakeTime.get();
-          if (timestamp.isBefore(quakeTime)) {
-            event.addReactionsToMessage("❌");
-            sendReply(event,
-                "Sorry, ToD cannot be before quake time (" + DATE_TIME_FORMATTER.format(quakeTime)
-                    + " ET)");
-            return;
+        if (!TARGETS_WITH_TODS_BEFORE_QUAKE_ALLOWED.contains(raidTarget.getName())) {
+          Optional<LocalDateTime> maybeQuakeTime = database.getQuakeTime();
+          if (maybeQuakeTime.isEmpty()) {
+            LOGGER.log("Error getting quake time from database, ignoring");
+          } else {
+            LocalDateTime quakeTime = maybeQuakeTime.get();
+            if (timestamp.isBefore(quakeTime)) {
+              event.addReactionsToMessage("❌");
+              sendReply(event,
+                  "Sorry, ToD cannot be before quake time (" + DATE_TIME_FORMATTER.format(quakeTime)
+                      + " ET)");
+              return;
+            }
           }
         }
         String timeSince = "~" + getTimeSince(timestamp) + " ago";
