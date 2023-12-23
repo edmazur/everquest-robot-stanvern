@@ -79,7 +79,7 @@ you're in there too.
 
 Setup:
 
-```
+```bash
 $ git clone https://github.com/edmazur/everquest-robot-stanvern
 $ cd everquest-robot-stanvern
 $ cp app.config.EXAMPLE app.config
@@ -88,7 +88,7 @@ $ # (configure app.config)
 
 Run in production:
 
-```
+```bash
 $ git pull
 $ ./gradlew installDist
 $ ./build/install/everquest-robot-stanvern/bin/everquest-robot-stanvern YourCharacterName
@@ -97,14 +97,14 @@ $ ./build/install/everquest-robot-stanvern/bin/everquest-robot-stanvern YourChar
 Run in development mode (Discord interactions restricted to test server, database queries go to test
 server):
 
-```
+```bash
 $ ./src/main/scripts/override-test-db-with-prod-db.sh
 $ ./gradlew run --args='YourCharacterName --debug'
 ```
 
 Code coverage report (see `./build/reports/jacoco/test/html/index.html`):
 
-```
+```bash
 $ ./gradlew build jacocoTestReport
 ```
 
