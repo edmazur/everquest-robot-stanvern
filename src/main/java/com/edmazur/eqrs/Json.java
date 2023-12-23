@@ -20,7 +20,6 @@ public class Json {
     JSONObject jsonObject = new JSONObject(scanner.useDelimiter("\\A").next());
     scanner.close();
     return Optional.of(jsonObject);
-
   }
 
 }

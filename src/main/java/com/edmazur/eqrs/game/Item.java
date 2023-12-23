@@ -23,7 +23,7 @@ public class Item {
   }
 
   /**
-   * Gets a pattern that will match names in a way to avoids backtick/apostrophe issues.
+   * Gets a pattern that will match names in a way that avoids backtick/apostrophe issues.
    * - Pattern is case-insensitive.
    * - Can match against multi-line input.
    * - Optional wildcards are included on both sides because there are no use cases where you want

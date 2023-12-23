@@ -16,7 +16,7 @@ public class EarthquakeListener implements EqLogListener {
   // This rate limit is just to safeguard against repeated false positive detection (code bug, GM
   // trolling, etc.), which would result in repeated batphones. 1 hour is somewhat arbitrary - long
   // enough that it shouldn't result in spam, but short enough where some edge case scenario where
-  // it quakes twice in a day ishandled correctly.
+  // it quakes twice in a day is handled correctly.
   private static final Duration RATE_LIMIT = Duration.ofHours(1);
 
   private final Config config;

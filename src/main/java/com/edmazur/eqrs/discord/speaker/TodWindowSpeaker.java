@@ -35,10 +35,10 @@ public class TodWindowSpeaker implements Runnable {
     try {
       Table table = raidTargetTableMaker.make();
       discord.deleteMessagesMatchingPredicate(getChannel(), DiscordPredicate.isFromYourself());
-      for (String messages : discordTableFormatter.getMessages(table, Map.of(0, 1))) {
+      for (String message : discordTableFormatter.getMessages(table, Map.of(0, 1))) {
         // Wait for the Future to complete before sending the next message. In testing, not having
         // this in place led to out-of-order messages when they got sent in rapid succession.
-        discord.sendMessage(getChannel(), messages).join();
+        discord.sendMessage(getChannel(), message).join();
       }
       discord.sendMessage(getChannel(),
           "**What does `[N]` mean?**\n"
