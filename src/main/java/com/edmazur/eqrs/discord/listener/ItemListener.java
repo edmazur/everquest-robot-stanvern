@@ -56,7 +56,6 @@ public class ItemListener implements MessageCreateListener {
       return;
     }
 
-    event.getChannel().type();
     List<Item> items = itemDatabase.parse(event.getMessageContent());
     if (items.isEmpty()) {
       event.getMessage().reply("Sorry, saw !item request, but couldn't match any item names. "
