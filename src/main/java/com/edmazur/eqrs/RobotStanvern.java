@@ -78,8 +78,8 @@ public class RobotStanvern {
     }
 
     if (config.getBoolean(Property.DEBUG)) {
-      LOGGER.log("Debug mode enabled, Discord output will only be sent as DM and database writes "
-          + "will be skipped (SQL will be logged)");
+      LOGGER.log("Debug mode enabled, test servers will be used for Discord and database "
+          + "interactions.");
     }
 
     String suppliedMode = config.getString(Config.Property.BASE_MODE);

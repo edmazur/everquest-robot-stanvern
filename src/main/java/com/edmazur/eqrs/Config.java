@@ -22,9 +22,8 @@ public class Config {
     DISCORD_PRIVATE_KEY("discord.private_key"),
 
     // When enabled:
-    // - Discord input will only be accepted from me via DM.
-    // - Discord output will only go to me as a DM (i.e. no channel output).
-    // - Database writes will be skipped and SQL will instead just be logged.
+    // - Test server (hardcoded) will be used for Discord interactions.
+    // - Test server (from config file) will be used for database interactions.
     DEBUG("debug"),
 
     EVERQUEST_INSTALL_DIRECTORY("everquest.install_directory"),
