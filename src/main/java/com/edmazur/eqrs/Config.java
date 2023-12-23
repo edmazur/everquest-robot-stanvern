@@ -39,7 +39,6 @@ public class Config {
     MYSQL_USERNAME_PROD("mysql.username.prod"),
     MYSQL_USERNAME_TEST("mysql.username.test"),
 
-    // TODO: Use these everywhere instead of ever relying on machine timezone.
     // The timezone that game logs are in.
     TIMEZONE_GAME("timezone.game"),
     // The timezone that the guild uses for scheduling.
