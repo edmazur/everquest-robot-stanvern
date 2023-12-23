@@ -192,7 +192,8 @@ public class DiscordTodListener implements MessageCreateListener {
         // !quake was used, but argument could not be parsed.
         if (!quakeParseMatcher.matches() || quakeParseMatcher.groupCount() != 1) {
           event.addReactionsToMessage("❌");
-          event.getMessage().reply("Sorry, unrecognized !quake command"
+          sendReply(event,
+              "Sorry, unrecognized !quake command"
               + "\n" + HELP_QUAKE_USAGE
               + "\n" + HELP_TIMESTAMP);
           return;
@@ -203,14 +204,15 @@ public class DiscordTodListener implements MessageCreateListener {
         Optional<LocalDateTime> maybeTimestamp = getTimestamp(timestampToParse);
         if (maybeTimestamp.isEmpty()) {
           event.addReactionsToMessage("❌");
-          event.getMessage().reply("Sorry, I can't read this timestamp: `" + timestampToParse + "`"
+          sendReply(event,
+              "Sorry, I can't read this timestamp: `" + timestampToParse + "`"
               + "\n" + HELP_TIMESTAMP);
           return;
         }
         LocalDateTime timestamp = maybeTimestamp.get();
         if (timestamp.isAfter(LocalDateTime.now())) {
           event.addReactionsToMessage("❌");
-          event.getMessage().reply(
+          sendReply(event,
               "Sorry, quake time cannot be in the future: `" + timestampToParse + "`");
           return;
         }
@@ -234,7 +236,7 @@ public class DiscordTodListener implements MessageCreateListener {
                 + " [" + timeSince + "]\n"
                 + "`(local) Quake time:` " + "<t:" + getUnixTimestamp(timestamp) + ":F>");
         event.addReactionsToMessage("👍");
-        event.getMessage().reply(embed);
+        sendReply(event, embed);
       }
     }
   }

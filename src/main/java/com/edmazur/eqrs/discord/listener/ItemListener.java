@@ -56,16 +56,20 @@ public class ItemListener implements MessageCreateListener {
       return;
     }
 
-    List<Item> items = itemDatabase.parse(event.getMessageContent());
-    if (items.isEmpty()) {
-      event.getMessage().reply("Sorry, saw !item request, but couldn't match any item names. "
-          + "Search is case-insensitive, but partial matches are NOT supported.");
-      return;
-    }
 
     MessageBuilder messageBuilder = new MessageBuilder()
         .replyTo(event.getMessage())
         .setAllowedMentions(new AllowedMentionsBuilder().build());
+
+    List<Item> items = itemDatabase.parse(event.getMessageContent());
+    if (items.isEmpty()) {
+      messageBuilder
+          .append("Sorry, saw !item request, but couldn't match any item names. Search is "
+              + "case-insensitive, but partial matches are NOT supported.")
+          .send(event.getChannel());
+      return;
+    }
+
     for (int i = 0; i < items.size(); i++) {
       Item item = items.get(i);
       messageBuilder.append((i > 0 ? "\n" : "") + item.getName() + " (" + item.getUrl() + ")");
