@@ -268,6 +268,14 @@ class GratsParserTest {
         "Multiple items found");
   }
 
+  @Test
+  void ignoredTokenInPlayerName() {
+    assertSuccessfulParse(
+        "[Thu Apr 11 02:19:52 2024] Shaqwanda tells the guild, "
+            + "'!grats Boots of the Vindicator dkpp 44'",
+        "$loot Boots of the Vindicator Dkpp 44");
+  }
+
   private enum ParseOutcome {
     SUCCESS,
     FAILURE,

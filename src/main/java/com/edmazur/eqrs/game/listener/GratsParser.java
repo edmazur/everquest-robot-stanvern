@@ -32,14 +32,25 @@ public class GratsParser {
               "swapping").stream(),
           GratsDetector.TRIGGERS.stream())
       .collect(Collectors.toList());
-  // This is a little hacky. There's a player named "Pebblespring" whose name thus contains "Espri".
-  // There isn't really a good way to identify this sort of scenario because the item parser
-  // intentionally permits lack of whitespace before/after item names since they commonly get linked
-  // that way in-game. In any case, this is the first time this issue has come up after running the
-  // system for awhile, so it may be rare and can be handled one-off like this. If the list
-  // continues to grow though, you should think about the problem more deeply and come up with a
-  // more robust/graceful solution.
+
+  // These sets are a little hacky. These edge cases are quite rare considering how long the system
+  // has been in place, but if the edge cases continue to grow, then you should think about a more
+  // robust/graceful solution. Explanations:
+  //
+  // - IGNORED_TOKEN_EXCEPTIONS_CASE_INSENSITIVE
+  //   There's a player named "Dkpp", which contains "dkp", which is an ignored token. There isn't
+  //   really a good way to identify this sort of scenario because the ignored tokens are
+  //   aggressively stripped out, given how they can often appear directly next to other valid text
+  //   (e.g. "100dkp").
+  //
+  // - IGNORED_ITEMS
+  //   There's a player named "Pebblespring", which contains "Espri", which is an item. There isn't
+  //   really a good way to identify this sort of scenario because the item parser intentionally
+  //   permits lack of whitespace before/after item names since they commonly get linked that way
+  //   in-game.
+  private static final Set<String> IGNORED_TOKEN_EXCEPTIONS_CASE_INSENSITIVE = Set.of("dkpp");
   private static final Set<String> IGNORED_ITEMS = Set.of("Espri");
+
   private static final String LOOT_COMMAND_FORMAT = "$loot %s %s %d";
 
   private final Config config;
@@ -122,8 +133,10 @@ public class GratsParser {
     List<String> otherParts = new ArrayList<String>();
     for (String part : gratsMessage.trim().split("\\s+")) {
       // Remove ignored tokens.
-      for (String ignoredTokenCaseInsensitive : IGNORED_TOKENS_CASE_INSENSITIVE) {
-        part = part.replaceAll("(?i)" + ignoredTokenCaseInsensitive, "");
+      if (!IGNORED_TOKEN_EXCEPTIONS_CASE_INSENSITIVE.contains(part.toLowerCase())) {
+        for (String ignoredTokenCaseInsensitive : IGNORED_TOKENS_CASE_INSENSITIVE) {
+          part = part.replaceAll("(?i)" + ignoredTokenCaseInsensitive, "");
+        }
       }
       if (part.isBlank()) {
         continue;
