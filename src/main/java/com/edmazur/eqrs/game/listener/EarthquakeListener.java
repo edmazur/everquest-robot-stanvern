@@ -8,6 +8,7 @@ import com.edmazur.eqrs.discord.Discord;
 import com.edmazur.eqrs.discord.DiscordChannel;
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import org.javacord.api.entity.message.Message;
 
 public class EarthquakeListener implements EqLogListener {
@@ -15,8 +16,11 @@ public class EarthquakeListener implements EqLogListener {
   private static final DateTimeFormatter DATE_TIME_FORMATTER =
       DateTimeFormatter.ofPattern("M/d HH:mm:ss");
 
-  private static final DiscordChannel PROD_BATPHONE_CHANNEL = DiscordChannel.GG_BATPHONE;
-  private static final DiscordChannel TEST_BATPHONE_CHANNEL = DiscordChannel.TEST_BATPHONE;
+  private static final List<DiscordChannel> PROD_BATPHONE_CHANNELS = List.of(
+      DiscordChannel.GG_QUAKEPHONE,
+      DiscordChannel.GG_BATPHONE);
+  private static final List<DiscordChannel> TEST_BATPHONE_CHANNELS = List.of(
+      DiscordChannel.TEST_BATPHONE);
 
   private static final DiscordChannel PROD_TOD_CHANNEL = DiscordChannel.GG_TOD;
   private static final DiscordChannel TEST_TOD_CHANNEL = DiscordChannel.TEST_TOD;
@@ -43,10 +47,12 @@ public class EarthquakeListener implements EqLogListener {
   public void onEvent(EqLogEvent eqLogEvent) {
     if (earthquakeDetector.containsEarthquake(eqLogEvent)) {
       if (rateLimiter.getPermission()) {
-        // Send batphone.
-        discord.sendMessage(
-            getBatphoneChannel(),
-            "@everyone QUAKE" + "\n" + "(ET: `" + eqLogEvent.getFullLine() + "`)");
+        // Send batphones.
+        for (DiscordChannel batphoneChannel : getBatphoneChannels()) {
+          discord.sendMessage(
+              batphoneChannel,
+              "@everyone QUAKE" + "\n" + "(ET: `" + eqLogEvent.getFullLine() + "`)");
+        }
 
         // Log the earthquake in the ToD channel.
         Message earthquakeLogMessage = discord
@@ -73,11 +79,11 @@ public class EarthquakeListener implements EqLogListener {
     }
   }
 
-  private DiscordChannel getBatphoneChannel() {
+  private List<DiscordChannel> getBatphoneChannels() {
     if (config.getBoolean(Config.Property.DEBUG)) {
-      return TEST_BATPHONE_CHANNEL;
+      return TEST_BATPHONE_CHANNELS;
     } else {
-      return PROD_BATPHONE_CHANNEL;
+      return PROD_BATPHONE_CHANNELS;
     }
   }
 
