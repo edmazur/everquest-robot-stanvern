@@ -119,7 +119,10 @@ public class GratsChannelListener implements
     message.addReaction("🤖");
 
     // Close out the button interaction.
-    event.getInteraction().createImmediateResponder().respond();
+    event.getButtonInteraction().acknowledge().exceptionally(e -> {
+      e.printStackTrace();
+      return null;
+    });
   }
 
   @Override
