@@ -14,6 +14,7 @@ Opal
 Pick
 Pot
 Ration
+Receipt
 Rice
 Rod
 Stein
