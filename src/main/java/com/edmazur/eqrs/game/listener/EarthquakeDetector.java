@@ -16,16 +16,20 @@ public class EarthquakeDetector {
       "The Gods of Norrath emit a sinister laugh as they toy with their creations. "
           + "They are reanimating creatures to provide a greater challenge to the mortals",
       "The gods have awoken to unleash their wrath across Norrath.",
-      "The gods have awoken to unlesh their wrath across Norrath.");
+      "The gods have awoken to unlesh their wrath across Norrath.",
+      "An unsettling silence smothers the land. Not a complete silence, but somehow quieter for "
+          + "it, the way a thick blanket of snow muffles the noise of the world. The chill of it "
+          + "pierces your bones, and you know, danger approaches.");
 
   private static final List<Pattern> KNOWN_EARTHQUAKE_PATTERNS = Arrays.asList(
       Pattern.compile("\\p{Alpha}+ BROADCASTS, "
           + "'Minions gather, their forms appearing as time and space coalesce.'"));
 
-  // Sometimes new earthquake messages are added. This failsafe string seems to always appear after
-  // earthquake messages though, so it can be used as an additional trigger if something else hasn't
-  // recently triggered.
-  // TODO: Is this a 100% reliable earthquake indicator? If so, consider using only this.
+  // Sometimes new earthquake messages are added. This failsafe string often (not always) appears
+  // after earthquake messages, so it can be used as an additional trigger if one of the known
+  // strings hasn't recently triggered.
+  // Unfortunately, this is not a 100% reliable earthquake indicator (i.e. earthquakes sometimes
+  // happen without it), so the known strings list is still needed.
   private static final String FAILSAFE_STRING = "You feel the need to get somewhere safe quickly.";
   private static final Duration FAILSAFE_WINDOW = Duration.ofMinutes(1);
 
