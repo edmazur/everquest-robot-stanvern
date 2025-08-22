@@ -22,6 +22,8 @@ public class ItemScreenshotter {
       LOG_SPAM_DELINEATOR_SIDE + " (ItemScreenshotter log spam - %s) " + LOG_SPAM_DELINEATOR_SIDE;
 
   public Optional<File> get(Item item) {
+    // Declare the driver here so it's accessible in the finally block.
+    ChromeDriver driver = null;
     try {
       // TODO: Eliminate all of the log spam from here and then remove the delineators.
       System.out.println(String.format(LOG_SPAM_DELINEATOR_FORMAT, "START"));
@@ -34,7 +36,7 @@ public class ItemScreenshotter {
       // from breaking.
       options.setAcceptInsecureCerts(true);
       System.setProperty("webdriver.chrome.silentOutput", "true");
-      ChromeDriver driver = new ChromeDriver(options);
+      driver = new ChromeDriver(options);
       System.out.println(String.format(LOG_SPAM_DELINEATOR_FORMAT, "END"));
 
       driver.get(item.getUrl());
@@ -55,7 +57,6 @@ public class ItemScreenshotter {
           + "wrapperDiv.appendChild(itemBottomDiv);");
       WebElement itemElement = driver.findElement(By.id(unique));
       File screenshot = ((TakesScreenshot) itemElement).getScreenshotAs(OutputType.FILE);
-      driver.quit();
       return Optional.of(screenshot);
     } catch (Exception e) {
       // This is a bit of a sledgehammer. https://github.com/SeleniumHQ/selenium/issues/11750 broke
@@ -66,6 +67,10 @@ public class ItemScreenshotter {
       System.err.println("Error getting item screenshot for: " + item.getName());
       e.printStackTrace();
       return Optional.empty();
+    } finally {
+      if (driver != null) {
+        driver.quit();
+      }
     }
   }
 
