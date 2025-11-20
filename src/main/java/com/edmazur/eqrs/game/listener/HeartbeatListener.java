@@ -3,6 +3,7 @@ package com.edmazur.eqrs.game.listener;
 import com.edmazur.eqlp.EqLogEvent;
 import com.edmazur.eqlp.EqLogListener;
 import com.edmazur.eqrs.discord.Discord;
+import com.edmazur.eqrs.discord.DiscordChannel;
 import com.edmazur.eqrs.discord.DiscordUser;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -39,9 +40,18 @@ public class HeartbeatListener implements EqLogListener, Runnable {
           && lastSentNotification.isBefore(mustHaveSentNotificationBefore)) {
         Duration durationSinceLastActivity =
             Duration.between(lastSeenActivity, LocalDateTime.now());
-        String message = String.format("No EQ log activity seen in %d minutes",
+
+        String userMessage = String.format(
+            "No EQ log activity seen in %d minutes.",
             durationSinceLastActivity.toMinutes());
-        discord.sendMessage(DiscordUser.EDMAZUR, message);
+        String channelMessage = userMessage + " Stanvern has been notified that his game client "
+            + "likely disconnected. Missed loot and ToDs will need to be manually entered.";
+
+        discord.sendMessage(DiscordUser.EDMAZUR, userMessage);
+        discord.sendMessage(DiscordChannel.GG_TOD, channelMessage);
+        discord.sendMessage(DiscordChannel.GG_TICKS_AND_GRATS, channelMessage)
+            .join().addReaction("👍");
+
         lastSentNotification = LocalDateTime.now();
       }
     } catch (Throwable t) {
