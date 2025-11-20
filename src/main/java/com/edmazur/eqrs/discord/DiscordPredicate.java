@@ -79,4 +79,13 @@ public class DiscordPredicate {
     };
   }
 
+  public static Predicate<Message> isNewerThan(Duration duration) {
+    return new Predicate<Message>() {
+      @Override
+      public boolean test(Message message) {
+        return message.getCreationTimestamp().plus(duration).isAfter(Instant.now());
+      }
+    };
+  }
+
 }

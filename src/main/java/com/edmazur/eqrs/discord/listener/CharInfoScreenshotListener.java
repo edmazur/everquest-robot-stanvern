@@ -10,6 +10,7 @@ import com.edmazur.eqrs.game.CharInfoScraper;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 import java.util.function.Predicate;
 import javax.imageio.ImageIO;
@@ -25,7 +26,8 @@ public class CharInfoScreenshotListener implements MessageCreateListener {
 
   private static final DiscordChannel PROD_CHANNEL = DiscordChannel.GG_BOT_CAMP;
   private static final DiscordChannel TEST_CHANNEL = DiscordChannel.TEST_BOT_SCRAPE;
-  private static final Predicate<Message> PREDICATE = DiscordPredicate.hasImage();
+  private static final Predicate<Message> PREDICATE = DiscordPredicate.hasImage()
+      .and(DiscordPredicate.isNewerThan(Duration.ofHours(24L)));
 
   private static final File SUCCESS_IMAGE = new File("src/main/resources/str.png");
 
