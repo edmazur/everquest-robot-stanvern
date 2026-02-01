@@ -48,6 +48,7 @@ public class HeartbeatListener implements EqLogListener, Runnable {
             + "likely disconnected. Missed loot and ToDs will need to be manually entered.";
 
         discord.sendMessage(DiscordUser.EDMAZUR, userMessage);
+        discord.sendMessage(DiscordChannel.GG_GROUP_TEXT, channelMessage);
         discord.sendMessage(DiscordChannel.GG_TOD, channelMessage);
         discord.sendMessage(DiscordChannel.GG_TICKS_AND_GRATS, channelMessage)
             .join().addReaction("👍");
