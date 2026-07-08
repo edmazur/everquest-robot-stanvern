@@ -169,7 +169,7 @@ public class GratsParser {
     }
     int dkpAmount = numericOnlyParts.get(0);
 
-    // Validate other parts.
+    // Validate player name.
     if (otherParts.size() != 1) {
       return ValueOrError.error(
           "``"
@@ -181,11 +181,18 @@ public class GratsParser {
               : "(Multiple name candidates found: ``"
                   + Joiner.on("``, ``").join(otherParts) + "``)"));
     }
-    if (!otherParts.get(0).matches("[a-zA-Z]+")) {
+    String playerNameCandidate = otherParts.get(0);
+
+    // Permit a trailing period on player name.
+    if (playerNameCandidate.charAt(playerNameCandidate.length() - 1) == '.') {
+      playerNameCandidate = playerNameCandidate.substring(0, playerNameCandidate.length() - 1);
+    }
+
+    if (!playerNameCandidate.matches("[a-zA-Z]+")) {
       return ValueOrError.error("Name candidate contains non-alpha characters: ``"
           + otherParts.get(0) + "``");
     }
-    String playerName = StringUtils.capitalize(otherParts.get(0).toLowerCase());
+    String playerName = StringUtils.capitalize(playerNameCandidate.toLowerCase());
 
     // If you've gotten this far, there is a single name and number, so you can assume it's a player
     // name and DKP amount.

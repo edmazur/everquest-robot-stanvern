@@ -132,11 +132,27 @@ class GratsParserTest {
   }
 
   @Test
-  void lootStringOutOfOrder() {
+  void lootStringOutOfOrderGratsLast() {
     assertSuccessfulParse(
         "[Wed May 24 19:43:04 2023] Errur tells the guild, "
             + "'Wristband of the Bonecaster Sauromite 1 !grats'",
         "$loot Wristband of the Bonecaster Sauromite 1");
+  }
+
+  @Test
+  void lootStringOutOfOrderNameLast() {
+    assertSuccessfulParse(
+        "[Mon Jul 06 15:14:58 2026] Aarbal tells the guild, "
+            + "'!grats Tattered Silk Turban 32 Aarball'",
+        "$loot Tattered Silk Turban Aarball 32");
+  }
+
+  @Test
+  void lootStringOutOfOrderNameLastWithPeriod() {
+    assertSuccessfulParse(
+        "[Mon Jul 06 15:14:58 2026] Aarbal tells the guild, "
+            + "'!grats Tattered Silk Turban 32 Aarball.'",
+        "$loot Tattered Silk Turban Aarball 32");
   }
 
   @Test
